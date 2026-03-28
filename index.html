@@ -96,17 +96,27 @@
     <script>
         const apiKey = "AIzaSyDSPL_PI31D1jBUC9qxGzPmo3zO5mclPpY";
         
-        // REACTION POOL (Tenor CDN - Much more stable)
+        // DIVERSE MEME POOL (Tenor, Imgur, Giphy Mix)
         const reactions = [
-            { gif: "https://media.tenor.com/5l3q3o8X7fIAAAAC/futurama-professor-farnsworth.gif", text: "Good news! We found your file..." },
-            { gif: "https://media.tenor.com/P1f8IXXwK90AAAAC/futurama-bender.gif", text: "A.I. is laughing at your skills..." },
-            { gif: "https://media.tenor.com/13HgwGsXF0aiGY/giphy.gif", text: "Analyzing your redundant duties..." },
-            { gif: "https://media.tenor.com/T0aP3Fnt4N0AAAAC/futurama-dr-zoidberg.gif", text: "Your former career is running away!" },
-            { gif: "https://media.tenor.com/vH1rDkY3KxQAAAAC/hypnotoad-futurama.gif", text: "ALL GLORY TO THE HYPNOTOAD." },
-            { gif: "https://media.tenor.com/O6Sj9S9I5VAAAAAC/laughing-jameson.gif", text: "Wait, you actually got paid for that?!" },
-            { gif: "https://media.tenor.com/rN55K280E8AAAAAC/swanson-trash.gif", text: "Routing your resume to the bin..." },
-            { gif: "https://media.tenor.com/3o7TKSjRrfIPjeiVyM/giphy.gif", text: "A.I. overwriting your importance..." }
+            { src: "https://media.tenor.com/5l3q3o8X7fIAAAAC/futurama-professor-farnsworth.gif", text: "Good news! We found your file..." },
+            { src: "https://media.tenor.com/P1f8IXXwK90AAAAC/futurama-bender.gif", text: "A.I. is laughing at your skills..." },
+            { src: "https://i.imgur.com/3o7TKSj.gif", text: "A.I. overwriting your importance..." },
+            { src: "https://media.tenor.com/vH1rDkY3KxQAAAAC/hypnotoad-futurama.gif", text: "ALL GLORY TO THE HYPNOTOAD." },
+            { src: "https://media.tenor.com/O6Sj9S9I5VAAAAAC/laughing-jameson.gif", text: "Wait, you actually got paid for that?!" },
+            { src: "https://media.tenor.com/rN55K280E8AAAAAC/swanson-trash.gif", text: "Routing your resume to the bin..." },
+            { src: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZleHlsZzB5NjNycHl4eHl4eHl4eHl4eHl4eHl4eHl4eHl4eHl4JnBvPmc/mLA0uFExS8N7a/giphy.gif", text: "Computing your obsolescence..." },
+            { src: "https://media.tenor.com/N_X6H8o0v0IAAAAC/dwight-the-office.gif", text: "False. You were never necessary." }
         ];
+
+        let currentMemes = [];
+        let stage = 0;
+
+        // AUTO-HEAL: If an image fails to load, try another one from the pool
+        document.getElementById('memeImage').onerror = function() {
+            console.warn("Broken GIF detected. Healing...");
+            const backup = reactions[Math.floor(Math.random() * reactions.length)];
+            this.src = backup.src;
+        };
 
         async function fetchAIJob(title) {
             try {
@@ -134,14 +144,13 @@
             
             const aiPromise = fetchAIJob(job);
             
-            // SHUFFLE AND PICK 3 UNIQUE
-            const shuffled = [...reactions].sort(() => Math.random() - 0.5).slice(0, 3);
-            let stage = 0;
+            currentMemes = [...reactions].sort(() => Math.random() - 0.5).slice(0, 3);
+            stage = 0;
 
             const timer = setInterval(() => {
-                if (stage < shuffled.length) {
-                    document.getElementById('memeImage').src = shuffled[stage].gif;
-                    document.getElementById('memeText').textContent = shuffled[stage].text;
+                if (stage < currentMemes.length) {
+                    document.getElementById('memeImage').src = currentMemes[stage].src;
+                    document.getElementById('memeText').textContent = currentMemes[stage].text;
                     stage++;
                 } else {
                     clearInterval(timer);
@@ -151,7 +160,8 @@
                         document.getElementById('rcNewRoleDesc').textContent = res.desc;
                         loader.classList.add('hidden');
                         document.getElementById('resultContainer').classList.remove('hidden');
-                        document.getElementById('sharePreview').value = `A.I. reassigned me to: ${res.title}. Find your fate: https://ai-tookmyjob.netlify.app// 🤖`;
+                        // UPDATED TO NETLIFY URL
+                        document.getElementById('sharePreview').value = `A.I. reassigned me to: ${res.title}. Find your fate: https://ai-tookmyjob.netlify.app/ 🤖`;
                     });
                 }
             }, 3000);
