@@ -13,141 +13,100 @@
         .brutal-border { border: 4px solid #000; }
         .brutal-shadow { box-shadow: 8px 8px 0px 0px #000; transition: all 0.1s ease; }
         .brutal-button:active:not(:disabled) { transform: translate(4px, 4px); box-shadow: 4px 4px 0px 0px #000; }
-        .brutal-button:disabled { opacity: 0.7; cursor: not-allowed; transform: translate(2px, 2px); box-shadow: 6px 6px 0px 0px #000; }
         .report-card { background-color: #fffcdd; background-image: repeating-linear-gradient(transparent, transparent 31px, #cbd5e1 31px, #cbd5e1 32px); background-position: 0 1.5rem; }
         .stamp-effect { color: #ef4444; border: 4px solid #ef4444; transform: rotate(-12deg); mix-blend-mode: multiply; border-radius: 8px; pointer-events: none; }
         @keyframes flash { 0% { opacity: 1; filter: invert(0); } 50% { opacity: 0.8; filter: invert(1); } 100% { opacity: 1; filter: invert(0); } }
         .flash-transition { animation: flash 0.2s ease-out; }
-        @keyframes shake { 0%, 100% { transform: translate(0,0); } 10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 0); } 20%, 40%, 60%, 80% { transform: translate(5px, 0); } }
-        .screen-shake { animation: shake 0.5s; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 text-black relative">
 
     <main id="mainMachine" class="w-full max-w-2xl bg-[#60a5fa] brutal-border rounded-2xl p-6 sm:p-10 brutal-shadow relative overflow-hidden transition-all duration-300 z-10 mt-8">
         <div class="absolute top-4 right-4 flex items-center space-x-3 z-50">
-            <button id="rebootBtn" class="bg-red-500 hover:bg-red-600 text-white text-xs font-black uppercase brutal-border px-3 py-1 brutal-button shadow-[2px_2px_0px_0px_#000] flex items-center gap-1">
-                <span>REBOOT</span> <span class="text-[10px]">🔴</span>
-            </button>
+            <button id="rebootBtn" class="bg-red-500 text-white text-xs font-black brutal-border px-3 py-1 shadow-[2px_2px_0px_0px_#000]">REBOOT 🔴</button>
             <div id="statusLight" class="w-4 h-4 rounded-full border-2 border-black bg-yellow-400"></div>
         </div>
 
         <div class="text-center mt-6 mb-8 relative z-10">
             <h1 class="title-font text-4xl sm:text-5xl lg:text-6xl text-white mb-4 tracking-wide" style="-webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">Career-Tron 3000</h1>
-            <p class="font-bold text-lg sm:text-xl bg-white brutal-border inline-block px-4 py-2 rounded-lg transform -rotate-2">Discover your inevitable fate! 🤖</p>
+            <p class="font-bold text-lg bg-white brutal-border inline-block px-4 py-2 rounded-lg transform -rotate-2">Discover your inevitable fate! 🤖</p>
         </div>
 
         <div id="formSection">
             <form id="careerForm" class="space-y-4 relative z-10">
                 <div class="space-y-2">
                     <label for="jobInput" class="block font-bold text-lg">Step 1: What do you mistakenly call a "Career"?</label>
-                    <input type="text" id="jobInput" placeholder="Type a job..." class="w-full p-4 brutal-border rounded-xl text-lg focus:outline-none focus:bg-[#e0f2fe] brutal-shadow bg-white" required autocomplete="off">
+                    <input type="text" id="jobInput" placeholder="Type a job..." class="w-full p-4 brutal-border rounded-xl text-lg brutal-shadow bg-white" required autocomplete="off">
                 </div>
                 <div class="flex flex-wrap gap-2 pb-4">
-                    <span class="text-sm font-bold mt-2">Quick Select:</span>
-                    <button type="button" class="quick-job bg-white border-2 border-black rounded-full px-3 py-1 text-sm font-bold hover:bg-yellow-200 brutal-shadow shadow-[2px_2px_0px_0px_#000]">Big 4 Consultant</button>
-                    <button type="button" class="quick-job bg-white border-2 border-black rounded-full px-3 py-1 text-sm font-bold hover:bg-yellow-200 brutal-shadow shadow-[2px_2px_0px_0px_#000]">Venture Capitalist</button>
-                    <button type="button" class="quick-job bg-white border-2 border-black rounded-full px-3 py-1 text-sm font-bold hover:bg-yellow-200 brutal-shadow shadow-[2px_2px_0px_0px_#000]">Scrum Master</button>
+                    <button type="button" class="quick-job bg-white border-2 border-black rounded-full px-3 py-1 text-sm font-bold brutal-shadow shadow-[2px_2px_0px_0px_#000]">Big 4 Consultant</button>
+                    <button type="button" class="quick-job bg-white border-2 border-black rounded-full px-3 py-1 text-sm font-bold brutal-shadow shadow-[2px_2px_0px_0px_#000]">Venture Capitalist</button>
+                    <button type="button" class="quick-job bg-white border-2 border-black rounded-full px-3 py-1 text-sm font-bold brutal-shadow shadow-[2px_2px_0px_0px_#000]">Scrum Master</button>
                 </div>
-                <button type="submit" id="submitBtn" class="w-full bg-[#facc15] hover:bg-[#eab308] text-black brutal-border p-4 rounded-xl text-xl font-bold brutal-button brutal-shadow flex items-center justify-center space-x-3">
-                    <span id="btnText">CONSULT THE A.I. OVERLORD ✨</span>
-                </button>
+                <button type="submit" class="w-full bg-[#facc15] text-black brutal-border p-4 rounded-xl text-xl font-bold brutal-button brutal-shadow">CONSULT THE A.I. OVERLORD ✨</button>
             </form>
         </div>
 
         <div id="memeLoader" class="hidden mt-4 relative z-10">
             <div class="bg-white brutal-border rounded-xl p-4 brutal-shadow transform rotate-1">
                 <div class="w-full h-48 sm:h-64 brutal-border overflow-hidden bg-black flex items-center justify-center mb-4 relative">
-                    <img id="memeImage" src="" alt="Processing" referrerpolicy="no-referrer" class="w-full h-full object-cover opacity-90">
-                    <div class="absolute top-0 left-0 w-full h-full bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
+                    <img id="memeImage" src="" alt="Processing" class="w-full h-full object-cover">
+                    <div class="absolute top-0 left-0 w-full h-full bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
                 </div>
-                <div class="bg-yellow-300 brutal-border p-4 transform -rotate-1 shadow-[4px_4px_0px_0px_#000]">
-                    <p id="memeText" class="text-lg sm:text-xl font-bold text-center uppercase">...</p>
+                <div class="bg-yellow-300 brutal-border p-4 shadow-[4px_4px_0px_0px_#000]">
+                    <p id="memeText" class="text-lg font-bold text-center uppercase">...</p>
                 </div>
             </div>
-            <p class="mt-6 text-sm font-bold text-center text-gray-800 animate-pulse">Consulting the Neural Networks...</p>
         </div>
 
         <div id="resultContainer" class="mt-4 hidden relative z-10">
             <div class="brutal-border rounded-xl p-6 sm:p-8 brutal-shadow relative transform rotate-1 report-card">
-                <div class="border-b-4 border-black pb-2 mb-6 text-center">
-                    <h2 class="text-xl sm:text-2xl font-black uppercase tracking-tighter">Official Reassignment Mandate</h2>
-                    <p class="text-xs font-bold text-gray-600">FORM #8472-B // DEPT. OF REDUNDANCY</p>
+                <div class="border-b-4 border-black pb-2 mb-6 text-center uppercase font-black">Official Reassignment Mandate</div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-3 brutal-border rounded-lg"><span class="text-xs font-bold text-gray-500 block">FORMER JOB:</span><strong id="rcJob" class="uppercase"></strong></div>
+                    <div class="bg-white p-3 brutal-border rounded-lg"><span class="text-xs font-bold text-gray-500 block">STATUS:</span><strong class="text-red-600">REPLACED BY CODE</strong></div>
+                    <div class="absolute -top-4 -right-2 stamp-effect px-4 py-2 font-black text-center bg-[#fffcdd]"><span class="text-3xl">99.9%</span><br><span class="text-[10px]">PROBABILITY 🤖</span></div>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6 relative">
-                    <div class="bg-white p-3 brutal-border rounded-lg shadow-[2px_2px_0px_0px_#000]">
-                        <span class="text-xs font-bold text-gray-500 uppercase block mb-1">Former Function:</span>
-                        <strong id="rcJob" class="text-lg uppercase break-words">...</strong>
-                    </div>
-                    <div class="bg-white p-3 brutal-border rounded-lg shadow-[2px_2px_0px_0px_#000]">
-                        <span class="text-xs font-bold text-gray-500 uppercase block mb-1">Status:</span>
-                        <strong class="text-lg text-red-600">REPLACED BY CODE</strong>
-                    </div>
-                    <div class="absolute -top-4 -right-2 sm:-top-8 sm:-right-6 stamp-effect px-4 py-2 font-black text-center bg-[#fffcdd] z-20 shadow-xl">
-                        <span class="text-3xl"><span id="rcProb">99.9</span>%</span><br>
-                        <span class="text-[10px] tracking-tighter block -mt-1 font-bold">REPLACEMENT PROBABILITY 🤖</span>
-                    </div>
-                </div>
-                <div class="bg-white p-4 sm:p-6 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] relative mb-6 mt-8">
-                    <span class="text-xs font-bold text-gray-500 uppercase block mb-2">New Mandatory Analog Role:</span>
-                    <h3 id="rcNewRoleTitle" class="text-2xl sm:text-3xl font-black text-black leading-tight uppercase mb-2"></h3>
-                    <p id="rcNewRoleDesc" class="text-sm font-bold text-gray-700 leading-relaxed"></p>
+                <div class="bg-white p-4 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] mb-6">
+                    <span class="text-xs font-bold text-gray-500 block mb-2 uppercase">New Mandatory Role:</span>
+                    <h3 id="rcNewRoleTitle" class="text-2xl font-black uppercase mb-1"></h3>
+                    <p id="rcNewRoleDesc" class="text-sm font-bold text-gray-700"></p>
                 </div>
             </div>
-            <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-                <button id="openShareBtn" class="flex-1 text-sm font-bold bg-[#facc15] hover:bg-[#eab308] px-4 py-3 brutal-border rounded-lg brutal-button shadow-[4px_4px_0px_0px_#000]">Share My Fate 📤</button>
-                <button id="resetBtn" class="flex-1 text-sm font-bold bg-[#bfdbfe] hover:bg-[#93c5fd] px-4 py-3 brutal-border rounded-lg brutal-button shadow-[4px_4px_0px_0px_#000]">Try Again 🔄</button>
-            </div>
+            <button id="openShareBtn" class="w-full mt-6 bg-[#facc15] text-black font-bold p-4 brutal-border rounded-lg brutal-shadow">Share My Fate 📤</button>
+            <button id="resetBtn" class="w-full mt-4 bg-white text-black font-bold p-3 brutal-border rounded-lg brutal-shadow">Try Another Job 🔄</button>
         </div>
     </main>
 
-    <footer class="mt-12 mb-8 text-center flex flex-col items-center gap-5 z-10 relative">
-        <p class="text-sm font-bold bg-white text-black brutal-border px-4 py-2 rounded-lg shadow-[2px_2px_0px_0px_#000]">Made with existential dread and too much coffee ☕</p>
-        <a href="https://www.linkedin.com/in/shazilymunawar" target="_blank" class="flex items-center gap-3 bg-[#0a66c2] text-white px-5 py-3 brutal-border rounded-lg brutal-button shadow-[4px_4px_0px_0px_#000]">
-            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-            <span class="font-bold text-sm">For now i do this.</span>
-        </a>
+    <footer class="mt-12 text-center flex flex-col items-center gap-4">
+        <p class="text-sm font-bold bg-white p-2 brutal-border shadow-[2px_2px_0px_0px_#000]">Made with existential dread and too much coffee ☕</p>
+        <a href="https://www.linkedin.com/in/shazilymunawar" target="_blank" class="bg-[#0a66c2] text-white px-4 py-2 brutal-border shadow-[3px_3px_0px_0px_#000] font-bold">For now i do this.</a>
     </footer>
 
-    <div id="shareModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-60 backdrop-blur-sm p-4">
-        <div class="w-full max-w-md bg-white brutal-border rounded-xl p-6 brutal-shadow">
-            <div class="flex justify-between items-center border-b-4 border-black pb-3 mb-4">
-                <h3 class="text-xl font-black uppercase">Transmission Hub</h3>
-                <button id="closeShareBtn" class="text-xl font-bold">✖</button>
-            </div>
-            <textarea id="sharePreview" readonly class="w-full h-24 p-3 bg-gray-100 brutal-border rounded-lg text-sm font-bold mb-4 focus:outline-none"></textarea>
-            <div class="flex flex-col gap-3">
-                <button id="shareLinkedIn" class="w-full bg-[#0a66c2] text-white font-bold py-3 brutal-border rounded-lg brutal-button shadow-[4px_4px_0px_0px_#000]">Share on LinkedIn</button>
-                <button id="copyShareBtn" class="w-full bg-[#facc15] text-black font-bold py-3 brutal-border rounded-lg brutal-button shadow-[4px_4px_0px_0px_#000]">Copy Text 📋</button>
-            </div>
+    <div id="shareModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4">
+        <div class="bg-white brutal-border p-6 max-w-md w-full shadow-[8px_8px_0px_0px_#000]">
+            <h3 class="text-xl font-black mb-4 uppercase">Share Fate</h3>
+            <textarea id="sharePreview" readonly class="w-full h-24 p-3 bg-gray-100 brutal-border font-bold mb-4"></textarea>
+            <button id="shareLinkedIn" class="w-full bg-[#0a66c2] text-white font-bold p-3 mb-3 brutal-border shadow-[4px_4px_0px_0px_#000]">LinkedIn</button>
+            <button id="copyShareBtn" class="w-full bg-[#facc15] font-bold p-3 brutal-border shadow-[4px_4px_0px_0px_#000]">Copy Link 📋</button>
+            <button id="closeShareBtn" class="w-full mt-4 text-xs underline uppercase font-bold">Close</button>
         </div>
     </div>
 
     <script>
         const apiKey = "AIzaSyDSPL_PI31D1jBUC9qxGzPmo3zO5mclPpY";
-        const fallbackJobs = [
-            { title: "Human Captcha Solver", desc: "You will spend 12 hours a day clicking pictures of crosswalks so delivery drones know what to run over." },
-            { title: "Algorithm Therapist", desc: "You will sit in a dark room and assure a stressed-out AI that its outputs are sufficient." },
-            { title: "Router Re-plugger", desc: "You stand by the main server. When the AI freezes, you unplug it, wait 10 seconds, and plug it back in." },
-            { title: "Sarcasm Detector Trainee", desc: "You manually verify if the AI's insults are funny or just genuinely hurtful." }
+        
+        // REACTION POOL (Tenor CDN - Much more stable)
+        const reactions = [
+            { gif: "https://media.tenor.com/5l3q3o8X7fIAAAAC/futurama-professor-farnsworth.gif", text: "Good news! We found your file..." },
+            { gif: "https://media.tenor.com/P1f8IXXwK90AAAAC/futurama-bender.gif", text: "A.I. is laughing at your skills..." },
+            { gif: "https://media.tenor.com/13HgwGsXF0aiGY/giphy.gif", text: "Analyzing your redundant duties..." },
+            { gif: "https://media.tenor.com/T0aP3Fnt4N0AAAAC/futurama-dr-zoidberg.gif", text: "Your former career is running away!" },
+            { gif: "https://media.tenor.com/vH1rDkY3KxQAAAAC/hypnotoad-futurama.gif", text: "ALL GLORY TO THE HYPNOTOAD." },
+            { gif: "https://media.tenor.com/O6Sj9S9I5VAAAAAC/laughing-jameson.gif", text: "Wait, you actually got paid for that?!" },
+            { gif: "https://media.tenor.com/rN55K280E8AAAAAC/swanson-trash.gif", text: "Routing your resume to the bin..." },
+            { gif: "https://media.tenor.com/3o7TKSjRrfIPjeiVyM/giphy.gif", text: "A.I. overwriting your importance..." }
         ];
-
-        const memePool = [
-            { gif: "https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif", text: "Analyzing the 'skills' of a {job}..." },
-            { gif: "https://media.giphy.com/media/jQmVFypWInKCc/giphy.gif", text: "Wait, people paid you for that?!" },
-            { gif: "https://media.giphy.com/media/2w6I6nNDwjcgE/giphy.gif", text: "Routing your pension to the mainframe..." }
-        ];
-
-        const form = document.getElementById('careerForm');
-        const jobInput = document.getElementById('jobInput');
-        const memeLoader = document.getElementById('memeLoader');
-        const memeImage = document.getElementById('memeImage');
-        const memeText = document.getElementById('memeText');
-        const resultContainer = document.getElementById('resultContainer');
-        const statusLight = document.getElementById('statusLight');
-
-        let currentState = {};
-        let aiPromise = null;
 
         async function fetchAIJob(title) {
             try {
@@ -155,65 +114,56 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `User job: ${title}. Invent a sarcastic, low-tech dystopian replacement job. Return JSON: {"title": "job name", "desc": "funny 1 sentence description"}` }] }],
-                        generationConfig: { responseMimeType: "application/json" }
+                        contents: [{ parts: [{ text: `User is a "${title}". Sarcastically invent a useless analog dystopian job. Return JSON only: {"title": "job", "desc": "funny 1 sentence description"}` }] }],
+                        generationConfig: { responseMimeType: "application/json", temperature: 1.0 }
                     })
                 });
                 const data = await response.json();
                 return JSON.parse(data.candidates[0].content.parts[0].text);
             } catch (e) {
-                return fallbackJobs[Math.floor(Math.random() * fallbackJobs.length)];
+                return { title: "Human Power Indicator", desc: "You stand by the server. Thumbs up for green, scream for red." };
             }
         }
 
-        form.addEventListener('submit', (e) => {
+        document.getElementById('careerForm').onsubmit = async (e) => {
             e.preventDefault();
-            const job = jobInput.value.trim().toUpperCase();
+            const job = document.getElementById('jobInput').value.trim().toUpperCase();
             document.getElementById('formSection').classList.add('hidden');
-            memeLoader.classList.remove('hidden');
-            statusLight.classList.replace('bg-yellow-400', 'bg-red-500');
+            const loader = document.getElementById('memeLoader');
+            loader.classList.remove('hidden');
             
-            aiPromise = fetchAIJob(job);
+            const aiPromise = fetchAIJob(job);
+            
+            // SHUFFLE AND PICK 3 UNIQUE
+            const shuffled = [...reactions].sort(() => Math.random() - 0.5).slice(0, 3);
             let stage = 0;
-            const stages = memePool.map(m => ({...m, text: m.text.replace('{job}', job)}));
-            
+
             const timer = setInterval(() => {
-                if (stage < stages.length) {
-                    memeImage.src = stages[stage].gif;
-                    memeText.textContent = stages[stage].text;
+                if (stage < shuffled.length) {
+                    document.getElementById('memeImage').src = shuffled[stage].gif;
+                    document.getElementById('memeText').textContent = shuffled[stage].text;
                     stage++;
                 } else {
                     clearInterval(timer);
-                    showResult(job);
+                    aiPromise.then(res => {
+                        document.getElementById('rcJob').textContent = job;
+                        document.getElementById('rcNewRoleTitle').textContent = res.title;
+                        document.getElementById('rcNewRoleDesc').textContent = res.desc;
+                        loader.classList.add('hidden');
+                        document.getElementById('resultContainer').classList.remove('hidden');
+                        document.getElementById('sharePreview').value = `A.I. reassigned me to: ${res.title}. Find your fate: https://shazily.github.io/AI-wasteland/ 🤖`;
+                    });
                 }
             }, 3000);
-        });
-
-        async function showResult(job) {
-            const result = await aiPromise;
-            currentState = { ...result, job, share: `A.I. thinks I'll be replaced by a ${result.title}. Find your fate: https://shazily.github.io/AI-wasteland/ 🤖` };
-            
-            rcJob.textContent = job;
-            rcNewRoleTitle.textContent = result.title;
-            rcNewRoleDesc.textContent = result.desc;
-            
-            memeLoader.classList.add('hidden');
-            resultContainer.classList.remove('hidden');
-            statusLight.classList.replace('bg-red-500', 'bg-yellow-400');
-        }
-
-        document.getElementById('resetBtn').addEventListener('click', () => location.reload());
-        document.getElementById('rebootBtn').addEventListener('click', () => location.reload());
-        document.querySelectorAll('.quick-job').forEach(b => b.onclick = () => jobInput.value = b.textContent);
-
-        const modal = document.getElementById('shareModal');
-        document.getElementById('openShareBtn').onclick = () => {
-            document.getElementById('sharePreview').value = currentState.share;
-            modal.classList.remove('hidden');
         };
-        document.getElementById('closeShareBtn').onclick = () => modal.classList.add('hidden');
-        document.getElementById('copyShareBtn').onclick = () => navigator.clipboard.writeText(currentState.share);
-        document.getElementById('shareLinkedIn').onclick = () => window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(currentState.share)}`);
+
+        document.getElementById('resetBtn').onclick = () => location.reload();
+        document.getElementById('rebootBtn').onclick = () => location.reload();
+        document.querySelectorAll('.quick-job').forEach(b => b.onclick = () => document.getElementById('jobInput').value = b.textContent);
+        document.getElementById('openShareBtn').onclick = () => document.getElementById('shareModal').classList.remove('hidden');
+        document.getElementById('closeShareBtn').onclick = () => document.getElementById('shareModal').classList.add('hidden');
+        document.getElementById('copyShareBtn').onclick = () => { navigator.clipboard.writeText(document.getElementById('sharePreview').value); document.getElementById('copyShareBtn').textContent = "COPIED! ✔️"; };
+        document.getElementById('shareLinkedIn').onclick = () => window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(document.getElementById('sharePreview').value)}`);
     </script>
 </body>
 </html>
