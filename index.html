@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    
+    <title>Career-Tron 3000 | A.I. Job Replacement</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Shrikhand&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #fdfbf7;
+            background-image: radial-gradient(#cbd5e1 2px, transparent 2px);
+            background-size: 30px 30px;
+            font-family: 'Space Mono', monospace;
+        }
+        
+        .title-font { font-family: 'Shrikhand', cursive; }
+        
+        .brutal-border { border: 4px solid #000; }
+        .brutal-shadow {
+            box-shadow: 8px 8px 0px 0px #000;
+            transition: all 0.1s ease;
+        }
+        .brutal-button:active:not(:disabled) {
+            transform: translate(4px, 4px);
+            box-shadow: 4px 4px 0px 0px #000;
+        }
+        .brutal-button:disabled {
+            opacity: 0.7; cursor: not-allowed;
+            transform: translate(2px, 2px);
+            box-shadow: 6px 6px 0px 0px #000;
+        }
+
+        .report-card {
+            background-color: #fffcdd;
+            background-image: repeating-linear-gradient(transparent, transparent 31px, #cbd5e1 31px, #cbd5e1 32px);
+            background-position: 0 1.5rem;
+        }
+        
+        .stamp-effect {
+            color: #ef4444; 
+            border: 4px solid #ef4444;
+            transform: rotate(-12deg);
+            mix-blend-mode: multiply;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        @keyframes flash {
+            0% { opacity: 1; filter: invert(0); }
+            50% { opacity: 0.8; filter: invert(1); }
+            100% { opacity: 1; filter: invert(0); }
+        }
+        .flash-transition {
+            animation: flash 0.2s ease-out;
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .screen-shake {
+            animation: shake 0.5s;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 text-black relative">
+
+    <main id="mainMachine" class="w-full max-w-2xl bg-[#60a5fa] brutal-border rounded-2xl p-6 sm:p-10 brutal-shadow relative overflow-hidden transition-all duration-300 z-10 mt-8">
+        
+        <div class="absolute top-4 right-4 flex items-center space-x-3 z-50">
+            <button id="rebootBtn" class="bg-red-500 hover:bg-red-600 text-white text-xs font-black uppercase brutal-border px-3 py-1 brutal-button shadow-[2px_2px_0px_0px_#000] flex items-center gap-1" title="Interrupt and restart">
+                <span>REBOOT</span> <span class="text-[10px]">🔴</span>
+            </button>
+            <div id="statusLight" class="w-4 h-4 rounded-full border-2 border-black bg-yellow-400"></div>
+        </div>
+
+        <div class="text-center mt-6 mb-8 relative z-10">
+            <h1 class="title-font text-4xl sm:text-5xl lg:text-6xl text-white mb-4 tracking-wide" style="-webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">
+                Career-Tron 3000
+            </h1>
+            <p class="font-bold text-lg sm:text-xl bg-white brutal-border inline-block px-4 py-2 rounded-lg transform -rotate-2">
+                Discover your inevitable fate! 🤖
+            </p>
+        </div>
+
+        <div id="formSection" class="block">
+            <form id="careerForm" class="space-y-4 relative z-10">
+                <div class="space-y-2">
+                    <label for="jobInput" class="block font-bold text-lg">Step 1: What do you mistakenly call a "Career"?</label>
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="jobInput" 
+                            placeholder="Type a job..." 
+                            class="w-full p-4 brutal-border rounded-xl text-lg focus:outline-none focus:bg-[#e0f2fe] transition-colors brutal-shadow bg-white"
+                            required
+                            autocomplete="off"
+                        >
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap gap-2 pb-4">
+                    <span class="text-sm font-bold mt-2">Quick Select:</span>
+                    <button type="button" class="quick-job bg-white border-2 border-black rounded-full px-3 py-1 text-sm font-bold hover:bg-yellow-200 transition-colors brutal-shadow shadow-[2px_2px_0px_0px_#000]">Big 4 Consultant</button>
+                    <button type="button" class="quick-job bg-white border-2 border-black rounded-full px-3 py-1 text-sm font-bold hover:bg-yellow-200 transition-colors brutal-shadow shadow-[2px_2px_0px_0px_#000]">Venture Capitalist</button>
+                    <button type="button" class="quick-job bg-white border-2 border-black rounded-full px-3 py-1 text-sm font-bold hover:bg-yellow-200 transition-colors brutal-shadow shadow-[2px_2px_0px_0px_#000]">Scrum Master</button>
+                    <button type="button" class="quick-job bg-white border-2 border-black rounded-full px-3 py-1 text-sm font-bold hover:bg-yellow-200 transition-colors brutal-shadow shadow-[2px_2px_0px_0px_#000]">Crypto Guru</button>
+                </div>
+
+                <button 
+                    type="submit" 
+                    id="submitBtn"
+                    class="w-full bg-[#facc15] hover:bg-[#eab308] text-black brutal-border p-4 rounded-xl text-xl font-bold brutal-button brutal-shadow flex items-center justify-center space-x-3"
+                >
+                    <span id="btnText">CONSULT THE A.I. OVERLORD ✨</span>
+                </button>
+            </form>
+        </div>
+
+        <div id="memeLoader" class="hidden mt-4 relative z-10">
+            <div class="bg-white brutal-border rounded-xl p-4 brutal-shadow transform rotate-1">
+                <div class="w-full h-48 sm:h-64 brutal-border overflow-hidden bg-black flex items-center justify-center mb-4 relative">
+                    <img id="memeImage" src="" alt="Processing meme" referrerpolicy="no-referrer" crossorigin="anonymous" class="w-full h-full object-cover opacity-90">
+                    <div class="absolute top-0 left-0 w-full h-full bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.25)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
+                </div>
+                <div class="bg-yellow-300 brutal-border p-4 transform -rotate-1 shadow-[4px_4px_0px_0px_#000]">
+                    <p id="memeText"
