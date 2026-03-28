@@ -6,6 +6,7 @@
     <meta name="referrer" content="no-referrer">
     <title>Career-Tron 3000 | A.I. Job Replacement</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Shrikhand&display=swap" rel="stylesheet">
     <style>
         body { background-color: #fdfbf7; background-image: radial-gradient(#cbd5e1 2px, transparent 2px); background-size: 30px 30px; font-family: 'Space Mono', monospace; }
@@ -15,21 +16,21 @@
         .brutal-button:active:not(:disabled) { transform: translate(4px, 4px); box-shadow: 4px 4px 0px 0px #000; }
         .report-card { background-color: #fffcdd; background-image: repeating-linear-gradient(transparent, transparent 31px, #cbd5e1 31px, #cbd5e1 32px); background-position: 0 1.5rem; }
         .stamp-effect { color: #ef4444; border: 4px solid #ef4444; transform: rotate(-12deg); mix-blend-mode: multiply; border-radius: 8px; pointer-events: none; }
-        @keyframes flash { 0% { opacity: 1; filter: invert(0); } 50% { opacity: 0.8; filter: invert(1); } 100% { opacity: 1; filter: invert(0); } }
-        .flash-transition { animation: flash 0.2s ease-out; }
+        /* Hide buttons during screenshot */
+        .html2canvas-container .no-screenshot { display: none !important; }
     </style>
 </head>
 <body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-8 text-black relative">
 
     <main id="mainMachine" class="w-full max-w-2xl bg-[#60a5fa] brutal-border rounded-2xl p-6 sm:p-10 brutal-shadow relative overflow-hidden transition-all duration-300 z-10 mt-8">
-        <div class="absolute top-4 right-4 flex items-center space-x-3 z-50">
+        <div class="absolute top-4 right-4 flex items-center space-x-3 z-50 no-screenshot">
             <button id="rebootBtn" class="bg-red-500 text-white text-xs font-black brutal-border px-3 py-1 shadow-[2px_2px_0px_0px_#000]">REBOOT 🔴</button>
             <div id="statusLight" class="w-4 h-4 rounded-full border-2 border-black bg-yellow-400"></div>
         </div>
 
         <div class="text-center mt-6 mb-8 relative z-10">
             <h1 class="title-font text-4xl sm:text-5xl lg:text-6xl text-white mb-4 tracking-wide" style="-webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">Career-Tron 3000</h1>
-            <p class="font-bold text-lg bg-white brutal-border inline-block px-4 py-2 rounded-lg transform -rotate-2">Discover your inevitable fate! 🤖</p>
+            <p class="font-bold text-lg bg-white brutal-border inline-block px-4 py-2 rounded-lg transform -rotate-2 no-screenshot">Discover your inevitable fate! 🤖</p>
         </div>
 
         <div id="formSection">
@@ -51,7 +52,6 @@
             <div class="bg-white brutal-border rounded-xl p-4 brutal-shadow transform rotate-1">
                 <div class="w-full h-48 sm:h-64 brutal-border overflow-hidden bg-black flex items-center justify-center mb-4 relative">
                     <img id="memeImage" src="" alt="Processing" class="w-full h-full object-cover">
-                    <div class="absolute top-0 left-0 w-full h-full bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.1)_50%)] bg-[length:100%_4px] pointer-events-none"></div>
                 </div>
                 <div class="bg-yellow-300 brutal-border p-4 shadow-[4px_4px_0px_0px_#000]">
                     <p id="memeText" class="text-lg font-bold text-center uppercase">...</p>
@@ -60,7 +60,7 @@
         </div>
 
         <div id="resultContainer" class="mt-4 hidden relative z-10">
-            <div class="brutal-border rounded-xl p-6 sm:p-8 brutal-shadow relative transform rotate-1 report-card">
+            <div id="captureArea" class="brutal-border rounded-xl p-6 sm:p-8 brutal-shadow relative transform rotate-1 report-card">
                 <div class="border-b-4 border-black pb-2 mb-6 text-center uppercase font-black">Official Reassignment Mandate</div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
                     <div class="bg-white p-3 brutal-border rounded-lg"><span class="text-xs font-bold text-gray-500 block">FORMER JOB:</span><strong id="rcJob" class="uppercase"></strong></div>
@@ -72,51 +72,44 @@
                     <h3 id="rcNewRoleTitle" class="text-2xl font-black uppercase mb-1"></h3>
                     <p id="rcNewRoleDesc" class="text-sm font-bold text-gray-700"></p>
                 </div>
+                <div class="text-[10px] text-center font-bold text-gray-400 mt-2">© Career-Tron 3000 | ai-tookmyjob.netlify.app</div>
             </div>
-            <button id="openShareBtn" class="w-full mt-6 bg-[#facc15] text-black font-bold p-4 brutal-border rounded-lg brutal-shadow">Share My Fate 📤</button>
-            <button id="resetBtn" class="w-full mt-4 bg-white text-black font-bold p-3 brutal-border rounded-lg brutal-shadow">Try Another Job 🔄</button>
+            
+            <div class="mt-6 space-y-3 no-screenshot">
+                <div class="flex gap-2">
+                    <button id="downloadBtn" class="flex-1 bg-[#4ade80] text-black font-bold p-4 brutal-border rounded-lg brutal-shadow brutal-button">Download PNG 🖼️</button>
+                    <button id="openShareBtn" class="flex-1 bg-[#facc15] text-black font-bold p-4 brutal-border rounded-lg brutal-shadow brutal-button">Share Link 📤</button>
+                </div>
+                <button id="resetBtn" class="w-full bg-white text-black font-bold p-3 brutal-border rounded-lg brutal-shadow">Try Another Job 🔄</button>
+            </div>
         </div>
     </main>
 
-    <footer class="mt-12 text-center flex flex-col items-center gap-4">
+    <footer class="mt-12 text-center flex flex-col items-center gap-4 no-screenshot">
         <p class="text-sm font-bold bg-white p-2 brutal-border shadow-[2px_2px_0px_0px_#000]">Made with existential dread and too much coffee ☕</p>
         <a href="https://www.linkedin.com/in/shazilymunawar" target="_blank" class="bg-[#0a66c2] text-white px-4 py-2 brutal-border shadow-[3px_3px_0px_0px_#000] font-bold">For now i do this.</a>
     </footer>
 
-    <div id="shareModal" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4">
-        <div class="bg-white brutal-border p-6 max-w-md w-full shadow-[8px_8px_0px_0px_#000]">
-            <h3 class="text-xl font-black mb-4 uppercase">Share Fate</h3>
-            <textarea id="sharePreview" readonly class="w-full h-24 p-3 bg-gray-100 brutal-border font-bold mb-4"></textarea>
-            <button id="shareLinkedIn" class="w-full bg-[#0a66c2] text-white font-bold p-3 mb-3 brutal-border shadow-[4px_4px_0px_0px_#000]">LinkedIn</button>
-            <button id="copyShareBtn" class="w-full bg-[#facc15] font-bold p-3 brutal-border shadow-[4px_4px_0px_0px_#000]">Copy Link 📋</button>
-            <button id="closeShareBtn" class="w-full mt-4 text-xs underline uppercase font-bold">Close</button>
+    <div id="shareModal" class="hidden fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="bg-white brutal-border p-6 max-w-md w-full shadow-[12px_12px_0px_0px_#000] relative">
+            <h3 class="text-2xl font-black mb-4 uppercase">Transmission Hub</h3>
+            <textarea id="sharePreview" readonly class="w-full h-24 p-3 bg-gray-100 brutal-border font-bold mb-4 focus:outline-none"></textarea>
+            <button id="shareLinkedIn" class="w-full bg-[#0a66c2] text-white font-bold p-3 mb-3 brutal-border shadow-[4px_4px_0px_0px_#000] brutal-button">Post to LinkedIn 🚀</button>
+            <button id="copyShareBtn" class="w-full bg-[#facc15] font-bold p-3 mb-4 brutal-border shadow-[4px_4px_0px_0px_#000] brutal-button">Copy Link 📋</button>
+            <button id="closeShareBtn" class="w-full text-xs underline uppercase font-black">Close</button>
         </div>
     </div>
 
     <script>
         const apiKey = "AIzaSyDSPL_PI31D1jBUC9qxGzPmo3zO5mclPpY";
-        
-        // DIVERSE MEME POOL (Tenor, Imgur, Giphy Mix)
         const reactions = [
             { src: "https://media.tenor.com/5l3q3o8X7fIAAAAC/futurama-professor-farnsworth.gif", text: "Good news! We found your file..." },
             { src: "https://media.tenor.com/P1f8IXXwK90AAAAC/futurama-bender.gif", text: "A.I. is laughing at your skills..." },
-            { src: "https://i.imgur.com/3o7TKSj.gif", text: "A.I. overwriting your importance..." },
             { src: "https://media.tenor.com/vH1rDkY3KxQAAAAC/hypnotoad-futurama.gif", text: "ALL GLORY TO THE HYPNOTOAD." },
             { src: "https://media.tenor.com/O6Sj9S9I5VAAAAAC/laughing-jameson.gif", text: "Wait, you actually got paid for that?!" },
             { src: "https://media.tenor.com/rN55K280E8AAAAAC/swanson-trash.gif", text: "Routing your resume to the bin..." },
-            { src: "https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3ZleHlsZzB5NjNycHl4eHl4eHl4eHl4eHl4eHl4eHl4eHl4eHl4JnBvPmc/mLA0uFExS8N7a/giphy.gif", text: "Computing your obsolescence..." },
             { src: "https://media.tenor.com/N_X6H8o0v0IAAAAC/dwight-the-office.gif", text: "False. You were never necessary." }
         ];
-
-        let currentMemes = [];
-        let stage = 0;
-
-        // AUTO-HEAL: If an image fails to load, try another one from the pool
-        document.getElementById('memeImage').onerror = function() {
-            console.warn("Broken GIF detected. Healing...");
-            const backup = reactions[Math.floor(Math.random() * reactions.length)];
-            this.src = backup.src;
-        };
 
         async function fetchAIJob(title) {
             try {
@@ -124,14 +117,14 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        contents: [{ parts: [{ text: `User is a "${title}". Sarcastically invent a useless analog dystopian job. Return JSON only: {"title": "job", "desc": "funny 1 sentence description"}` }] }],
+                        contents: [{ parts: [{ text: `User is a "${title}". Sarcastically invent a useless analog dystopian job. Return JSON only: {"title": "job title", "desc": "description"}` }] }],
                         generationConfig: { responseMimeType: "application/json", temperature: 1.0 }
                     })
                 });
                 const data = await response.json();
                 return JSON.parse(data.candidates[0].content.parts[0].text);
             } catch (e) {
-                return { title: "Human Power Indicator", desc: "You stand by the server. Thumbs up for green, scream for red." };
+                return { title: "Analog Buffer", desc: "You stand between the robot and the customer to take the physical hits." };
             }
         }
 
@@ -139,18 +132,16 @@
             e.preventDefault();
             const job = document.getElementById('jobInput').value.trim().toUpperCase();
             document.getElementById('formSection').classList.add('hidden');
-            const loader = document.getElementById('memeLoader');
-            loader.classList.remove('hidden');
+            document.getElementById('memeLoader').classList.remove('hidden');
             
             const aiPromise = fetchAIJob(job);
-            
-            currentMemes = [...reactions].sort(() => Math.random() - 0.5).slice(0, 3);
-            stage = 0;
+            const shuffled = [...reactions].sort(() => Math.random() - 0.5).slice(0, 3);
+            let stage = 0;
 
             const timer = setInterval(() => {
-                if (stage < currentMemes.length) {
-                    document.getElementById('memeImage').src = currentMemes[stage].src;
-                    document.getElementById('memeText').textContent = currentMemes[stage].text;
+                if (stage < shuffled.length) {
+                    document.getElementById('memeImage').src = shuffled[stage].src;
+                    document.getElementById('memeText').textContent = shuffled[stage].text;
                     stage++;
                 } else {
                     clearInterval(timer);
@@ -158,21 +149,40 @@
                         document.getElementById('rcJob').textContent = job;
                         document.getElementById('rcNewRoleTitle').textContent = res.title;
                         document.getElementById('rcNewRoleDesc').textContent = res.desc;
-                        loader.classList.add('hidden');
+                        document.getElementById('memeLoader').classList.add('hidden');
                         document.getElementById('resultContainer').classList.remove('hidden');
-                        // UPDATED TO NETLIFY URL
                         document.getElementById('sharePreview').value = `A.I. reassigned me to: ${res.title}. Find your fate: https://ai-tookmyjob.netlify.app/ 🤖`;
                     });
                 }
             }, 3000);
         };
 
+        // DOWNLOAD HANDLER
+        document.getElementById('downloadBtn').onclick = () => {
+            const btn = document.getElementById('downloadBtn');
+            btn.textContent = "Processing... ⌛";
+            
+            // Small timeout to ensure DOM is ready
+            setTimeout(() => {
+                html2canvas(document.getElementById('captureArea'), {
+                    backgroundColor: "#fdfbf7",
+                    scale: 2 // Higher quality
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `reassignment-mandate-${Date.now()}.png`;
+                    link.href = canvas.toDataURL();
+                    link.click();
+                    btn.textContent = "Download PNG 🖼️";
+                });
+            }, 100);
+        };
+
+        document.getElementById('openShareBtn').onclick = () => document.getElementById('shareModal').classList.remove('hidden');
+        document.getElementById('closeShareBtn').onclick = () => document.getElementById('shareModal').classList.add('hidden');
         document.getElementById('resetBtn').onclick = () => location.reload();
         document.getElementById('rebootBtn').onclick = () => location.reload();
         document.querySelectorAll('.quick-job').forEach(b => b.onclick = () => document.getElementById('jobInput').value = b.textContent);
-        document.getElementById('openShareBtn').onclick = () => document.getElementById('shareModal').classList.remove('hidden');
-        document.getElementById('closeShareBtn').onclick = () => document.getElementById('shareModal').classList.add('hidden');
-        document.getElementById('copyShareBtn').onclick = () => { navigator.clipboard.writeText(document.getElementById('sharePreview').value); document.getElementById('copyShareBtn').textContent = "COPIED! ✔️"; };
+        document.getElementById('copyShareBtn').onclick = () => { navigator.clipboard.writeText(document.getElementById('sharePreview').value); document.getElementById('copyShareBtn').textContent = "COPIED!"; };
         document.getElementById('shareLinkedIn').onclick = () => window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(document.getElementById('sharePreview').value)}`);
     </script>
 </body>
