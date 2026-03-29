@@ -1,6 +1,6 @@
 exports.handler = async function(event) {
     const job = event.queryStringParameters.job;
-    const apiKey = process.env.GEMINI_API_KEY; // reads from Netlify, never exposed
+    const apiKey = process.env.GEMINI_API_KEY;
 
     const prompt = `Act as a cynical A.I. Overlord reassigning obsolete humans.
 The user's current job is "${job}".
@@ -12,7 +12,7 @@ Return ONLY valid JSON, no markdown:
 
     try {
         const res = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -27,6 +27,10 @@ Return ONLY valid JSON, no markdown:
             }
         );
         const data = await res.json();
+
+        // THIS LINE tells us exactly what Gemini is returning
+        console.log("GEMINI RAW RESPONSE:", JSON.stringify(data));
+
         const result = JSON.parse(data.candidates[0].content.parts[0].text);
         return {
             statusCode: 200,
@@ -34,6 +38,8 @@ Return ONLY valid JSON, no markdown:
             body: JSON.stringify(result)
         };
     } catch (err) {
+        // NOW we can see the actual error
+        console.error("FUNCTION ERROR:", err.message);
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
