@@ -53,6 +53,7 @@
     <!-- THE MACHINE -->
     <main id="mainMachine" class="w-full max-w-2xl bg-[#60a5fa] brutal-border rounded-2xl p-6 sm:p-10 brutal-shadow relative mx-4 transition-all duration-300">
         
+        <!-- Hardware status -->
         <div class="absolute top-4 right-4 flex items-center space-x-3 no-screenshot">
             <button onclick="location.reload()" class="bg-red-500 text-white text-[10px] font-black brutal-border px-3 py-1 shadow-[2px_2px_0px_0px_#000] uppercase transition-transform hover:scale-105 active:translate-y-1">REBOOT 🔴</button>
             <div id="statusLight" class="w-4 h-4 rounded-full border-2 border-black bg-green-500 shadow-[0_0_10px_#22c55e]"></div>
@@ -63,22 +64,22 @@
             <div class="bg-white brutal-border p-3 rounded-lg transform -rotate-1 mb-4 shadow-[4px_4px_0px_0px_#000]">
                 <p class="text-[11px] font-bold uppercase leading-tight italic text-black text-center">Bureau of Human Obsolescence: Reassignment Hub</p>
             </div>
-            <p class="text-[10px] font-black uppercase text-white tracking-widest">Unit #3000-Z | Neural Proxy Active</p>
+            <p class="text-[10px] font-black uppercase text-white tracking-widest text-center">Unit #3000-Z | Security Proxy Active</p>
         </div>
 
         <!-- STAGE 1: INPUT -->
         <div id="formSection">
             <form id="careerForm" class="space-y-6">
                 <div class="space-y-2 text-center">
-                    <label class="block font-black text-lg uppercase tracking-tighter italic text-white" style="-webkit-text-stroke: 0.5px black;">Current Career Path:</label>
+                    <label class="block font-black text-lg uppercase tracking-tighter italic text-white" style="-webkit-text-stroke: 0.5px black;">Current Human "Career":</label>
                     <input type="text" id="jobInput" placeholder="Ex: Growth Hacker, Scrum Master..." class="w-full p-4 brutal-border rounded-xl text-lg brutal-shadow focus:outline-none bg-white text-center" required>
                 </div>
                 
                 <div class="flex flex-wrap gap-2 justify-center pb-2">
-                    <button type="button" onclick="document.getElementById('jobInput').value='Venture Capitalist'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 transition-colors uppercase">VC</button>
-                    <button type="button" onclick="document.getElementById('jobInput').value='Scrum Master'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 transition-colors uppercase">Scrum Master</button>
-                    <button type="button" onclick="document.getElementById('jobInput').value='Prompt Engineer'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 transition-colors uppercase">Prompt Engineer</button>
-                    <button type="button" onclick="document.getElementById('jobInput').value='Agile Coach'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 transition-colors uppercase">Agile Coach</button>
+                    <button type="button" onclick="document.getElementById('jobInput').value='Venture Capitalist'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">VC</button>
+                    <button type="button" onclick="document.getElementById('jobInput').value='Scrum Master'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Scrum Master</button>
+                    <button type="button" onclick="document.getElementById('jobInput').value='Prompt Engineer'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Prompt Engineer</button>
+                    <button type="button" onclick="document.getElementById('jobInput').value='Agile Coach'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Agile Coach</button>
                 </div>
 
                 <div class="text-center space-y-3">
@@ -145,18 +146,26 @@
         const MEME_FILES = ["they-took-our-jobs-darryl-weathers.gif", "hes-got-no-job-south-park.gif", "benjammins-too-much-time.gif", "steven-he-stop-crying.gif", "steven-he-smells-like.gif", "benjammins-call-hr.gif", "tesla-optimus.gif", "robot-ai.gif", "ai-ai-is-here.gif", "typing-bored-typing.gif", "youre-fired-donald-trump.gif", "home-time.gif", "haha.gif", "office.gif", "emotional-damage.gif", "awkward-awkward-smile.gif", "the-it-crowd-moss-the-it-crowd.gif"];
         
         function getMemeUrl(filename, config) { 
-            return `https://raw.githubusercontent.com/${config.username}/${config.repo}/${config.branch}/memes/${filename}`; 
+            const user = config.username || "shazily";
+            const repo = config.repo || "AI-wasteland";
+            const branch = config.branch || "main";
+            return `https://raw.githubusercontent.com/${user}/${repo}/${branch}/memes/${filename}`; 
         }
 
         async function fetchAI(job) {
             try {
-                // Call the Netlify Function Proxy
-                const response = await fetch(`/.netlify/functions/get-fate?job=${encodeURIComponent(job)}`);
+                // Determine the correct endpoint (handles both live and preview environments)
+                let endpoint = "/.netlify/functions/get-fate";
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    endpoint = "http://localhost:8888/.netlify/functions/get-fate";
+                }
+
+                const response = await fetch(`${endpoint}?job=${encodeURIComponent(job)}`);
                 if (!response.ok) throw new Error("Overlord is busy.");
                 return await response.json();
             } catch (e) {
                 console.error("Proxy failed:", e);
-                // Fallback for local testing or server issues
+                // Fallback config so the app still works if the function is down
                 return { 
                     msgs: ["Status: Optimizing sadness.", "Status: Skillset expired.", "Status: Rebooting ego.", "Status: System upgrade."], 
                     res: { t: "Analog Server Fan", d: "You will stand in the server room and blow through a straw for 12 hours a day until obsolescence." },
@@ -180,8 +189,10 @@
             const interval = setInterval(async () => {
                 const data = await aiPromise;
                 if (stage < 4) {
-                    document.getElementById('memeImage').src = getMemeUrl(chosenFiles[stage], data.github);
-                    document.getElementById('memeText').textContent = data.msgs[stage] || "Status: Analyzing failure...";
+                    // Safety check for data object
+                    const githubConfig = (data && data.github) ? data.github : { username: "shazily", repo: "AI-wasteland", branch: "main" };
+                    document.getElementById('memeImage').src = getMemeUrl(chosenFiles[stage], githubConfig);
+                    document.getElementById('memeText').textContent = (data && data.msgs) ? data.msgs[stage] : "Status: Analyzing failure...";
                     stage++;
                 } else {
                     clearInterval(interval);
