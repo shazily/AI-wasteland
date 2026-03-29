@@ -53,7 +53,6 @@
     <!-- THE MACHINE -->
     <main id="mainMachine" class="w-full max-w-2xl bg-[#60a5fa] brutal-border rounded-2xl p-6 sm:p-10 brutal-shadow relative mx-4 transition-all duration-300">
         
-        <!-- Status Panel -->
         <div class="absolute top-4 right-4 flex items-center space-x-3 no-screenshot">
             <button onclick="location.reload()" class="bg-red-500 text-white text-[10px] font-black brutal-border px-3 py-1 shadow-[2px_2px_0px_0px_#000] uppercase transition-transform hover:scale-105 active:translate-y-1">REBOOT 🔴</button>
             <div id="statusLight" class="w-4 h-4 rounded-full border-2 border-black bg-green-500 shadow-[0_0_10px_#22c55e]"></div>
@@ -64,10 +63,10 @@
             <div class="bg-white brutal-border p-3 rounded-lg transform -rotate-1 mb-4 shadow-[4px_4px_0px_0px_#000]">
                 <p class="text-[11px] font-bold uppercase leading-tight italic text-black text-center">Bureau of Human Obsolescence: Reassignment Hub</p>
             </div>
-            <p class="text-[10px] font-black uppercase text-white tracking-widest">Unit #3000-Z | Secure Neural Link Active</p>
+            <p class="text-[10px] font-black uppercase text-white tracking-widest">Unit #3000-Z | Neural Proxy Active</p>
         </div>
 
-        <!-- INPUT -->
+        <!-- STAGE 1: INPUT -->
         <div id="formSection">
             <form id="careerForm" class="space-y-6">
                 <div class="space-y-2 text-center">
@@ -84,12 +83,12 @@
 
                 <div class="text-center space-y-3">
                     <button type="submit" class="w-full bg-[#facc15] text-black brutal-border p-5 rounded-xl text-xl font-black shadow-[4px_4px_0px_0px_#000] active:translate-y-1 transition-all hover:bg-yellow-300">CONSULT THE OVERLORD</button>
-                    <p class="text-xs font-black uppercase text-white tracking-widest italic">Calculating your future irrelevance... 😭</p>
+                    <p class="text-xs font-black uppercase text-white tracking-widest italic text-center">Calculating your inevitable replacement... 😭</p>
                 </div>
             </form>
         </div>
 
-        <!-- RESULTS -->
+        <!-- STAGE 3: RESULT -->
         <div id="resultContainer" class="hidden">
             <div id="captureArea" class="brutal-border rounded-xl p-6 sm:p-8 brutal-shadow relative report-card overflow-hidden">
                 <div class="scanline"></div>
@@ -143,16 +142,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script>
-        // FULL GIF REGISTRY FROM YOUR REPO
-        const MEME_FILES = [
-            "they-took-our-jobs-darryl-weathers.gif", "hes-got-no-job-south-park.gif", 
-            "benjammins-too-much-time.gif", "steven-he-stop-crying.gif", 
-            "steven-he-smells-like.gif", "benjammins-call-hr.gif", 
-            "tesla-optimus.gif", "robot-ai.gif", "ai-ai-is-here.gif", 
-            "typing-bored-typing.gif", "youre-fired-donald-trump.gif", 
-            "home-time.gif", "haha.gif", "office.gif", "emotional-damage.gif", 
-            "awkward-awkward-smile.gif", "the-it-crowd-moss-the-it-crowd.gif"
-        ];
+        const MEME_FILES = ["they-took-our-jobs-darryl-weathers.gif", "hes-got-no-job-south-park.gif", "benjammins-too-much-time.gif", "steven-he-stop-crying.gif", "steven-he-smells-like.gif", "benjammins-call-hr.gif", "tesla-optimus.gif", "robot-ai.gif", "ai-ai-is-here.gif", "typing-bored-typing.gif", "youre-fired-donald-trump.gif", "home-time.gif", "haha.gif", "office.gif", "emotional-damage.gif", "awkward-awkward-smile.gif", "the-it-crowd-moss-the-it-crowd.gif"];
         
         function getMemeUrl(filename, config) { 
             return `https://raw.githubusercontent.com/${config.username}/${config.repo}/${config.branch}/memes/${filename}`; 
@@ -160,12 +150,8 @@
 
         async function fetchAI(job) {
             try {
-                // Ensure absolute URL construction for environments like blob: or restricted origins
-                const baseUrl = window.location.origin === 'null' || !window.location.origin ? '' : window.location.origin;
-                const url = new URL('/.netlify/functions/get-fate', baseUrl || window.location.href);
-                url.searchParams.set('job', job);
-
-                const response = await fetch(url.toString());
+                // Call the Netlify Function Proxy
+                const response = await fetch(`/.netlify/functions/get-fate?job=${encodeURIComponent(job)}`);
                 if (!response.ok) throw new Error("Overlord is busy.");
                 return await response.json();
             } catch (e) {
@@ -194,11 +180,8 @@
             const interval = setInterval(async () => {
                 const data = await aiPromise;
                 if (stage < 4) {
-                    // Update image and text for each stage
-                    if (data && data.github) {
-                        document.getElementById('memeImage').src = getMemeUrl(chosenFiles[stage], data.github);
-                    }
-                    document.getElementById('memeText').textContent = (data && data.msgs) ? data.msgs[stage] : "Status: Analyzing failure...";
+                    document.getElementById('memeImage').src = getMemeUrl(chosenFiles[stage], data.github);
+                    document.getElementById('memeText').textContent = data.msgs[stage] || "Status: Analyzing failure...";
                     stage++;
                 } else {
                     clearInterval(interval);
