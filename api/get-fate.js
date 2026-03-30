@@ -31,7 +31,11 @@ Return ONLY valid JSON, no markdown, no extra text:
         const data = await response.json();
         if (!data.message) return res.status(200).json({ debug: JSON.stringify(data) });
 
-        const text = data.message.content.trim();
+       const text = data.message.content.trim()
+        .replace(/^```json\s*/i, '')
+        .replace(/^```\s*/i, '')
+        .replace(/```\s*$/i, '')
+        .trim();
         const result = JSON.parse(text);
         return res.status(200).json(result);
 
