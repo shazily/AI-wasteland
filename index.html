@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
-    <title>Career-Tron 3000 | Official Future Mandate</title>
+    <title>Career-Roast ☕ | A.I powered Re-assignment</title>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QX4K1WEL73"></script>
@@ -196,14 +196,14 @@
             overflow-y: auto;
         }
 
-        .bureau-title {
-            font-family: 'Shrikhand', cursive;
-            letter-spacing: 0.02em;
-            line-height: 1.15;
-        }
         .bureau-strip {
-            line-height: 1.25;
-            gap: 0.2rem 0.45rem;
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
         }
         #mainMachine {
             max-height: min(100dvh, 100vh);
@@ -232,11 +232,9 @@
 
     <!-- Header -->
     <div class="text-center mt-1 sm:mt-2 mb-2 sm:mb-4 shrink-0">
-        <h1 class="title-font text-[clamp(1.5rem,5.5dvh,2.75rem)] sm:text-5xl md:text-6xl text-white mb-1 sm:mb-2 leading-[0.92] sm:leading-tight pr-10 sm:pr-0" style="-webkit-text-stroke: 2px black; text-shadow: 3px 3px 0px #000;">Career-Tron</h1>
-        <div class="bureau-strip mx-auto mb-1.5 sm:mb-2 flex flex-wrap items-baseline justify-center gap-x-1.5 gap-y-0.5 rounded-lg border-2 border-black bg-amber-100 px-2 py-1.5 shadow-[2px_2px_0_0_#000] max-w-xl">
-            <span class="bureau-title text-xs sm:text-base text-slate-900">🗂️ Obsolescence Bureau</span>
-            <span class="font-black text-slate-700 text-[10px] sm:text-xs" aria-hidden="true">·</span>
-            <span class="bureau-title text-xs sm:text-base text-slate-900">Reassignment Hub 📋</span>
+        <h1 class="title-font text-[clamp(1.5rem,5.5dvh,2.75rem)] sm:text-5xl md:text-6xl text-white mb-1 sm:mb-2 leading-[0.92] sm:leading-tight pr-10 sm:pr-0" style="-webkit-text-stroke: 2px black; text-shadow: 3px 3px 0px #000;">Career-Roast ☕</h1>
+        <div class="bureau-strip mx-auto mb-1.5 sm:mb-2 flex flex-nowrap items-center justify-center rounded-lg border-2 border-black bg-amber-100 px-2.5 py-1.5 shadow-[2px_2px_0_0_#000] max-w-xl text-center">
+            <span class="text-[10px] sm:text-sm md:text-base text-slate-900 tracking-tight">🗂️ Obsolescence Bureau · Reassignment Hub 📋</span>
         </div>
         <div id="introBlurbCard" class="intro-blurb-card bg-white brutal-border p-2 sm:p-2.5 rounded-lg transform -rotate-1 mb-1 shadow-[3px_3px_0px_0px_#000] max-w-xl mx-auto">
             <p class="text-[11px] sm:text-sm font-black text-violet-900 italic text-center leading-snug">✨ No shame. Only vibes. ✨</p>
@@ -277,7 +275,7 @@
     <div id="resultContainer" class="hidden">
         <div id="captureArea" class="report-compact brutal-border rounded-xl p-3 sm:p-5 md:p-6 brutal-shadow relative report-card overflow-hidden">
             <div class="scanline"></div>
-            <div class="border-b-2 sm:border-b-4 border-black pb-1.5 sm:pb-2 mb-3 sm:mb-4 text-center uppercase font-black text-lg sm:text-2xl italic tracking-tighter">Future Mandate</div>
+            <div class="border-b-2 sm:border-b-4 border-black pb-1.5 sm:pb-2 mb-3 sm:mb-4 text-center font-black text-lg sm:text-2xl italic tracking-tighter normal-case">A.I powered Re-assignment</div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4 relative">
                 <div class="bg-white p-2 sm:p-3 brutal-border rounded-lg">
                     <span class="text-[9px] font-black text-gray-400 block uppercase mb-0.5">Current Job:</span>
@@ -297,7 +295,7 @@
                 <h3 id="rcNewRoleTitle" class="text-xl sm:text-2xl md:text-3xl font-black uppercase mb-1 sm:mb-2 tracking-tighter text-blue-600 italic leading-tight"></h3>
                 <p id="rcNewRoleDesc" class="text-sm sm:text-base md:text-[1.05rem] font-extrabold text-gray-900 leading-relaxed border-l-[5px] border-black pl-3 sm:pl-4 bg-gray-50/80 py-2 rounded-r-md"></p>
             </div>
-            <div class="text-[7px] sm:text-[8px] text-center font-bold text-gray-400 uppercase tracking-widest mt-1 italic">© Career-Tron 3000 | Human Obsolescence Bureau</div>
+            <div class="text-[7px] sm:text-[8px] text-center font-bold text-gray-400 uppercase tracking-widest mt-1 italic">© Career-Roast | Human Obsolescence Bureau</div>
         </div>
 
         <div class="mt-3 sm:mt-5 no-screenshot">
@@ -373,6 +371,11 @@
 // ─── Config ───────────────────────────────────────────────────────────
 const STAGE_MS   = 4800;
 const GITHUB_RAW = "https://raw.githubusercontent.com/shazily/AI-wasteland/main/Memes/";
+/**
+ * Meme roster (17): canonical filenames under Memes/ on GitHub.
+ * Playback uses a session queue: Fisher–Yates shuffle, random rotation, then shift()
+ * so nothing replays until a full pass completes; each refill picks a new random start.
+ */
 const MEME_FILES = [...new Set([
     "they-took-our-jobs-darryl-weathers.gif",
     "hes-got-no-job-south-park.gif",
@@ -392,6 +395,8 @@ const MEME_FILES = [...new Set([
     "awkward-awkward-smile.gif",
     "the-it-crowd-moss-the-it-crowd.gif"
 ])];
+const MEME_QUEUE_KEY = 'aiw_meme_queue_v1';
+const MEME_LAST_KEY = 'aiw_meme_last_v1';
 
 // ─── Pre-cache GIFs in parallel on page load ─────────────────────────
 const gifCache = {};
@@ -416,8 +421,8 @@ async function warmCache() {
 warmCache();
 
 /**
- * GIF cycle: one shuffled lap per roast (no refill — no repeated files until a new run).
- * Single-file list keeps that file looping. Stale onload gated by memeShowGen.
+ * GIF cycle: session queue (shuffle + random rotation). No file repeats until the queue
+ * drains and refills. Preload next URL so the current GIF stays visible (no black gap).
  */
 const MEME_FLIP_MS = 1000;
 let memeChaosTimer = null;
@@ -430,6 +435,54 @@ function shuffleMemeDeck(arr) {
     }
     return a;
 }
+
+function memeFilenameSet() {
+    return new Set(MEME_FILES);
+}
+
+function loadMemeQueueFromStorage() {
+    try {
+        const raw = sessionStorage.getItem(MEME_QUEUE_KEY);
+        const q = JSON.parse(raw);
+        const allowed = memeFilenameSet();
+        if (Array.isArray(q) && q.length && q.every((f) => allowed.has(f))) return q;
+    } catch (e) { /* ignore */ }
+    return null;
+}
+
+function saveMemeQueueToStorage(q) {
+    sessionStorage.setItem(MEME_QUEUE_KEY, JSON.stringify(q));
+}
+
+/** New shuffled deck rotated by a random offset; optional avoid back-to-back with last shown. */
+function buildFreshMemeQueue(avoidLast) {
+    const base = shuffleMemeDeck([...MEME_FILES]);
+    const n = base.length;
+    if (n === 0) return [];
+    if (n === 1) return [...base];
+    const rot = Math.floor(Math.random() * n);
+    let out = [...base.slice(rot), ...base.slice(0, rot)];
+    const last = avoidLast || '';
+    if (last && out.length > 1 && out[0] === last) {
+        out = [...out.slice(1), out[0]];
+    }
+    return out;
+}
+
+function takeNextMemeFilename() {
+    if (MEME_FILES.length === 0) return null;
+    if (MEME_FILES.length === 1) return MEME_FILES[0];
+    let q = loadMemeQueueFromStorage();
+    if (!q || q.length === 0) {
+        const prevLast = sessionStorage.getItem(MEME_LAST_KEY) || '';
+        q = buildFreshMemeQueue(prevLast);
+    }
+    const filename = q.shift();
+    sessionStorage.setItem(MEME_LAST_KEY, filename);
+    saveMemeQueueToStorage(q);
+    return filename;
+}
+
 function stopMemeChaos() {
     if (memeChaosTimer !== null) {
         clearInterval(memeChaosTimer);
@@ -440,54 +493,34 @@ function stopMemeChaos() {
 
 function memeUrlForDisplay(filename, bust) {
     const u = GITHUB_RAW + filename;
-    // Always bust cache per flip. Blob URLs reuse the same string per file; re-assigning can skip
-    // load/decoding so the carousel appears to “stick” or repeat the same few GIFs.
     return `${u}${u.includes('?') ? '&' : '?'}__m=${bust}`;
 }
 
 function startMemeChaos(memeImg, gifWrapper) {
     stopMemeChaos();
     memeShowGen = 0;
-    const order = shuffleMemeDeck([...MEME_FILES]);
-    let nextIndex = 0;
-
-    function popNextFilename() {
-        if (MEME_FILES.length === 0) return null;
-        if (MEME_FILES.length === 1) return MEME_FILES[0];
-        if (nextIndex >= order.length) return null;
-        return order[nextIndex++];
-    }
 
     function showOne() {
-        const filename = popNextFilename();
-        if (!filename) {
-            if (memeChaosTimer !== null) {
-                clearInterval(memeChaosTimer);
-                memeChaosTimer = null;
-            }
-            return;
-        }
+        const filename = takeNextMemeFilename();
+        if (!filename) return;
         const gen = ++memeShowGen;
         const url = memeUrlForDisplay(filename, gen);
-        gifWrapper.classList.add('gif-loading');
-        memeImg.classList.add('hidden');
-        memeImg.onload = null;
-        memeImg.onerror = null;
-        memeImg.removeAttribute('src');
-        requestAnimationFrame(() => {
+        const needShimmer = memeImg.classList.contains('hidden');
+        if (needShimmer) gifWrapper.classList.add('gif-loading');
+        const pre = new Image();
+        pre.onload = () => {
             if (gen !== memeShowGen) return;
-            memeImg.onload = () => {
-                if (gen !== memeShowGen) return;
-                gifWrapper.classList.remove('gif-loading');
-                memeImg.classList.remove('hidden');
-            };
-            memeImg.onerror = () => {
-                if (gen !== memeShowGen) return;
-                gifWrapper.classList.remove('gif-loading');
-                memeImg.classList.remove('hidden');
-            };
             memeImg.src = url;
-        });
+            memeImg.classList.remove('hidden');
+            gifWrapper.classList.remove('gif-loading');
+        };
+        pre.onerror = () => {
+            if (gen !== memeShowGen) return;
+            memeImg.src = url;
+            memeImg.classList.remove('hidden');
+            gifWrapper.classList.remove('gif-loading');
+        };
+        pre.src = url;
     }
     showOne();
     memeChaosTimer = setInterval(showOne, MEME_FLIP_MS);
@@ -540,7 +573,7 @@ function buildSharePost(ctx) {
         : `• (${ROAST_VOICE} bluescreened tactfully.)`;
 
     const linkedInBody =
-        `Career-Tron 3000 dragged my career. 99.9% “certainty” — hilarious, legally meaningless.
+        `Career-Roast ☕ dragged my career. 99.9% “certainty” — hilarious, legally meaningless.
 
 Was: ${job} | STATUS: FUTURE CANCELLED 🔴
 MANDATE: ${title}
@@ -554,11 +587,11 @@ Try your luck before HR does: ${site}`;
     const q1 = lines[0] || 'Peak obsolescence.';
     const q2 = lines[1] || '';
     let xBody = q2
-        ? `Career-Tron 3000 → "${title}" 💀\n“${q1}” · “${q2}”\n\nTry your luck → ${site}`
+        ? `Career-Roast ☕ → "${title}" 💀\n“${q1}” · “${q2}”\n\nTry your luck → ${site}`
         : `Reassigned to “${title}” 💀 ${q1}\n\nTry yours → ${site}`;
     const X_MAX = 260;
     if (xBody.length > X_MAX) {
-        xBody = `Career-Tron 3000 → “${title}” 💀\n${q1}\n\nTry your luck → ${site}`;
+        xBody = `Career-Roast ☕ → “${title}” 💀\n${q1}\n\nTry your luck → ${site}`;
     }
     if (xBody.length > X_MAX) {
         xBody = `AI mandate: “${title}” 💀\nTry yours → ${site}`;
@@ -784,7 +817,7 @@ async function shareTextPost(shareText, openUrl, meta = {}) {
         try {
             if (isLinkedIn) await copyCaptionForLinkedIn(shareText);
             const payload = {
-                title: isLinkedIn ? shareTitle : 'Career-Tron 3000',
+                title: isLinkedIn ? shareTitle : 'Career-Roast ☕',
                 text: shareText
             };
             if (!shareText.includes('ai-wasteland.vercel.app')) payload.url = site;
