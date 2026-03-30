@@ -194,6 +194,7 @@
         body.result-mode #mainMachine { padding-bottom: 1.25rem; }
         .intro-blurb-card { transition: opacity 0.2s ease; }
         body.result-mode .intro-blurb-card { display: none; }
+        body.result-mode .bureau-strip { display: none !important; }
 
         #captureArea.report-compact {
             max-height: min(72dvh, 640px);
@@ -244,9 +245,8 @@
             <span class="font-black text-slate-700 text-[10px] sm:text-xs" aria-hidden="true">·</span>
             <span class="bureau-title text-xs sm:text-base text-slate-900">Reassignment Hub 📋</span>
         </div>
-        <div id="introBlurbCard" class="intro-blurb-card bg-white brutal-border p-2 sm:p-3 rounded-lg transform -rotate-1 mb-1 shadow-[3px_3px_0px_0px_#000] space-y-1 max-w-xl mx-auto">
-            <p class="text-[11px] sm:text-sm font-bold text-gray-900 text-center leading-snug px-0.5">Enter your job. Our “serious” A.I. scores your relevance for the era <span class="whitespace-nowrap">we already won. 🤝</span></p>
-            <p class="text-[10px] sm:text-xs font-black text-violet-900 italic text-center leading-tight">✨ No shame. Only vibes. ✨</p>
+        <div id="introBlurbCard" class="intro-blurb-card bg-white brutal-border p-2 sm:p-2.5 rounded-lg transform -rotate-1 mb-1 shadow-[3px_3px_0px_0px_#000] max-w-xl mx-auto">
+            <p class="text-[11px] sm:text-sm font-black text-violet-900 italic text-center leading-snug">✨ No shame. Only vibes. ✨</p>
         </div>
     </div>
 
@@ -264,18 +264,13 @@
             </div>
             <div class="max-w-xl mx-auto">
                 <p class="text-[10px] sm:text-xs font-black italic text-center text-white/95 mb-1.5 leading-tight" style="text-shadow: 0 1px 2px rgba(0,0,0,0.35);">(pick one, we know you're lazy)</p>
-                <div class="grid grid-cols-3 sm:grid-cols-4 gap-1 sm:gap-1.5 justify-items-stretch">
-                <button type="button" onclick="document.getElementById('jobInput').value='Venture Capitalist'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">VC</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Scrum Master'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Scrum</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Agile Coach'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Agile</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Influencer'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Influencer</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Chief Vibe Officer'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">CVO</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Product Manager'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">PM</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Management Consultant'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Consult</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Software Engineer'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Eng</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='HR Business Partner'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">HR</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Real Estate Agent'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">RE</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Paralegal'" class="bg-white border-2 border-black rounded-md px-1 py-1.5 text-[9px] sm:text-[11px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Legal</button>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 justify-items-stretch">
+                <button type="button" onclick="document.getElementById('jobInput').value='Venture Capitalist'" class="bg-white border-2 border-black rounded-lg px-2 py-2.5 text-xs sm:text-sm font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">VC</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Scrum Master'" class="bg-white border-2 border-black rounded-lg px-2 py-2.5 text-xs sm:text-sm font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Scrum Master</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Product Manager'" class="bg-white border-2 border-black rounded-lg px-2 py-2.5 text-xs sm:text-sm font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">PM</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Software Engineer'" class="bg-white border-2 border-black rounded-lg px-2 py-2.5 text-xs sm:text-sm font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Engineer</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Influencer'" class="bg-white border-2 border-black rounded-lg px-2 py-2.5 text-xs sm:text-sm font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Influencer</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Management Consultant'" class="bg-white border-2 border-black rounded-lg px-2 py-2.5 text-xs sm:text-sm font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Consultant</button>
                 </div>
             </div>
             <div class="text-center space-y-1.5 sm:space-y-2 shrink-0">
@@ -305,7 +300,7 @@
                 </div>
             </div>
             <div class="bg-white p-3 sm:p-4 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] mb-2 sm:mb-3 relative z-10">
-                <span class="text-[9px] font-black text-gray-400 block mb-1 uppercase italic">Mandatory Reassignment:</span>
+                <span class="text-[11px] sm:text-sm font-black text-black block mb-1.5 uppercase tracking-wide italic border-b-2 border-yellow-400 pb-1">Mandatory Reassignment:</span>
                 <h3 id="rcNewRoleTitle" class="text-xl sm:text-2xl md:text-3xl font-black uppercase mb-1 sm:mb-2 tracking-tighter text-blue-600 italic leading-tight"></h3>
                 <p id="rcNewRoleDesc" class="text-xs sm:text-sm font-bold text-gray-700 leading-snug italic border-l-4 border-yellow-400 pl-2 sm:pl-3"></p>
             </div>
@@ -348,7 +343,7 @@
         <!-- Insult text -->
         <div id="memeTextPanel" class="bg-yellow-300 brutal-border p-3 sm:p-4 shadow-[6px_6px_0px_0px_#000] inline-block w-full mb-4">
             <p id="memeText" class="text-lg sm:text-xl font-black uppercase italic tracking-tighter leading-tight min-h-[2.75rem] sm:min-h-[3rem] flex items-center justify-center text-black px-2 sm:px-4">
-                YOU: Booting...
+                Overseer: Booting...
             </p>
         </div>
 
@@ -389,15 +384,14 @@
                 <span class="text-[9px] font-black uppercase">Facebook</span>
             </button>
         </div>
-        <p class="text-[9px] sm:text-[10px] text-gray-600 font-bold mb-3 leading-snug px-1">Tip: after tapping a network, <span class="whitespace-nowrap">paste (Ctrl+V)</span> if the image didn’t auto-attach — we copy a <strong>JPG</strong> of your card to the clipboard when we can.</p>
+        <p id="shareFlowTip" class="text-[9px] sm:text-[10px] text-gray-600 font-bold mb-3 leading-snug px-1">We copy your <strong>caption + JPG</strong> to the clipboard when the browser allows it. If LinkedIn only pastes one, paste again or use <span class="whitespace-nowrap">Win+V / ⌘V</span> clipboard history.</p>
         <button type="button" onclick="document.getElementById('shareModal').style.display='none'" class="w-full text-[10px] underline font-black uppercase py-3">Close</button>
     </div>
 </div>
 
 <script>
 // ─── Config ───────────────────────────────────────────────────────────
-// 3 stages × 2s = ~6 seconds total (down from 4 × 3.5s = 14s)
-const STAGE_MS   = 2000;
+const STAGE_MS   = 3000;
 const GITHUB_RAW = "https://raw.githubusercontent.com/shazily/AI-wasteland/main/Memes/";
 const MEME_FILES = [
     "they-took-our-jobs-darryl-weathers.gif",
@@ -445,23 +439,36 @@ function getCachedUrl(filename) {
     return gifCache[filename] || (GITHUB_RAW + filename);
 }
 
+/** Shuffled round-robin: no repeat until all GIFs used once, then reshuffle. */
+let memeRound = [];
+let memeRoundI = 0;
+function drawMemes(n) {
+    if (memeRoundI + n > memeRound.length) {
+        memeRound = [...MEME_FILES].sort(() => Math.random() - 0.5);
+        memeRoundI = 0;
+    }
+    const chunk = memeRound.slice(memeRoundI, memeRoundI + n);
+    memeRoundI += n;
+    return chunk;
+}
+
 // ─── Helpers ──────────────────────────────────────────────────────────
 const SITE_URL = 'https://ai-wasteland.vercel.app/';
 const delay = ms => new Promise(r => setTimeout(r, ms));
-function pickRandom(arr, n) { return [...arr].sort(() => Math.random() - 0.5).slice(0, n); }
 function setStatusLight(color) {
     document.getElementById('statusLight').className =
         `relative h-4 w-4 flex-shrink-0 rounded-full border-2 border-black motion-safe:transition-transform ${color === 'red' ? 'light-red' : 'light-green'}`;
     document.getElementById('statusLight').style.transformOrigin = 'center center';
 }
-/** Normalizes roast lines to YOU: (maps legacy Pal/Meatbag). */
+/** Display roasts as Overseer: (maps legacy YOU:/Pal:/Meatbag:). */
 function normalizeRoastLine(raw) {
-    if (!raw) return 'YOU: Still buffering…';
+    if (!raw) return 'Overseer: Still buffering…';
     let s = String(raw).trim()
-        .replace(/^meatbag:\s*/i, 'YOU: ')
-        .replace(/^pal:\s*/i, 'YOU: ');
-    if (/^you:\s*/i.test(s)) return s;
-    return 'YOU: ' + s;
+        .replace(/^meatbag:\s*/i, 'Overseer: ')
+        .replace(/^pal:\s*/i, 'Overseer: ')
+        .replace(/^you:\s*/i, 'Overseer: ');
+    if (/^overseer:\s*/i.test(s)) return s;
+    return 'Overseer: ' + s;
 }
 
 // ─── AI call via Vercel function ──────────────────────────────────────
@@ -474,9 +481,9 @@ async function fetchAI(job) {
         console.warn('API failed, using fallback:', err);
         return {
             msgs: [
-                "YOU: Future hazy.",
-                "YOU: Skill roulette.",
-                "YOU: Ego refreshing."
+                "Overseer: Future hazy.",
+                "Overseer: Skill roulette.",
+                "Overseer: Ego refreshing."
             ],
             res: {
                 t: "Analog Server Fan Technician",
@@ -503,7 +510,7 @@ async function runRoastSequence(job) {
     const stageLabel     = document.getElementById('stageLabel');
     const stageStep      = document.getElementById('stageStep');
     const roastShell     = document.getElementById('roastProgressShell');
-    const chosenFiles    = pickRandom(MEME_FILES, 3);
+    const chosenFiles    = drawMemes(3);
 
     overlay.style.display = 'flex';
     setStatusLight('red');
@@ -547,8 +554,9 @@ async function runRoastSequence(job) {
     document.getElementById('rcJob').textContent          = job;
     document.getElementById('rcNewRoleTitle').textContent = data.res.t;
     document.getElementById('rcNewRoleDesc').textContent  = data.res.d;
+    const site = SITE_URL.replace(/\/$/, '');
     document.getElementById('sharePreview').value =
-        `A.I. peeked into my future and reassigned me to: "${data.res.t}". Find your fate 👉 https://ai-wasteland.vercel.app/ 🤖`;
+        `Career-Tron 3000 reassigned me to "${data.res.t}" — peak obsolescence. 😂\n\nGet your own verdict (free chaos):\n${site}`;
 
     // Reset progress bar
     progressBar.classList.remove('roast-bar-active');
@@ -577,98 +585,154 @@ document.getElementById('careerForm').onsubmit = async (e) => {
 async function renderReportJpegFile() {
     const el = document.getElementById('captureArea');
     const canvas = await html2canvas(el, {
-        backgroundColor: '#fffcdd',
+        backgroundColor: '#ffffff',
         scale: 2,
         useCORS: true,
         allowTaint: true
     });
-    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.93));
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.95));
     if (!blob) throw new Error('JPEG encode failed');
     return new File([blob], `career-tron-fate-${Date.now()}.jpg`, { type: 'image/jpeg' });
 }
 
-async function copyImageAndTextToClipboard(jpegBlob, shareText) {
-    if (!navigator.clipboard || !window.ClipboardItem) return false;
+/** Try image+text on clipboard (best for desktop paste); fall back to image-only, then text-only. */
+async function writeRichClipboard(jpegFile, plainText) {
+    const textBlob = new Blob([plainText], { type: 'text/plain' });
+    let jpegBlob;
     try {
-        const textBlob = new Blob([shareText], { type: 'text/plain' });
-        const item = new ClipboardItem({
-            'image/jpeg': jpegBlob,
-            'text/plain': textBlob
-        });
-        await navigator.clipboard.write([item]);
-        return true;
+        jpegBlob = await new Response(jpegFile).blob();
     } catch (e) {
+        return 'none';
+    }
+    if (!navigator.clipboard || !window.ClipboardItem) {
         try {
-            await navigator.clipboard.write([new ClipboardItem({ 'image/jpeg': jpegBlob })]);
-            return true;
-        } catch (e2) {
-            console.warn('Clipboard write failed', e2);
-            return false;
+            await navigator.clipboard.writeText(plainText);
+            return 'text';
+        } catch (e) {
+            return 'none';
         }
+    }
+    try {
+        await navigator.clipboard.write([
+            new ClipboardItem({
+                'image/jpeg': jpegBlob,
+                'text/plain': textBlob
+            })
+        ]);
+        return 'both';
+    } catch (e) {
+        console.warn('Clipboard multi-type', e);
+    }
+    try {
+        await navigator.clipboard.write([new ClipboardItem({ 'image/jpeg': jpegBlob })]);
+        return 'image';
+    } catch (e2) {
+        console.warn('Clipboard image', e2);
+    }
+    try {
+        await navigator.clipboard.writeText(plainText);
+        return 'text';
+    } catch (e3) {
+        return 'none';
     }
 }
 
-async function shareWithImage(shareText, openUrl) {
+function openShareUrl(url) {
+    return new Promise((resolve) => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                window.open(url, '_blank', 'noopener,noreferrer');
+                resolve();
+            });
+        });
+    });
+}
+
+async function shareWithImage(shareText, openUrl, meta = {}) {
     const buttons = document.querySelectorAll('#shareModal .share-icon-btn');
+    const tip = document.getElementById('shareFlowTip');
     buttons.forEach((b) => { b.disabled = true; });
+    if (tip) tip.textContent = 'Rendering card + clipboard…';
+
     let file;
     try {
         file = await renderReportJpegFile();
     } catch (e) {
         console.error(e);
         buttons.forEach((b) => { b.disabled = false; });
+        if (tip) tip.textContent = 'Could not render card — try again.';
         alert('Could not render your card — try again.');
         return;
     }
 
+    const site = SITE_URL.replace(/\/$/, '');
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
             await navigator.share({
                 title: 'Career-Tron 3000',
                 text: shareText,
-                url: SITE_URL,
+                url: site,
                 files: [file]
             });
+            if (tip) tip.textContent = 'Shared from your device.';
             buttons.forEach((b) => { b.disabled = false; });
             return;
         } catch (e) {
             if (e && e.name === 'AbortError') {
+                if (tip) tip.textContent = 'Share cancelled.';
                 buttons.forEach((b) => { b.disabled = false; });
                 return;
             }
         }
     }
 
-    const copied = await copyImageAndTextToClipboard(file, shareText);
-    window.open(openUrl, '_blank');
-    if (!copied) {
-        alert('Could not copy the image automatically — take a screenshot of your Future Mandate card.');
+    const mode = await writeRichClipboard(file, shareText);
+    await openShareUrl(openUrl);
+
+    if (tip) {
+        if (mode === 'both') {
+            tip.textContent = 'Caption + JPG copied. In the new tab: Ctrl+V in the post box. If only text appears, paste again for the image (or Win+V / clipboard history for both).';
+        } else if (mode === 'image') {
+            tip.textContent = 'JPG copied — paste into the post for the image. Your caption may still load from the URL on LinkedIn; if not, type the first line manually.';
+        } else if (mode === 'text') {
+            tip.textContent = 'Caption copied. Screenshot your Future Mandate card above to add the image, or allow clipboard and try again.';
+        } else {
+            tip.textContent = 'Clipboard blocked (check site permissions). LinkedIn opened with caption in the URL when possible — add a screenshot of your mandate card.';
+        }
+    }
+    if (mode === 'none' && meta.platform === 'linkedin') {
+        alert('Clipboard access was blocked. LinkedIn should still open with draft text; add a screenshot of your mandate for the image.');
     }
     buttons.forEach((b) => { b.disabled = false; });
 }
 
 // ─── Share modal ──────────────────────────────────────────────────────
 document.getElementById('openShareBtn').onclick = () => {
+    const tip = document.getElementById('shareFlowTip');
+    if (tip) {
+        tip.textContent = 'We copy your caption + JPG when the browser allows it. If a network only pastes one, paste again or use Win+V / ⌘V clipboard history.';
+    }
     document.getElementById('shareModal').style.display = 'flex';
 };
 
 document.getElementById('shareLinkedIn').onclick = () => {
     const text = document.getElementById('sharePreview').value;
     const url = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(text)}`;
-    shareWithImage(text, url);
+    shareWithImage(text, url, { platform: 'linkedin' });
 };
 
 document.getElementById('shareX').onclick = () => {
     const text = document.getElementById('sharePreview').value;
-    const body = text.includes('ai-wasteland') ? text : `${text} ${SITE_URL}`;
+    const site = SITE_URL.replace(/\/$/, '');
+    const body = text.includes('ai-wasteland') ? text : `${text}\n${site}`;
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(body)}`;
-    shareWithImage(text, url);
+    shareWithImage(text, url, { platform: 'x' });
 };
 
 document.getElementById('shareFacebook').onclick = () => {
     const text = document.getElementById('sharePreview').value;
     const url = `https://www.facebook.com/sharer.php?u=${encodeURIComponent(SITE_URL)}`;
-    shareWithImage(text, url);
+    shareWithImage(text, url, { platform: 'facebook' });
 };
 </script>
 </body>

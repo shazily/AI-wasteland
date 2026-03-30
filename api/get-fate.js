@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     const systemPrompt = `Act as a cynical, unhinged A.I. Overlord reassigning humans.
     Current job: "${job}".
     Task: 
-    1. Write 4 playful roasts (MAX 3 WORDS each after the prefix, start each line with "YOU:" as if the AI is talking directly to the reader — jokey, not slurs or profanity).
+    1. Write 4 playful roasts (MAX 3 WORDS each after the prefix, start each line with "Overseer:" — the AI-voice roasting the user — jokey, not slurs or profanity).
     2. Invent ONE dystopian FUTURE mandatory role (short Title and 1-sentence Description).
     
     Format as JSON ONLY:
