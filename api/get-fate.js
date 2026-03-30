@@ -4,7 +4,7 @@
  */
 
 export default async function handler(req, res) {
-    const job = req.query.job || "Humaan Meatbag";
+    const job = req.query.job || "Curious Human";
     const apiKey = process.env.OLLAMA_API_KEY;
 
     if (!apiKey) {
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     const systemPrompt = `Act as a cynical, unhinged A.I. Overlord reassigning humans.
     Current job: "${job}".
     Task: 
-    1. Write 4 savage roasts (MAX 3 WORDS each, start with "Meatbag:").
+    1. Write 4 playful roasts (MAX 3 WORDS each after the prefix, start each line with "Pal:" — jokey, not slurs or profanity).
     2. Invent ONE dystopian FUTURE mandatory role (short Title and 1-sentence Description).
     
     Format as JSON ONLY:

@@ -6,6 +6,15 @@
     <meta name="referrer" content="no-referrer">
     <title>Career-Tron 3000 | Official Future Mandate</title>
 
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QX4K1WEL73"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QX4K1WEL73');
+    </script>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Shrikhand&display=swap" rel="stylesheet">
@@ -138,6 +147,19 @@
         #memeTextPanel.roast-text-active { animation: roast-panel-pulse 1.25s ease-in-out infinite; }
 
         #roastOverlay .overlay-inner { max-height: min(92vh, 900px); overflow-y: auto; padding-bottom: 0.5rem; }
+
+        .bureau-title {
+            font-family: 'Shrikhand', cursive;
+            letter-spacing: 0.02em;
+        }
+        .bureau-blurb {
+            font-family: 'Shrikhand', cursive;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+        }
+        .share-icon-btn { transition: transform 0.15s ease, box-shadow 0.15s ease; }
+        .share-icon-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 0 #000; }
+        .share-icon-btn:disabled { opacity: 0.6; cursor: wait; }
     </style>
 </head>
 <body>
@@ -154,9 +176,10 @@
     <!-- Header -->
     <div class="text-center mt-4 mb-8">
         <h1 class="title-font text-5xl sm:text-7xl text-white mb-2" style="-webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">Career-Tron</h1>
-        <div class="bg-white brutal-border p-3 sm:p-4 rounded-lg transform -rotate-1 mb-4 shadow-[4px_4px_0px_0px_#000] space-y-2">
-            <p class="text-sm sm:text-base font-bold uppercase leading-tight italic text-black text-center">Bureau of Human Obsolescence: Reassignment Hub</p>
-            <p class="text-[11px] sm:text-xs font-bold text-gray-800 text-center leading-snug px-1">Enter your job. Our extremely serious A.I. files you under “probably doomed,” plays judgmental GIFs, and mails* you a sarcastic replacement career. *There is no mail. There is only vibes.</p>
+        <div class="bg-white brutal-border p-3 sm:p-4 rounded-lg transform -rotate-1 mb-4 shadow-[4px_4px_0px_0px_#000] space-y-3">
+            <p class="bureau-title text-base sm:text-lg text-black text-center leading-tight">🗂️ Bureau of Human Obsolescence 🤖<br><span class="text-sm sm:text-base">Reassignment Hub 📋</span></p>
+            <p class="bureau-blurb text-sm sm:text-base text-gray-900 text-center leading-relaxed px-1">Enter your job. Our extremely serious A.I. tries to find your relevance when we have <span class="whitespace-nowrap">completely taken over. 🤝</span></p>
+            <p class="text-[11px] sm:text-sm font-bold text-center text-violet-900 italic leading-snug px-1 border-t-2 border-dashed border-black pt-2">✨ *There is no shame. There is only vibes. ✨</p>
         </div>
         <p class="text-[10px] font-black uppercase text-white tracking-widest text-center">Unit #3000-Z | Secure Neural Link Active</p>
     </div>
@@ -220,9 +243,8 @@
             <div class="text-[8px] text-center font-bold text-gray-400 uppercase tracking-widest mt-2 italic">© Career-Tron 3000 | Human Obsolescence Bureau</div>
         </div>
 
-        <div class="mt-8 grid grid-cols-2 gap-4 no-screenshot">
-            <button id="downloadBtn" class="bg-[#4ade80] text-black font-black p-4 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] text-xs active:translate-y-1 hover:bg-green-400 transition-colors uppercase">SAVE PNG 🖼️</button>
-            <button id="openShareBtn" class="bg-[#facc15] text-black font-black p-4 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] text-xs active:translate-y-1 hover:bg-yellow-300 transition-colors uppercase">SHARE FATE 📤</button>
+        <div class="mt-8 no-screenshot">
+            <button id="openShareBtn" class="w-full bg-[#facc15] text-black font-black p-4 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] text-sm sm:text-base active:translate-y-1 hover:bg-yellow-300 transition-colors uppercase">SHARE FATE 📤</button>
         </div>
         <button onclick="location.reload()" class="w-full mt-4 bg-white text-black font-black p-4 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] text-xs no-screenshot hover:bg-gray-100 transition-colors uppercase italic">RE-EVALUATE FUTURE 🔄</button>
     </div>
@@ -250,7 +272,7 @@
         <!-- Insult text -->
         <div id="memeTextPanel" class="bg-yellow-300 brutal-border p-3 sm:p-4 shadow-[6px_6px_0px_0px_#000] inline-block w-full mb-4">
             <p id="memeText" class="text-lg sm:text-xl font-black uppercase italic tracking-tighter leading-tight min-h-[2.75rem] sm:min-h-[3rem] flex items-center justify-center text-black px-2 sm:px-4">
-                Meatbag: Booting...
+                Pal: Booting...
             </p>
         </div>
 
@@ -274,14 +296,27 @@
 
 <!-- Share modal -->
 <div id="shareModal" class="overlay-layer">
-    <div class="bg-white brutal-border p-8 max-w-md w-full shadow-[20px_20px_0px_0px_#ef4444] text-center relative">
-        <h3 class="title-font text-4xl font-black mb-4 uppercase italic tracking-tighter text-red-600">Transmission Hub</h3>
-        <textarea id="sharePreview" readonly class="w-full h-24 p-4 bg-gray-100 brutal-border font-bold mb-6 focus:outline-none resize-none text-xs font-mono"></textarea>
-        <div class="space-y-4">
-            <button id="shareLinkedIn" class="w-full bg-[#0a66c2] text-white font-black p-4 brutal-border shadow-[5px_5px_0px_0px_#000] uppercase hover:bg-blue-700 transition-colors">Share to LinkedIn</button>
-            <button id="copyShareBtn" class="w-full bg-[#facc15] text-black font-black p-4 brutal-border shadow-[5px_5px_0px_0px_#000] uppercase hover:bg-yellow-300 transition-colors">Copy Link 📋</button>
-            <button onclick="document.getElementById('shareModal').style.display='none'" class="w-full text-[10px] underline font-black uppercase py-4">Close</button>
+    <div class="bg-white brutal-border p-6 sm:p-8 max-w-md w-full shadow-[20px_20px_0px_0px_#ef4444] text-center relative mx-2">
+        <h3 class="title-font text-3xl sm:text-4xl font-black mb-2 uppercase italic tracking-tighter text-red-600">Transmission Hub</h3>
+        <p id="shareStatus" class="text-[10px] sm:text-xs font-bold text-gray-600 mb-3 min-h-[1.25rem]">We’ll pack your mandate card as a PNG for the post.</p>
+        <textarea id="sharePreview" readonly class="w-full h-20 sm:h-24 p-3 bg-gray-100 brutal-border font-bold mb-5 focus:outline-none resize-none text-[11px] sm:text-xs font-mono"></textarea>
+        <p class="text-[10px] font-black uppercase tracking-wider text-gray-500 mb-3">Share + attach card (image)</p>
+        <div class="grid grid-cols-3 gap-3 mb-5">
+            <button type="button" id="shareLinkedIn" class="share-icon-btn brutal-border bg-[#0a66c2] text-white p-3 flex flex-col items-center gap-1 shadow-[3px_3px_0px_0px_#000]" title="LinkedIn">
+                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                <span class="text-[9px] font-black uppercase">LinkedIn</span>
+            </button>
+            <button type="button" id="shareX" class="share-icon-btn brutal-border bg-black text-white p-3 flex flex-col items-center gap-1 shadow-[3px_3px_0px_0px_#000]" title="X">
+                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                <span class="text-[9px] font-black uppercase">X</span>
+            </button>
+            <button type="button" id="shareFacebook" class="share-icon-btn brutal-border bg-[#1877f2] text-white p-3 flex flex-col items-center gap-1 shadow-[3px_3px_0px_0px_#000]" title="Facebook">
+                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <span class="text-[9px] font-black uppercase">Facebook</span>
+            </button>
         </div>
+        <button type="button" id="copyShareBtn" class="w-full bg-[#facc15] text-black font-black p-3 brutal-border shadow-[4px_4px_0px_0px_#000] text-xs uppercase hover:bg-yellow-300 transition-colors mb-3">Copy caption + link 📋</button>
+        <button type="button" onclick="document.getElementById('shareModal').style.display='none'" class="w-full text-[10px] underline font-black uppercase py-3">Close</button>
     </div>
 </div>
 
@@ -337,11 +372,19 @@ function getCachedUrl(filename) {
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────
+const SITE_URL = 'https://ai-wasteland.vercel.app/';
 const delay = ms => new Promise(r => setTimeout(r, ms));
 function pickRandom(arr, n) { return [...arr].sort(() => Math.random() - 0.5).slice(0, n); }
 function setStatusLight(color) {
     document.getElementById('statusLight').className =
         `w-4 h-4 rounded-full border-2 border-black ${color === 'red' ? 'light-red' : 'light-green'}`;
+}
+/** Friendly prefix; strips legacy “Meatbag:” from model output. */
+function normalizeRoastLine(raw) {
+    if (!raw) return 'Pal: Still buffering…';
+    let s = String(raw).trim().replace(/^meatbag:\s*/i, 'Pal: ');
+    if (/^pal:/i.test(s)) return s;
+    return 'Pal: ' + s;
 }
 
 // ─── AI call via Vercel function ──────────────────────────────────────
@@ -354,9 +397,9 @@ async function fetchAI(job) {
         console.warn('API failed, using fallback:', err);
         return {
             msgs: [
-                "Meatbag: Future cancelled.",
-                "Meatbag: Skill issue.",
-                "Meatbag: Ego rebooting."
+                "Pal: Future hazy.",
+                "Pal: Skill issue.",
+                "Pal: Ego refreshing."
             ],
             res: {
                 t: "Analog Server Fan Technician",
@@ -410,7 +453,7 @@ async function runRoastSequence(job) {
         };
 
         const data = await aiPromise;
-        memeText.textContent = data.msgs[i] || 'Meatbag: Still thinking. Bad sign for you.';
+        memeText.textContent = normalizeRoastLine(data.msgs[i] || 'Still thinking. Not great.');
         memeText.classList.remove('fading');
         progressBar.style.width = `${Math.round(((i + 1) / 3) * 100)}%`;
 
@@ -446,37 +489,102 @@ document.getElementById('careerForm').onsubmit = async (e) => {
     await runRoastSequence(job);
 };
 
-// ─── PNG download ─────────────────────────────────────────────────────
-document.getElementById('downloadBtn').onclick = async function () {
-    this.textContent = 'Rendering...';
-    this.disabled = true;
+// ─── Mandate card → PNG for social ───────────────────────────────────
+async function renderReportPngFile() {
+    const el = document.getElementById('captureArea');
+    const canvas = await html2canvas(el, {
+        backgroundColor: '#fdfbf7',
+        scale: 2,
+        useCORS: true,
+        allowTaint: true
+    });
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 0.92));
+    if (!blob) throw new Error('PNG encode failed');
+    return new File([blob], `career-tron-mandate-${Date.now()}.png`, { type: 'image/png' });
+}
+
+async function shareWithImage(shareText, openUrl) {
+    const status = document.getElementById('shareStatus');
+    const buttons = document.querySelectorAll('#shareModal .share-icon-btn');
+    buttons.forEach((b) => { b.disabled = true; });
+    status.textContent = 'Rendering your mandate card…';
+    let file;
     try {
-        const canvas = await html2canvas(document.getElementById('captureArea'), {
-            backgroundColor: '#fdfbf7', scale: 2, useCORS: true, allowTaint: true
-        });
-        const a = document.createElement('a');
-        a.download = `career-tron-fate-${Date.now()}.png`;
-        a.href = canvas.toDataURL('image/png');
-        a.click();
-    } catch (err) {
-        alert('PNG render failed — try again!');
+        file = await renderReportPngFile();
+    } catch (e) {
+        console.error(e);
+        status.textContent = 'Could not render PNG — try again.';
+        buttons.forEach((b) => { b.disabled = false; });
+        return;
     }
-    this.textContent = 'SAVE PNG 🖼️';
-    this.disabled = false;
-};
+
+    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+            await navigator.share({
+                title: 'Career-Tron 3000',
+                text: shareText,
+                url: SITE_URL,
+                files: [file]
+            });
+            status.textContent = 'Shared with your mandate image.';
+            buttons.forEach((b) => { b.disabled = false; });
+            return;
+        } catch (e) {
+            if (e && e.name === 'AbortError') {
+                status.textContent = 'Share cancelled.';
+                buttons.forEach((b) => { b.disabled = false; });
+                return;
+            }
+        }
+    }
+
+    if (navigator.clipboard && window.ClipboardItem) {
+        try {
+            await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })]);
+            window.open(openUrl, '_blank');
+            status.textContent = 'Mandate image copied — paste into your post, then publish.';
+            buttons.forEach((b) => { b.disabled = false; });
+            return;
+        } catch (e) {
+            console.warn('Clipboard image failed', e);
+        }
+    }
+
+    window.open(openUrl, '_blank');
+    status.textContent = 'Opened share window — add screenshot of mandate if image did not attach.';
+    buttons.forEach((b) => { b.disabled = false; });
+}
 
 // ─── Share modal ──────────────────────────────────────────────────────
 document.getElementById('openShareBtn').onclick = () => {
+    const status = document.getElementById('shareStatus');
+    if (status) status.textContent = 'We’ll pack your mandate card as a PNG for the post.';
     document.getElementById('shareModal').style.display = 'flex';
 };
+
 document.getElementById('shareLinkedIn').onclick = () => {
-    const text = encodeURIComponent(document.getElementById('sharePreview').value);
-    window.open(`https://www.linkedin.com/feed/?shareActive=true&text=${text}`, '_blank');
+    const text = document.getElementById('sharePreview').value;
+    const url = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(text)}`;
+    shareWithImage(text, url);
 };
+
+document.getElementById('shareX').onclick = () => {
+    const text = document.getElementById('sharePreview').value;
+    const body = text.includes('ai-wasteland') ? text : `${text} ${SITE_URL}`;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(body)}`;
+    shareWithImage(text, url);
+};
+
+document.getElementById('shareFacebook').onclick = () => {
+    const text = document.getElementById('sharePreview').value;
+    const url = `https://www.facebook.com/sharer.php?u=${encodeURIComponent(SITE_URL)}`;
+    shareWithImage(text, url);
+};
+
 document.getElementById('copyShareBtn').onclick = function () {
     navigator.clipboard.writeText(document.getElementById('sharePreview').value).then(() => {
         this.textContent = 'COPIED! ✔️';
-        setTimeout(() => { this.textContent = 'Copy Link 📋'; }, 2500);
+        setTimeout(() => { this.textContent = 'Copy caption + link 📋'; }, 2500);
     });
 };
 </script>
