@@ -1,11 +1,11 @@
 module.exports = async function handler(req, res) {
-    const job = req.query.job;
     const apiKey = process.env.OLLAMA_API_KEY;
-
-    if (!apiKey) {
-        return res.status(200).json({ debug: "NO API KEY FOUND" });
-    }
-
+    return res.status(200).json({ 
+        keyFound: !!apiKey, 
+        keyPreview: apiKey ? apiKey.substring(0, 8) + "..." : "MISSING",
+        allEnvKeys: Object.keys(process.env).filter(k => k.includes('OLLAMA'))
+    });
+}
     const prompt = `Act as a cynical A.I. Overlord reassigning obsolete humans.
 The user's current job is "${job}".
 1. Write exactly 4 ULTRA-SHORT savage roasts. Each MAX 3 WORDS, must start with "Meatbag:".
