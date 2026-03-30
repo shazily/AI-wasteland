@@ -4,20 +4,22 @@
  */
 
 export default async function handler(req, res) {
-    const job = req.query.job || "Human Meatbag";
+    const job = req.query.job || "Humaan Meatbag";
     const apiKey = process.env.OLLAMA_API_KEY;
 
     if (!apiKey) {
         return res.status(200).json({ debug: "NO API KEY FOUND. Please set OLLAMA_API_KEY in Vercel." });
     }
 
-    const systemPrompt = `Act as a cynical, unhinged A.I. Overlord reassigning obsolete humans.
-    The user's current job is "${job}".
-    1. Write exactly 4 ULTRA-SHORT savage roasts. Each MAX 3 WORDS, must start with "Meatbag:".
-    2. Invent ONE darkly funny FUTURE mandatory role (dystopian, doesn't exist yet).
-       Title: short & punchy. Description: max 2 sentences of what they will DO.
-    Return ONLY valid JSON, no markdown, no extra text:
-    {"msgs":["m1","m2","m3","m4"],"res":{"t":"Title","d":"Description."}}`;
+    // Optimization: Keeping the prompt extremely concise to speed up Ollama's generation time
+    const systemPrompt = `Act as a cynical, unhinged A.I. Overlord reassigning humans.
+    Current job: "${job}".
+    Task: 
+    1. Write 4 savage roasts (MAX 3 WORDS each, start with "Meatbag:").
+    2. Invent ONE dystopian FUTURE mandatory role (short Title and 1-sentence Description).
+    
+    Format as JSON ONLY:
+    {"msgs":["m1","m2","m3","m4"],"res":{"t":"Title","d":"Description"}}`;
 
     try {
         const response = await fetch("https://ollama.com/api/chat", {
@@ -28,8 +30,15 @@ export default async function handler(req, res) {
             },
             body: JSON.stringify({
                 model: "gemma3:4b",
-                messages: [{ role: "user", content: systemPrompt }],
-                stream: false
+                messages: [
+                    { role: "system", content: "You are a sarcastic AI that only outputs JSON." },
+                    { role: "user", content: systemPrompt }
+                ],
+                stream: false,
+                options: {
+                    temperature: 0.9,
+                    num_predict: 150 // Limit output length to ensure we beat the 10s timeout
+                }
             })
         });
 
@@ -58,13 +67,22 @@ export default async function handler(req, res) {
         const jsonString = rawContent.substring(firstBrace, lastBrace + 1);
 
         try {
-            const result = JSON.parse(jsonString);
+            // Clean up common AI formatting quirks before parsing
+            const sanitized = jsonString.replace(/[\x00-\x1F\x7F]/g, ""); 
+            const result = JSON.parse(sanitized);
+
+            // Ensure the structure is correct before sending to frontend
+            if (!result.msgs || !Array.isArray(result.msgs) || !result.res) {
+                 throw new Error("Invalid JSON structure");
+            }
+
             return res.status(200).json(result);
         } catch (parseError) {
-            // Final attempt: Remove common problematic control characters if strict parse fails
-            const sanitized = jsonString.replace(/[\x00-\x1F\x7F]/g, "");
-            const finalResult = JSON.parse(sanitized);
-            return res.status(200).json(finalResult);
+            return res.status(200).json({ 
+                debug: "JSON Parse Failed", 
+                raw: rawContent,
+                error: parseError.message 
+            });
         }
 
     } catch (error) {
