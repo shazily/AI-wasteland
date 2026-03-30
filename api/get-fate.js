@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
 Output JSON ONLY — no markdown, no backticks, no commentary.
 
-msgs: array of exactly 4 strings. Each string MUST begin with "Ex-Machin-a-haha:" then at most THREE words of roast (absurd, petty, jokey — never slurs or profanity).
+msgs: array of exactly 4 strings. Each string MUST contain that prefix exactly ONCE: "Ex-Machin-a-haha:" then at most THREE words of roast (absurd, petty, jokey — never slurs or profanity). Never add Overseer, Kryten, or any second speaker label.
 
 res.t: NEW job title — absurd but concrete. HARD MAX 6 words. Punchy, memorable, SPECIFIC to this person's field; avoid repetitive templates like "X Curator" or "Y Specialist" unless twisted into comedy. Never lean on filler buzzwords (synergy, leverage, stakeholder, chronometric) unless you are mocking them.
 

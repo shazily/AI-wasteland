@@ -164,7 +164,7 @@
             0%, 100% { box-shadow: 6px 6px 0 0 #000, 0 0 0 0 rgba(250, 204, 21, 0.35); }
             50%      { box-shadow: 6px 6px 0 0 #000, 0 0 22px 2px rgba(250, 204, 21, 0.55); }
         }
-        #memeTextPanel.roast-text-active { animation: roast-panel-pulse 1.25s ease-in-out infinite; }
+        #roastQuotePanel.roast-text-active { animation: roast-panel-pulse 1.25s ease-in-out infinite; }
 
         #roastOverlay .overlay-inner {
             max-height: min(94vh, 900px);
@@ -343,23 +343,23 @@
             </div>
         </div>
 
-        <!-- Insult text -->
-        <div id="memeTextPanel" class="bg-yellow-300 brutal-border p-3 sm:p-4 shadow-[6px_6px_0px_0px_#000] inline-block w-full mb-2 sm:mb-3">
-            <p id="memeText" class="text-lg sm:text-xl font-black uppercase italic tracking-tighter leading-tight min-h-[2.75rem] sm:min-h-[3rem] flex items-center justify-center text-black px-2 sm:px-4">
-                Ex-Machin-a-haha: Booting…
-            </p>
-        </div>
-
-        <!-- Progress bar -->
+        <!-- Progress + live roast line (meme above, copy here so both stay visible longer) -->
         <div id="roastProgressShell" class="bg-black brutal-border p-3 sm:p-4 w-full text-center ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/90 transition-shadow duration-300 flex flex-col items-center">
+            <p id="stageHint" class="text-fuchsia-300 font-black uppercase tracking-wide text-[10px] sm:text-xs mb-1 opacity-95">⊞ Bureau queue: you’re entertainment now</p>
             <p id="stageStep" class="text-yellow-300 font-black uppercase tracking-wider text-xs sm:text-sm mb-2 drop-shadow-[0_1px_0_rgba(0,0,0,0.9)] w-full text-center px-1">Ritual 1 / 3 — smile for the algorithm</p>
-            <div class="flex items-center justify-center gap-3 mb-2 w-full max-w-xl mx-auto px-1">
+            <div class="flex items-center justify-center gap-3 mb-3 w-full max-w-xl mx-auto px-1">
                 <div class="relative flex h-3 w-3 flex-shrink-0 items-center justify-center" aria-hidden="true">
                     <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-60"></span>
                     <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500 brutal-border border border-black"></span>
                 </div>
                 <p id="stageLabel" class="text-white font-black uppercase tracking-wide text-sm sm:text-base leading-snug text-center flex-1 min-w-0">Weaponizing your LinkedIn headline…</p>
             </div>
+            <div id="roastQuotePanel" class="bg-yellow-300 brutal-border p-3 sm:p-4 shadow-[6px_6px_0px_0px_#000] w-full max-w-xl mb-3">
+                <p id="memeText" class="text-sm sm:text-base font-black italic tracking-tight leading-snug min-h-[3.25rem] sm:min-h-[3.5rem] flex items-center justify-center text-black text-center px-1 sm:px-2">
+                    Ex-Machin-a-haha: Booting…
+                </p>
+            </div>
+            <p class="text-[10px] sm:text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1 w-full text-center">Entropy meter</p>
             <div class="w-full max-w-xl mx-auto bg-gray-800 brutal-border h-4 sm:h-5 overflow-hidden">
                 <div id="progressBar" class="h-full bg-[#facc15]" style="width:0%"></div>
             </div>
@@ -394,7 +394,7 @@
 
 <script>
 // ─── Config ───────────────────────────────────────────────────────────
-const STAGE_MS   = 3000;
+const STAGE_MS   = 4800;
 const GITHUB_RAW = "https://raw.githubusercontent.com/shazily/AI-wasteland/main/Memes/";
 const MEME_FILES = [
     "they-took-our-jobs-darryl-weathers.gif",
@@ -514,14 +514,14 @@ const ROAST_VOICE = 'Ex-Machin-a-haha';
 function normalizeRoastLine(raw) {
     if (!raw) return `${ROAST_VOICE}: Still buffering…`;
     const P = `${ROAST_VOICE}: `;
-    let s = String(raw).trim()
-        .replace(/^meatbag:\s*/i, P)
-        .replace(/^pal:\s*/i, P)
-        .replace(/^you:\s*/i, P)
-        .replace(/^overseer:\s*/i, P)
-        .replace(/^kryten:\s*/i, P);
-    s = s.replace(/^ex-machin-a-haha:\s*/i, P);
-    if (s.startsWith(P)) return s;
+    let s = String(raw).trim();
+    /** Peel stacked labels (model sometimes emits Overseer: Ex-Machin-a-haha: …). */
+    const peel = /^(?:overseer|kryten|meatbag|pal|you|ex-machin-a-haha)\s*:\s*/i;
+    let prev = '';
+    while (prev !== s) {
+        prev = s;
+        s = s.replace(peel, '').trim();
+    }
     return P + s;
 }
 
@@ -603,19 +603,22 @@ async function fetchAI(job) {
     }
 }
 
-// ─── Roast sequence — 3 stages, 2s each ──────────────────────────────
+// ─── Roast sequence — 3 stages (STAGE_MS each) ───────────────────
 const ROAST_STAGES = [
     {
-        step: 'Ritual 1/3 — HR has left the building',
-        label: 'Scraping your job title for incriminating optimism…'
+        hint: 'Calibration: delusion → baseline',
+        step: 'Phase 1/3 — dignity leak detected',
+        label: 'Mining your title for unearned confidence molecules…'
     },
     {
-        step: 'Ritual 2/3 — toaster is winning',
-        label: 'Proving you\'re statistically replaceable by kitchen appliances…'
+        hint: 'Thermostat outperforming you',
+        step: 'Phase 2/3 — appliance supremacy',
+        label: 'Running you vs. a rice cooker on “strategic vision.” Rice cooker up by 40%…'
     },
     {
-        step: 'Ritual 3/3 — stamp goes brrr',
-        label: 'Printing a Future Mandate that looks official (it\'s not)…'
+        hint: 'Paperclip scarcity: fabricated',
+        step: 'Phase 3/3 — mandate printer go brrr',
+        label: 'Forging clip-art authority so LinkedIn will respect the fiction…'
     }
 ];
 
@@ -623,7 +626,8 @@ async function runRoastSequence(job) {
     const overlay        = document.getElementById('roastOverlay');
     const memeImg        = document.getElementById('memeImage');
     const memeText       = document.getElementById('memeText');
-    const memeTextPanel  = document.getElementById('memeTextPanel');
+    const roastQuotePanel = document.getElementById('roastQuotePanel');
+    const stageHint      = document.getElementById('stageHint');
     const gifWrapper     = document.getElementById('gifWrapper');
     const progressBar    = document.getElementById('progressBar');
     const stageLabel     = document.getElementById('stageLabel');
@@ -634,13 +638,14 @@ async function runRoastSequence(job) {
     setStatusLight('red');
     progressBar.classList.add('roast-bar-active');
     if (roastShell) roastShell.classList.add('roast-active');
-    if (memeTextPanel) memeTextPanel.classList.add('roast-text-active');
+    if (roastQuotePanel) roastQuotePanel.classList.add('roast-text-active');
     startMemeChaos(memeImg, gifWrapper);
 
     const aiPromise = fetchAI(job);
 
     try {
         for (let i = 0; i < 3; i++) {
+            if (stageHint) stageHint.textContent = ROAST_STAGES[i].hint;
             stageStep.textContent = ROAST_STAGES[i].step;
             stageLabel.textContent = ROAST_STAGES[i].label;
             memeText.classList.add('fading');
@@ -674,7 +679,7 @@ async function runRoastSequence(job) {
 
     progressBar.classList.remove('roast-bar-active');
     if (roastShell) roastShell.classList.remove('roast-active');
-    if (memeTextPanel) memeTextPanel.classList.remove('roast-text-active');
+    if (roastQuotePanel) roastQuotePanel.classList.remove('roast-text-active');
     progressBar.style.transition = 'none';
     progressBar.style.width = '0%';
     setTimeout(() => { progressBar.style.transition = 'width 1.9s linear'; }, 50);
