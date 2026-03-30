@@ -437,8 +437,8 @@ function getCachedUrl(filename) {
     return gifCache[filename] || (GITHUB_RAW + filename);
 }
 
-/** Rapid random meme cycling during roast (new pick ~every MEME_FLIP_MS; avoids immediate repeat). */
-const MEME_FLIP_MS = 380;
+/** Random meme cycling during roast (new pick every MEME_FLIP_MS; avoids immediate repeat). */
+const MEME_FLIP_MS = 900;
 let memeChaosTimer = null;
 function stopMemeChaos() {
     if (memeChaosTimer !== null) {
