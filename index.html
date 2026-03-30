@@ -16,7 +16,6 @@
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Shrikhand&display=swap" rel="stylesheet">
 
     <style>
@@ -84,7 +83,6 @@
             background-size: 100% 4px, 3px 100%; pointer-events: none; opacity: 0.4;
         }
         .no-screenshot { display: block; }
-        .html2canvas-container .no-screenshot { display: none !important; }
 
         @keyframes pulse-green {
             0%, 100% { box-shadow: 0 0 6px rgba(34,197,94,0.5); transform: scale(1); }
@@ -496,6 +494,64 @@ function normalizeRoastLine(raw) {
     return 'Overseer: ' + s;
 }
 
+function stripOverseerForShare(raw) {
+    return normalizeRoastLine(raw).replace(/^Overseer:\s*/i, '').trim();
+}
+
+/**
+ * Viral share copy: real mandate details + Overseer burns + clear “try your luck” link.
+ * Text-first posts travel better than images in most apps and tee up curiosity clicks.
+ */
+function buildSharePost(ctx) {
+    const site = SITE_URL.replace(/\/$/, '');
+    const job = (ctx.job || '').trim() || 'Professional human';
+    const title = (ctx.res?.t || '').trim() || 'Classified reassignment';
+    const desc = (ctx.res?.d || '').trim() || '';
+    const lines = (ctx.msgs || [])
+        .map(stripOverseerForShare)
+        .filter(Boolean)
+        .slice(0, 4);
+    const roastsBlock = lines.length
+        ? lines.map((s) => `• ${s}`).join('\n')
+        : '• (The Overseer is speechless. Rare.)';
+
+    const linkedInBody =
+        `I fed my real job into Career-Tron 3000 — an AI “Human Obsolescence Bureau.” It issued a Future Mandate. Hard to argue with 99.9% certainty.
+
+CURRENT JOB (on file): ${job}
+STATUS: FUTURE CANCELLED 🔴
+
+MANDATORY REASSIGNMENT: ${title}
+${desc}
+
+The Overseer’s finest burns:
+${roastsBlock}
+
+Think you’re safe? Try your luck — same roast + mandate machine, free:
+${site}`;
+
+    const q1 = lines[0] || 'Peak obsolescence.';
+    const q2 = lines[1] || '';
+    let xBody = q2
+        ? `Career-Tron 3000 → "${title}" 💀\n“${q1}” · “${q2}”\n\nTry your luck → ${site}`
+        : `Reassigned to “${title}” 💀 ${q1}\n\nTry yours → ${site}`;
+    const X_MAX = 260;
+    if (xBody.length > X_MAX) {
+        xBody = `Career-Tron 3000 → “${title}” 💀\n${q1}\n\nTry your luck → ${site}`;
+    }
+    if (xBody.length > X_MAX) {
+        xBody = `AI mandate: “${title}” 💀\nTry yours → ${site}`;
+    }
+    return { linkedInBody, xBody, site };
+}
+
+function syncSharePreviewFromFate(ctx) {
+    const { linkedInBody, xBody } = buildSharePost(ctx);
+    const ta = document.getElementById('sharePreview');
+    ta.value = linkedInBody;
+    ta.dataset.shareX = xBody;
+}
+
 // ─── AI call via Vercel function ──────────────────────────────────────
 async function fetchAI(job) {
     try {
@@ -508,7 +564,8 @@ async function fetchAI(job) {
             msgs: [
                 "Overseer: Future hazy.",
                 "Overseer: Skill roulette.",
-                "Overseer: Ego refreshing."
+                "Overseer: Ego refreshing.",
+                "Overseer: Desk warming."
             ],
             res: {
                 t: "Analog Server Fan Technician",
@@ -563,12 +620,17 @@ async function runRoastSequence(job) {
         }
 
         const data = await aiPromise;
+        const res = (data.res && typeof data.res === 'object' && typeof data.res.t === 'string' && data.res.t)
+            ? data.res
+            : {
+                t: 'Analog Server Fan Technician',
+                d: 'You will stand in the CPU hall and blow through a straw for 12 hours daily. Overtime is mandatory. Breathing is optional.'
+            };
+        const msgs = Array.isArray(data.msgs) ? data.msgs : [];
         document.getElementById('rcJob').textContent          = job;
-        document.getElementById('rcNewRoleTitle').textContent = data.res.t;
-        document.getElementById('rcNewRoleDesc').textContent  = data.res.d;
-        const site = SITE_URL.replace(/\/$/, '');
-        document.getElementById('sharePreview').value =
-            `Career-Tron 3000 reassigned me to "${data.res.t}" — peak obsolescence. 😂\n\nGet your own verdict (free chaos):\n${site}`;
+        document.getElementById('rcNewRoleTitle').textContent = res.t;
+        document.getElementById('rcNewRoleDesc').textContent  = res.d;
+        syncSharePreviewFromFate({ job, msgs, res });
     } finally {
         stopMemeChaos();
     }
@@ -594,68 +656,6 @@ document.getElementById('careerForm').onsubmit = async (e) => {
     document.getElementById('formSection').classList.add('hidden');
     await runRoastSequence(job);
 };
-
-// ─── Mandate card → JPEG for social (opaque; pastes better on some networks) ─
-async function renderReportJpegFile() {
-    const el = document.getElementById('captureArea');
-    const canvas = await html2canvas(el, {
-        backgroundColor: '#ffffff',
-        scale: 2,
-        useCORS: true,
-        allowTaint: true
-    });
-    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.95));
-    if (!blob) throw new Error('JPEG encode failed');
-    return new File([blob], `career-tron-fate-${Date.now()}.jpg`, { type: 'image/jpeg' });
-}
-
-/**
- * Try image+text on clipboard (desktop paste). Optional skipImageOnly: LinkedIn mobile/desktop often
- * loses caption if we overwrite clipboard with image-only after a failed multi-type write.
- */
-async function writeRichClipboard(jpegFile, plainText, opts = {}) {
-    const skipImageOnly = opts.skipImageOnly === true;
-    const textBlob = new Blob([plainText], { type: 'text/plain' });
-    let jpegBlob;
-    try {
-        jpegBlob = await new Response(jpegFile).blob();
-    } catch (e) {
-        return 'none';
-    }
-    if (!navigator.clipboard || !window.ClipboardItem) {
-        try {
-            await navigator.clipboard.writeText(plainText);
-            return 'text';
-        } catch (e) {
-            return 'none';
-        }
-    }
-    try {
-        await navigator.clipboard.write([
-            new ClipboardItem({
-                'image/jpeg': jpegBlob,
-                'text/plain': textBlob
-            })
-        ]);
-        return 'both';
-    } catch (e) {
-        console.warn('Clipboard multi-type', e);
-    }
-    if (!skipImageOnly) {
-        try {
-            await navigator.clipboard.write([new ClipboardItem({ 'image/jpeg': jpegBlob })]);
-            return 'image';
-        } catch (e2) {
-            console.warn('Clipboard image', e2);
-        }
-    }
-    try {
-        await navigator.clipboard.writeText(plainText);
-        return 'text';
-    } catch (e3) {
-        return 'none';
-    }
-}
 
 function openShareUrl(url) {
     return new Promise((resolve) => {
@@ -689,41 +689,28 @@ function scheduleLinkedInCaptionRefresh(shareText) {
     });
 }
 
-async function shareWithImage(shareText, openUrl, meta = {}) {
+/** Text + link only — jokes and CTA survive LinkedIn/X handoffs better than image shares. */
+async function shareTextPost(shareText, openUrl, meta = {}) {
     const buttons = document.querySelectorAll('#shareModal .share-icon-btn');
     const tip = document.getElementById('shareFlowTip');
     const isLinkedIn = meta.platform === 'linkedin';
     buttons.forEach((b) => { b.disabled = true; });
-    if (tip) tip.textContent = 'Rendering card…';
-
-    if (isLinkedIn) {
-        await copyCaptionForLinkedIn(shareText);
-    }
-
-    let file;
-    try {
-        file = await renderReportJpegFile();
-    } catch (e) {
-        console.error(e);
-        buttons.forEach((b) => { b.disabled = false; });
-        if (tip) tip.textContent = 'Could not render card — try again.';
-        alert('Could not render your card — try again.');
-        return;
-    }
+    if (tip) tip.textContent = 'Preparing your post…';
 
     const site = SITE_URL.replace(/\/$/, '');
-    /** Some Android targets read `title` when they ignore `text`. */
-    const shareTitle = shareText.length > 280 ? shareText.slice(0, 277).trim() + '…' : shareText;
+    const shareTitle = shareText.length > 220 ? shareText.slice(0, 217).trim() + '…' : shareText;
 
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+    if (isLinkedIn) await copyCaptionForLinkedIn(shareText);
+
+    if (navigator.share) {
         try {
             if (isLinkedIn) await copyCaptionForLinkedIn(shareText);
-            await navigator.share({
+            const payload = {
                 title: isLinkedIn ? shareTitle : 'Career-Tron 3000',
-                text: shareText,
-                url: site,
-                files: [file]
-            });
+                text: shareText
+            };
+            if (!shareText.includes('ai-wasteland.vercel.app')) payload.url = site;
+            await navigator.share(payload);
             if (isLinkedIn) scheduleLinkedInCaptionRefresh(shareText);
             if (tip) tip.textContent = SHARE_TIP_DARE;
             buttons.forEach((b) => { b.disabled = false; });
@@ -737,13 +724,14 @@ async function shareWithImage(shareText, openUrl, meta = {}) {
         }
     }
 
-    const mode = await writeRichClipboard(file, shareText, { skipImageOnly: isLinkedIn });
+    try {
+        await navigator.clipboard.writeText(shareText);
+    } catch (e) {
+        console.warn('Clipboard', e);
+    }
     await openShareUrl(openUrl);
 
     if (tip) tip.textContent = SHARE_TIP_DARE;
-    if (mode === 'none' && isLinkedIn) {
-        alert('Clipboard access was blocked. LinkedIn should still open with draft text; add a screenshot of your mandate for the image.');
-    }
     buttons.forEach((b) => { b.disabled = false; });
 }
 
@@ -756,22 +744,20 @@ document.getElementById('openShareBtn').onclick = () => {
 
 document.getElementById('shareLinkedIn').onclick = () => {
     const text = document.getElementById('sharePreview').value;
-    const url = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(text)}`;
-    shareWithImage(text, url, { platform: 'linkedin' });
+    shareTextPost(text, 'https://www.linkedin.com/feed/?shareActive=true', { platform: 'linkedin' });
 };
 
 document.getElementById('shareX').onclick = () => {
-    const text = document.getElementById('sharePreview').value;
-    const site = SITE_URL.replace(/\/$/, '');
-    const body = text.includes('ai-wasteland') ? text : `${text}\n${site}`;
-    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(body)}`;
-    shareWithImage(text, url, { platform: 'x' });
+    const ta = document.getElementById('sharePreview');
+    const text = ta.dataset.shareX || ta.value;
+    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+    shareTextPost(text, url, { platform: 'x' });
 };
 
 document.getElementById('shareFacebook').onclick = () => {
     const text = document.getElementById('sharePreview').value;
     const url = `https://www.facebook.com/sharer.php?u=${encodeURIComponent(SITE_URL)}`;
-    shareWithImage(text, url, { platform: 'facebook' });
+    shareTextPost(text, url, { platform: 'facebook' });
 };
 </script>
 </body>
