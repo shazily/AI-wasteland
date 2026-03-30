@@ -287,10 +287,6 @@
     <!-- Result -->
     <div id="resultContainer" class="hidden">
         <div id="captureArea" class="report-compact brutal-border rounded-xl p-3 sm:p-5 md:p-6 brutal-shadow relative report-card overflow-hidden">
-            <button type="button" onclick="location.reload()" title="Start over" class="absolute top-2 left-2 z-30 bg-white text-black px-2 py-1.5 brutal-border shadow-[1px_1px_0px_0px_#000] font-bold text-[9px] sm:text-[10px] uppercase italic inline-flex items-center gap-1 hover:bg-gray-100 transition-colors">
-                <svg class="w-3 h-3 reboot-icon-pulse flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
-                Reboot
-            </button>
             <div class="scanline"></div>
             <div class="border-b-2 sm:border-b-4 border-black pb-1.5 sm:pb-2 mb-3 sm:mb-4 text-center uppercase font-black text-lg sm:text-2xl italic tracking-tighter">Future Mandate</div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4 relative">
@@ -313,6 +309,10 @@
                 <p id="rcNewRoleDesc" class="text-sm sm:text-base md:text-[1.05rem] font-extrabold text-gray-900 leading-relaxed border-l-[5px] border-black pl-3 sm:pl-4 bg-gray-50/80 py-2 rounded-r-md"></p>
             </div>
             <div class="text-[7px] sm:text-[8px] text-center font-bold text-gray-400 uppercase tracking-widest mt-1 italic">© Career-Tron 3000 | Human Obsolescence Bureau</div>
+            <button type="button" onclick="location.reload()" title="Start over" class="no-screenshot mt-2 mx-auto flex items-center justify-center gap-1 bg-white text-black px-2 py-1.5 brutal-border shadow-[1px_1px_0px_0px_#000] font-bold text-[9px] sm:text-[10px] uppercase italic hover:bg-gray-100 transition-colors">
+                <svg class="w-3 h-3 reboot-icon-pulse flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                Re-evaluate
+            </button>
         </div>
 
         <div class="mt-3 sm:mt-4 no-screenshot">
@@ -325,10 +325,6 @@
                 </span>
             </button>
         </div>
-        <details class="no-screenshot mt-2 text-left max-w-2xl mx-auto w-full px-1">
-            <summary class="text-[9px] sm:text-[10px] font-black uppercase tracking-wide text-gray-600 cursor-pointer select-none">GIF roster — <span id="memeCountRoster">0</span> files (each once per roast)</summary>
-            <ol id="memeFileList" class="mt-1.5 list-decimal pl-5 space-y-0.5 text-[8px] sm:text-[9px] font-mono text-gray-700 break-all max-h-40 overflow-y-auto"></ol>
-        </details>
     </div>
 
     <footer class="mt-2 sm:mt-4 text-center no-screenshot shrink-0 pb-1">
@@ -457,30 +453,23 @@ function stopMemeChaos() {
 }
 
 function memeUrlForDisplay(filename, bust) {
-    const blob = gifCache[filename];
-    if (blob) return blob;
     const u = GITHUB_RAW + filename;
+    // Always bust cache per flip. Blob URLs reuse the same string per file; re-assigning can skip
+    // load/decoding so the carousel appears to “stick” or repeat the same few GIFs.
     return `${u}${u.includes('?') ? '&' : '?'}__m=${bust}`;
 }
 
 function startMemeChaos(memeImg, gifWrapper) {
     stopMemeChaos();
     memeShowGen = 0;
-    const pool = shuffleMemeDeck([...MEME_FILES]);
-    let lastFilename = null;
+    const order = shuffleMemeDeck([...MEME_FILES]);
+    let nextIndex = 0;
 
     function popNextFilename() {
         if (MEME_FILES.length === 0) return null;
         if (MEME_FILES.length === 1) return MEME_FILES[0];
-        if (pool.length === 0) return null;
-        let f = pool.shift();
-        let guard = 0;
-        while (f === lastFilename && pool.length > 0 && guard++ < MEME_FILES.length + 2) {
-            f = pool.shift();
-        }
-        if (f === lastFilename) return null;
-        lastFilename = f;
-        return f;
+        if (nextIndex >= order.length) return null;
+        return order[nextIndex++];
     }
 
     function showOne() {
@@ -517,15 +506,6 @@ function startMemeChaos(memeImg, gifWrapper) {
     showOne();
     memeChaosTimer = setInterval(showOne, MEME_FLIP_MS);
 }
-
-(function initMemeFileRoster() {
-    const ul = document.getElementById('memeFileList');
-    const c = document.getElementById('memeCountRoster');
-    if (ul) {
-        ul.innerHTML = MEME_FILES.map((f) => `<li>${f}</li>`).join('');
-    }
-    if (c) c.textContent = String(MEME_FILES.length);
-})();
 
 // ─── Helpers ──────────────────────────────────────────────────────────
 const SITE_URL = 'https://ai-wasteland.vercel.app/';
