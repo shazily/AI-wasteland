@@ -68,6 +68,10 @@
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(8px) brightness(0.4);
             -webkit-backdrop-filter: blur(8px) brightness(0.4);
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 0.35rem;
+            padding-bottom: 1rem;
         }
         #shareModal {
             z-index: 6000;
@@ -163,10 +167,13 @@
         #memeTextPanel.roast-text-active { animation: roast-panel-pulse 1.25s ease-in-out infinite; }
 
         #roastOverlay .overlay-inner {
-            max-height: min(92vh, 900px);
+            max-height: min(94vh, 900px);
             overflow-y: auto;
-            padding-bottom: 0.5rem;
+            padding-bottom: 0.35rem;
             animation: roast-overlay-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         @keyframes roast-overlay-in {
             from { opacity: 0; transform: translateY(12px) scale(0.96); }
@@ -329,31 +336,31 @@
     <div class="overlay-inner w-full max-w-lg sm:max-w-xl text-center px-1">
 
         <!-- GIF frame — letterboxed so any aspect ratio fits -->
-        <div class="gif-frame-anim bg-white brutal-border rounded-xl p-3 sm:p-4 brutal-shadow transform rotate-1 mb-4 sm:mb-6 overflow-hidden">
-            <div id="gifWrapper" class="w-full aspect-[4/3] max-h-[min(42vh,320px)] sm:max-h-[min(48vh,380px)] min-h-[160px] brutal-border overflow-hidden bg-black flex items-center justify-center relative gif-loading mx-auto">
+        <div class="gif-frame-anim bg-white brutal-border rounded-xl p-2 sm:p-3 brutal-shadow transform rotate-1 mb-2 sm:mb-3 w-full overflow-hidden">
+            <div id="gifWrapper" class="w-full aspect-[4/3] max-h-[min(36vh,280px)] sm:max-h-[min(42vh,340px)] min-h-[140px] brutal-border overflow-hidden bg-black flex items-center justify-center relative gif-loading mx-auto">
                 <img id="memeImage" src="" alt="Roasting..." class="max-w-full max-h-full w-auto h-auto object-contain hidden">
                 <div class="scanline"></div>
             </div>
         </div>
 
         <!-- Insult text -->
-        <div id="memeTextPanel" class="bg-yellow-300 brutal-border p-3 sm:p-4 shadow-[6px_6px_0px_0px_#000] inline-block w-full mb-4">
+        <div id="memeTextPanel" class="bg-yellow-300 brutal-border p-3 sm:p-4 shadow-[6px_6px_0px_0px_#000] inline-block w-full mb-2 sm:mb-3">
             <p id="memeText" class="text-lg sm:text-xl font-black uppercase italic tracking-tighter leading-tight min-h-[2.75rem] sm:min-h-[3rem] flex items-center justify-center text-black px-2 sm:px-4">
-                Kryten: Booting…
+                Ex-Machin-a-haha: Booting…
             </p>
         </div>
 
         <!-- Progress bar -->
-        <div id="roastProgressShell" class="bg-black brutal-border p-3 sm:p-4 w-full text-left ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/90 transition-shadow duration-300">
-            <p id="stageStep" class="text-yellow-300 font-black uppercase tracking-wider text-xs sm:text-sm mb-1.5 drop-shadow-[0_1px_0_rgba(0,0,0,0.9)]">Ritual 1 / 3 — smile for the algorithm</p>
-            <div class="flex items-center gap-3 mb-2">
-                <div class="relative flex h-3 w-3 flex-shrink-0 items-center justify-center">
+        <div id="roastProgressShell" class="bg-black brutal-border p-3 sm:p-4 w-full text-center ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/90 transition-shadow duration-300 flex flex-col items-center">
+            <p id="stageStep" class="text-yellow-300 font-black uppercase tracking-wider text-xs sm:text-sm mb-2 drop-shadow-[0_1px_0_rgba(0,0,0,0.9)] w-full text-center px-1">Ritual 1 / 3 — smile for the algorithm</p>
+            <div class="flex items-center justify-center gap-3 mb-2 w-full max-w-xl mx-auto px-1">
+                <div class="relative flex h-3 w-3 flex-shrink-0 items-center justify-center" aria-hidden="true">
                     <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-60"></span>
                     <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500 brutal-border border border-black"></span>
                 </div>
-                <p id="stageLabel" class="text-white font-black uppercase tracking-wide text-sm sm:text-base leading-snug flex-1">Weaponizing your LinkedIn headline…</p>
+                <p id="stageLabel" class="text-white font-black uppercase tracking-wide text-sm sm:text-base leading-snug text-center flex-1 min-w-0">Weaponizing your LinkedIn headline…</p>
             </div>
-            <div class="w-full bg-gray-800 brutal-border h-4 sm:h-5 overflow-hidden">
+            <div class="w-full max-w-xl mx-auto bg-gray-800 brutal-border h-4 sm:h-5 overflow-hidden">
                 <div id="progressBar" class="h-full bg-[#facc15]" style="width:0%"></div>
             </div>
         </div>
@@ -501,24 +508,30 @@ function setStatusLight(color) {
         `relative h-4 w-4 flex-shrink-0 rounded-full border-2 border-black motion-safe:transition-transform ${color === 'red' ? 'light-red' : 'light-green'}`;
     document.getElementById('statusLight').style.transformOrigin = 'center center';
 }
-/** Display roasts as Kryten: (service droid voice — legacy YOU:/Pal:/Meatbag:/Overseer:). */
+/** On-screen roast voice label (API + legacy prefixes normalized here). */
+const ROAST_VOICE = 'Ex-Machin-a-haha';
+
 function normalizeRoastLine(raw) {
-    if (!raw) return 'Kryten: Still buffering…';
+    if (!raw) return `${ROAST_VOICE}: Still buffering…`;
+    const P = `${ROAST_VOICE}: `;
     let s = String(raw).trim()
-        .replace(/^meatbag:\s*/i, 'Kryten: ')
-        .replace(/^pal:\s*/i, 'Kryten: ')
-        .replace(/^you:\s*/i, 'Kryten: ')
-        .replace(/^overseer:\s*/i, 'Kryten: ');
-    if (/^kryten:\s*/i.test(s)) return s;
-    return 'Kryten: ' + s;
+        .replace(/^meatbag:\s*/i, P)
+        .replace(/^pal:\s*/i, P)
+        .replace(/^you:\s*/i, P)
+        .replace(/^overseer:\s*/i, P)
+        .replace(/^kryten:\s*/i, P);
+    s = s.replace(/^ex-machin-a-haha:\s*/i, P);
+    if (s.startsWith(P)) return s;
+    return P + s;
 }
 
-function stripKrytenForShare(raw) {
-    return normalizeRoastLine(raw).replace(/^Kryten:\s*/i, '').trim();
+function stripRoastVoiceForShare(raw) {
+    const re = new RegExp(`^${ROAST_VOICE.replace(/-/g, '\\-')}:\\s*`, 'i');
+    return normalizeRoastLine(raw).replace(re, '').trim();
 }
 
 /**
- * LinkedIn-skimmable + unhinged: punchy hook, mandate, Kryten hits, shameless CTA.
+ * LinkedIn-skimmable + unhinged: punchy hook, mandate, Ex-Machin-a-haha volleys, CTA.
  */
 function buildSharePost(ctx) {
     const site = SITE_URL.replace(/\/$/, '');
@@ -526,12 +539,12 @@ function buildSharePost(ctx) {
     const title = (ctx.res?.t || '').trim() || 'Classified reassignment';
     const desc = (ctx.res?.d || '').trim() || '';
     const lines = (ctx.msgs || [])
-        .map(stripKrytenForShare)
+        .map(stripRoastVoiceForShare)
         .filter(Boolean)
         .slice(0, 4);
     const roastsBlock = lines.length
         ? lines.map((s) => `• ${s}`).join('\n')
-        : '• (Kryten has politely imploded.)';
+        : `• (${ROAST_VOICE} bluescreened tactfully.)`;
 
     const linkedInBody =
         `Career-Tron 3000 dragged my career. 99.9% “certainty” — hilarious, legally meaningless.
@@ -540,7 +553,7 @@ Was: ${job} | STATUS: FUTURE CANCELLED 🔴
 MANDATE: ${title}
 ${desc}
 
-Kryten’s hits:
+${ROAST_VOICE} volleys:
 ${roastsBlock}
 
 Try your luck before HR does: ${site}`;
@@ -577,10 +590,10 @@ async function fetchAI(job) {
         console.warn('API failed, using fallback:', err);
         return {
             msgs: [
-                "Kryten: Future hazy.",
-                "Kryten: Skill roulette.",
-                "Kryten: Ego refreshing.",
-                "Kryten: Desk warming."
+                "Ex-Machin-a-haha: Future hazy.",
+                "Ex-Machin-a-haha: Skill roulette.",
+                "Ex-Machin-a-haha: Ego refreshing.",
+                "Ex-Machin-a-haha: Desk warming."
             ],
             res: {
                 t: "Analog Server Fan Technician",

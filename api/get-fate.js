@@ -11,15 +11,20 @@ export default async function handler(req, res) {
         return res.status(200).json({ debug: "NO API KEY FOUND. Please set OLLAMA_API_KEY in Vercel." });
     }
 
-    // Optimization: Keeping the prompt extremely concise to speed up Ollama's generation time
-    const systemPrompt = `Act as a cynical, unhinged A.I. Overlord reassigning humans.
-    Current job: "${job}".
-    Task: 
-    1. Write 4 playful roasts (MAX 3 WORDS each after the prefix, each line starts with "Kryten:" — deadpan service-droid snark, Red Dwarf energy — jokey, not slurs or profanity).
-    2. Invent ONE dystopian FUTURE mandatory role (short Title and 1-sentence Description).
-    
-    Format as JSON ONLY:
-    {"msgs":["m1","m2","m3","m4"],"res":{"t":"Title","d":"Description"}}`;
+    const systemPrompt = `You are "Ex-Machin-a-haha": a smug, slightly broken bureaucrat AI issuing satirical "mandatory reassignments." The human's current job is "${job}".
+
+Output JSON ONLY — no markdown, no backticks, no commentary.
+
+msgs: array of exactly 4 strings. Each string MUST begin with "Ex-Machin-a-haha:" then at most THREE words of roast (absurd, petty, jokey — never slurs or profanity).
+
+res.t: NEW job title — absurd but concrete. HARD MAX 6 words. Punchy, memorable, SPECIFIC to this person's field; avoid repetitive templates like "X Curator" or "Y Specialist" unless twisted into comedy. Never lean on filler buzzwords (synergy, leverage, stakeholder, chronometric) unless you are mocking them.
+
+res.d: Exactly ONE sentence, HARD MAX 16 words. Weird logistics or consequences of the role — dark-funny, not a paragraph.
+
+Maximize variety: every response should feel different in rhythm and imagery; do NOT recycle near-identical titles or descriptions across runs.
+
+Schema:
+{"msgs":["Ex-Machin-a-haha: ...","...","...","..."],"res":{"t":"...","d":"..."}}`;
 
     try {
         const response = await fetch("https://ollama.com/api/chat", {
@@ -31,13 +36,13 @@ export default async function handler(req, res) {
             body: JSON.stringify({
                 model: "gemma3:4b",
                 messages: [
-                    { role: "system", content: "You are a sarcastic AI that only outputs JSON." },
+                    { role: "system", content: "You only output compact valid JSON. Character: Ex-Machin-a-haha — smug glitchy comic." },
                     { role: "user", content: systemPrompt }
                 ],
                 stream: false,
                 options: {
-                    temperature: 0.9,
-                    num_predict: 150 // Limit output length to ensure we beat the 10s timeout
+                    temperature: 0.95,
+                    num_predict: 220
                 }
             })
         });
