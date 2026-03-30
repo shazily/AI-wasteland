@@ -151,11 +151,11 @@
         .bureau-title {
             font-family: 'Shrikhand', cursive;
             letter-spacing: 0.02em;
+            line-height: 1.15;
         }
-        .bureau-blurb {
-            font-family: 'Shrikhand', cursive;
-            font-weight: 400;
-            letter-spacing: 0.01em;
+        .bureau-strip {
+            line-height: 1.2;
+            gap: 0.25rem 0.5rem;
         }
         .share-icon-btn { transition: transform 0.15s ease, box-shadow 0.15s ease; }
         .share-icon-btn:hover:not(:disabled) { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 0 #000; }
@@ -166,7 +166,7 @@
 
 <div id="cacheTracker">Neural Cache: Initializing...</div>
 
-<main id="mainMachine" class="w-full max-w-2xl bg-[#60a5fa] brutal-border rounded-2xl p-6 sm:p-10 brutal-shadow relative mx-4 transition-all duration-300">
+<main id="mainMachine" class="w-full max-w-2xl bg-[#60a5fa] brutal-border rounded-2xl p-4 sm:p-10 brutal-shadow relative mx-3 sm:mx-4 my-2 sm:my-4 transition-all duration-300">
 
     <!-- Hardware controls -->
     <div class="absolute top-4 right-4 flex items-center no-screenshot">
@@ -174,19 +174,23 @@
     </div>
 
     <!-- Header -->
-    <div class="text-center mt-4 mb-8">
-        <h1 class="title-font text-5xl sm:text-7xl text-white mb-2" style="-webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">Career-Tron</h1>
-        <div class="bg-white brutal-border p-3 sm:p-4 rounded-lg transform -rotate-1 mb-4 shadow-[4px_4px_0px_0px_#000] space-y-3">
-            <p class="bureau-title text-base sm:text-lg text-black text-center leading-tight">🗂️ Bureau of Human Obsolescence 🤖<br><span class="text-sm sm:text-base">Reassignment Hub 📋</span></p>
-            <p class="bureau-blurb text-sm sm:text-base text-gray-900 text-center leading-relaxed px-1">Enter your job. Our extremely serious A.I. tries to find your relevance when we have <span class="whitespace-nowrap">completely taken over. 🤝</span></p>
-            <p class="text-[11px] sm:text-sm font-bold text-center text-violet-900 italic leading-snug px-1 border-t-2 border-dashed border-black pt-2">✨ *There is no shame. There is only vibes. ✨</p>
+    <div class="text-center mt-1 sm:mt-3 mb-5 sm:mb-8">
+        <h1 class="title-font text-4xl sm:text-7xl text-white mb-1 sm:mb-2 leading-none sm:leading-tight" style="-webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">Career-Tron</h1>
+        <div class="bg-white brutal-border p-2 sm:p-3 rounded-lg transform -rotate-1 mb-2 sm:mb-4 shadow-[4px_4px_0px_0px_#000] space-y-1.5">
+            <div class="bureau-strip flex flex-wrap items-baseline justify-center px-0.5">
+                <span class="bureau-title text-[12px] sm:text-[15px] text-black">🗂️ Obsolescence Bureau</span>
+                <span class="text-black font-black text-[10px] sm:text-xs hidden sm:inline" aria-hidden="true">·</span>
+                <span class="bureau-title text-[12px] sm:text-[15px] text-black">Reassignment Hub 📋</span>
+            </div>
+            <p class="text-[10px] sm:text-xs font-bold text-gray-900 text-center leading-snug px-0.5 max-w-md mx-auto">Enter your job. Our “serious” A.I. scores your relevance for the era <span class="whitespace-nowrap">we already won. 🤝</span></p>
+            <p class="text-[9px] sm:text-[11px] font-black text-violet-900 italic text-center leading-tight tracking-wide">✨ No shame. Only vibes. ✨</p>
         </div>
-        <p class="text-[10px] font-black uppercase text-white tracking-widest text-center">Unit #3000-Z | Secure Neural Link Active</p>
+        <p class="text-[9px] sm:text-[10px] font-black uppercase text-white tracking-widest text-center">Unit #3000-Z | Secure Neural Link Active</p>
     </div>
 
     <!-- Form -->
     <div id="formSection">
-        <form id="careerForm" class="space-y-6">
+        <form id="careerForm" class="space-y-4 sm:space-y-6">
             <div class="space-y-2 text-center">
                 <div class="w-full px-1 pt-1 pb-0 sm:pt-2">
                     <div class="inline-block max-w-full bg-[#facc15] brutal-border px-3 py-2 sm:px-4 sm:py-2.5 shadow-[3px_3px_0px_0px_#000] rounded-lg mx-auto">
