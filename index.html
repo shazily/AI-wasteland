@@ -339,19 +339,19 @@
         <!-- Insult text -->
         <div id="memeTextPanel" class="bg-yellow-300 brutal-border p-3 sm:p-4 shadow-[6px_6px_0px_0px_#000] inline-block w-full mb-4">
             <p id="memeText" class="text-lg sm:text-xl font-black uppercase italic tracking-tighter leading-tight min-h-[2.75rem] sm:min-h-[3rem] flex items-center justify-center text-black px-2 sm:px-4">
-                Overseer: Booting...
+                Kryten: Booting…
             </p>
         </div>
 
         <!-- Progress bar -->
         <div id="roastProgressShell" class="bg-black brutal-border p-3 sm:p-4 w-full text-left ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/90 transition-shadow duration-300">
-            <p id="stageStep" class="text-yellow-400 font-black uppercase tracking-wider text-[10px] sm:text-xs mb-1">Protocol 1 / 3</p>
+            <p id="stageStep" class="text-yellow-300 font-black uppercase tracking-wider text-xs sm:text-sm mb-1.5 drop-shadow-[0_1px_0_rgba(0,0,0,0.9)]">Ritual 1 / 3 — smile for the algorithm</p>
             <div class="flex items-center gap-3 mb-2">
                 <div class="relative flex h-3 w-3 flex-shrink-0 items-center justify-center">
                     <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-60"></span>
                     <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500 brutal-border border border-black"></span>
                 </div>
-                <p id="stageLabel" class="text-white font-black uppercase tracking-wide text-[11px] sm:text-sm leading-snug flex-1">Deploying disrespect...</p>
+                <p id="stageLabel" class="text-white font-black uppercase tracking-wide text-sm sm:text-base leading-snug flex-1">Weaponizing your LinkedIn headline…</p>
             </div>
             <div class="w-full bg-gray-800 brutal-border h-4 sm:h-5 overflow-hidden">
                 <div id="progressBar" class="h-full bg-[#facc15]" style="width:0%"></div>
@@ -380,7 +380,7 @@
                 <span class="text-[9px] font-black uppercase">Facebook</span>
             </button>
         </div>
-        <p id="shareFlowTip" class="text-[9px] sm:text-[10px] text-gray-600 font-bold mb-3 leading-snug px-1">Share your professional A.I roast - I dare you!</p>
+        <p id="shareFlowTip" class="text-base sm:text-lg font-black text-gray-900 mb-4 leading-snug px-2">Share your professional A.I roast — I dare you! 😂</p>
         <button type="button" onclick="document.getElementById('shareModal').style.display='none'" class="w-full text-[10px] underline font-black uppercase py-3">Close</button>
     </div>
 </div>
@@ -435,9 +435,17 @@ function getCachedUrl(filename) {
     return gifCache[filename] || (GITHUB_RAW + filename);
 }
 
-/** Random meme cycling during roast (new pick every MEME_FLIP_MS; avoids immediate repeat). */
+/** GIF cycle: shuffle deck, show each meme once per pass, reshuffle between passes (no dupes in one lap). */
 const MEME_FLIP_MS = 900;
 let memeChaosTimer = null;
+function shuffleMemeDeck(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
 function stopMemeChaos() {
     if (memeChaosTimer !== null) {
         clearInterval(memeChaosTimer);
@@ -446,14 +454,24 @@ function stopMemeChaos() {
 }
 function startMemeChaos(memeImg, gifWrapper) {
     stopMemeChaos();
+    let deck = shuffleMemeDeck(MEME_FILES);
+    let di = 0;
     let lastFile = null;
     function pickFile() {
         if (MEME_FILES.length === 0) return null;
-        let f = MEME_FILES[Math.floor(Math.random() * MEME_FILES.length)];
-        let guard = 0;
-        while (MEME_FILES.length > 1 && f === lastFile && guard++ < 24) {
-            f = MEME_FILES[Math.floor(Math.random() * MEME_FILES.length)];
+        if (MEME_FILES.length === 1) {
+            lastFile = MEME_FILES[0];
+            return MEME_FILES[0];
         }
+        if (di >= deck.length) {
+            deck = shuffleMemeDeck(MEME_FILES);
+            di = 0;
+            if (deck[0] === lastFile) {
+                const k = deck.findIndex((f) => f !== lastFile);
+                if (k > 0) [deck[0], deck[k]] = [deck[k], deck[0]];
+            }
+        }
+        const f = deck[di++];
         lastFile = f;
         return f;
     }
@@ -483,24 +501,24 @@ function setStatusLight(color) {
         `relative h-4 w-4 flex-shrink-0 rounded-full border-2 border-black motion-safe:transition-transform ${color === 'red' ? 'light-red' : 'light-green'}`;
     document.getElementById('statusLight').style.transformOrigin = 'center center';
 }
-/** Display roasts as Overseer: (maps legacy YOU:/Pal:/Meatbag:). */
+/** Display roasts as Kryten: (service droid voice — legacy YOU:/Pal:/Meatbag:/Overseer:). */
 function normalizeRoastLine(raw) {
-    if (!raw) return 'Overseer: Still buffering…';
+    if (!raw) return 'Kryten: Still buffering…';
     let s = String(raw).trim()
-        .replace(/^meatbag:\s*/i, 'Overseer: ')
-        .replace(/^pal:\s*/i, 'Overseer: ')
-        .replace(/^you:\s*/i, 'Overseer: ');
-    if (/^overseer:\s*/i.test(s)) return s;
-    return 'Overseer: ' + s;
+        .replace(/^meatbag:\s*/i, 'Kryten: ')
+        .replace(/^pal:\s*/i, 'Kryten: ')
+        .replace(/^you:\s*/i, 'Kryten: ')
+        .replace(/^overseer:\s*/i, 'Kryten: ');
+    if (/^kryten:\s*/i.test(s)) return s;
+    return 'Kryten: ' + s;
 }
 
-function stripOverseerForShare(raw) {
-    return normalizeRoastLine(raw).replace(/^Overseer:\s*/i, '').trim();
+function stripKrytenForShare(raw) {
+    return normalizeRoastLine(raw).replace(/^Kryten:\s*/i, '').trim();
 }
 
 /**
- * Viral share copy: real mandate details + Overseer burns + clear “try your luck” link.
- * Text-first posts travel better than images in most apps and tee up curiosity clicks.
+ * LinkedIn-skimmable + unhinged: punchy hook, mandate, Kryten hits, shameless CTA.
  */
 function buildSharePost(ctx) {
     const site = SITE_URL.replace(/\/$/, '');
@@ -508,27 +526,24 @@ function buildSharePost(ctx) {
     const title = (ctx.res?.t || '').trim() || 'Classified reassignment';
     const desc = (ctx.res?.d || '').trim() || '';
     const lines = (ctx.msgs || [])
-        .map(stripOverseerForShare)
+        .map(stripKrytenForShare)
         .filter(Boolean)
         .slice(0, 4);
     const roastsBlock = lines.length
         ? lines.map((s) => `• ${s}`).join('\n')
-        : '• (The Overseer is speechless. Rare.)';
+        : '• (Kryten has politely imploded.)';
 
     const linkedInBody =
-        `I fed my real job into Career-Tron 3000 — an AI “Human Obsolescence Bureau.” It issued a Future Mandate. Hard to argue with 99.9% certainty.
+        `Career-Tron 3000 dragged my career. 99.9% “certainty” — hilarious, legally meaningless.
 
-CURRENT JOB (on file): ${job}
-STATUS: FUTURE CANCELLED 🔴
-
-MANDATORY REASSIGNMENT: ${title}
+Was: ${job} | STATUS: FUTURE CANCELLED 🔴
+MANDATE: ${title}
 ${desc}
 
-The Overseer’s finest burns:
+Kryten’s hits:
 ${roastsBlock}
 
-Think you’re safe? Try your luck — same roast + mandate machine, free:
-${site}`;
+Try your luck before HR does: ${site}`;
 
     const q1 = lines[0] || 'Peak obsolescence.';
     const q2 = lines[1] || '';
@@ -562,10 +577,10 @@ async function fetchAI(job) {
         console.warn('API failed, using fallback:', err);
         return {
             msgs: [
-                "Overseer: Future hazy.",
-                "Overseer: Skill roulette.",
-                "Overseer: Ego refreshing.",
-                "Overseer: Desk warming."
+                "Kryten: Future hazy.",
+                "Kryten: Skill roulette.",
+                "Kryten: Ego refreshing.",
+                "Kryten: Desk warming."
             ],
             res: {
                 t: "Analog Server Fan Technician",
@@ -576,10 +591,19 @@ async function fetchAI(job) {
 }
 
 // ─── Roast sequence — 3 stages, 2s each ──────────────────────────────
-const STAGE_LABELS = [
-    'SCANNING YOUR RESUME FOR HUBRIS...',
-    'CROSS-REFERENCING YOU VS A TOASTER...',
-    'ISSUING A MEANINGLESS BUT OFFICIAL-LOOKING VERDICT...'
+const ROAST_STAGES = [
+    {
+        step: 'Ritual 1/3 — HR has left the building',
+        label: 'Scraping your job title for incriminating optimism…'
+    },
+    {
+        step: 'Ritual 2/3 — toaster is winning',
+        label: 'Proving you\'re statistically replaceable by kitchen appliances…'
+    },
+    {
+        step: 'Ritual 3/3 — stamp goes brrr',
+        label: 'Printing a Future Mandate that looks official (it\'s not)…'
+    }
 ];
 
 async function runRoastSequence(job) {
@@ -604,8 +628,8 @@ async function runRoastSequence(job) {
 
     try {
         for (let i = 0; i < 3; i++) {
-            stageStep.textContent = `Protocol ${i + 1} / 3`;
-            stageLabel.textContent = STAGE_LABELS[i];
+            stageStep.textContent = ROAST_STAGES[i].step;
+            stageLabel.textContent = ROAST_STAGES[i].label;
             memeText.classList.add('fading');
 
             const data = await aiPromise;
@@ -668,7 +692,7 @@ function openShareUrl(url) {
     });
 }
 
-const SHARE_TIP_DARE = 'Share your professional A.I roast - I dare you!';
+const SHARE_TIP_DARE = 'Share your professional A.I roast — I dare you! 😂';
 
 /** LinkedIn app often drops Share API text; keep caption on clipboard for paste in the post field. */
 async function copyCaptionForLinkedIn(shareText) {
