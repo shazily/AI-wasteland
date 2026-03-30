@@ -540,33 +540,29 @@ function stripRoastVoiceForShare(raw) {
     return normalizeRoastLine(raw).replace(re, '').trim();
 }
 
+function clipShareSnippet(s, max) {
+    const t = String(s || '').replace(/\s+/g, ' ').trim();
+    if (!t) return '';
+    if (t.length <= max) return t;
+    return `${t.slice(0, max - 1).trim()}…`;
+}
+
 /**
- * LinkedIn-skimmable + unhinged: punchy hook, mandate, Ex-Machin-a-haha volleys, CTA.
+ * LinkedIn: one short line + URL (app often drops long pasted text).
  */
 function buildSharePost(ctx) {
     const site = SITE_URL.replace(/\/$/, '');
-    const job = (ctx.job || '').trim() || 'Professional human';
-    const title = (ctx.res?.t || '').trim() || 'Classified reassignment';
-    const desc = (ctx.res?.d || '').trim() || '';
+    const job = (ctx.job || '').trim() || 'professional human';
+    const title = (ctx.res?.t || '').trim() || 'classified reassignment';
     const lines = (ctx.msgs || [])
         .map(stripRoastVoiceForShare)
         .filter(Boolean)
         .slice(0, 4);
-    const roastsBlock = lines.length
-        ? lines.map((s) => `• ${s}`).join('\n')
-        : `• (${ROAST_VOICE} bluescreened tactfully.)`;
-
-    const linkedInBody =
-        `Career-Roast dragged my career. 99.9% “certainty” — hilarious, legally meaningless.
-
-Was: ${job} | STATUS: FUTURE CANCELLED 🔴
-MANDATE: ${title}
-${desc}
-
-${ROAST_VOICE} volleys:
-${roastsBlock}
-
-Try your luck before HR does: ${site}`;
+    const mandate = clipShareSnippet(title, 34);
+    const role = clipShareSnippet(job, 22);
+    const linkedInBody = mandate
+        ? `From ${role} to “${mandate}” — blame the robot. Career-Roast: ${site}`
+        : `Career-Roast fired my ego. Your turn: ${site}`;
 
     const q1 = lines[0] || 'Peak obsolescence.';
     const q2 = lines[1] || '';
