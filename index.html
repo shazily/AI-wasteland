@@ -100,6 +100,44 @@
             to   { opacity: 1; transform: translateY(0)    rotate(1deg); }
         }
         #captureArea { animation: slideUp 0.4s ease forwards; }
+
+        @keyframes start-here-bob {
+            0%, 100% { transform: translateY(0); }
+            50%      { transform: translateY(-5px); }
+        }
+        .start-here-hint {
+            display: inline-block;
+            animation: start-here-bob 1.15s ease-in-out infinite;
+            will-change: transform;
+        }
+
+        @keyframes progress-glow {
+            0%, 100% { box-shadow: inset 0 0 0 1px #000, 0 0 0 0 rgba(250, 204, 21, 0); }
+            50%      { box-shadow: inset 0 0 0 1px #000, 0 0 14px 2px rgba(250, 204, 21, 0.85); }
+        }
+        @keyframes progress-stripe {
+            0% { background-position: 0 0; }
+            100% { background-position: 24px 0; }
+        }
+        #progressBar.roast-bar-active {
+            background-image: linear-gradient(
+                110deg,
+                #facc15 0%,
+                #fde047 45%,
+                #facc15 55%,
+                #eab308 100%
+            );
+            background-size: 24px 100%;
+            animation: progress-stripe 0.55s linear infinite, progress-glow 1s ease-in-out infinite;
+        }
+
+        @keyframes roast-panel-pulse {
+            0%, 100% { box-shadow: 6px 6px 0 0 #000, 0 0 0 0 rgba(250, 204, 21, 0.35); }
+            50%      { box-shadow: 6px 6px 0 0 #000, 0 0 22px 2px rgba(250, 204, 21, 0.55); }
+        }
+        #memeTextPanel.roast-text-active { animation: roast-panel-pulse 1.25s ease-in-out infinite; }
+
+        #roastOverlay .overlay-inner { max-height: min(92vh, 900px); overflow-y: auto; padding-bottom: 0.5rem; }
     </style>
 </head>
 <body>
@@ -116,8 +154,9 @@
     <!-- Header -->
     <div class="text-center mt-4 mb-8">
         <h1 class="title-font text-5xl sm:text-7xl text-white mb-2" style="-webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">Career-Tron</h1>
-        <div class="bg-white brutal-border p-3 rounded-lg transform -rotate-1 mb-4 shadow-[4px_4px_0px_0px_#000]">
+        <div class="bg-white brutal-border p-3 sm:p-4 rounded-lg transform -rotate-1 mb-4 shadow-[4px_4px_0px_0px_#000] space-y-2">
             <p class="text-sm sm:text-base font-bold uppercase leading-tight italic text-black text-center">Bureau of Human Obsolescence: Reassignment Hub</p>
+            <p class="text-[11px] sm:text-xs font-bold text-gray-800 text-center leading-snug px-1">Enter your job. Our extremely serious A.I. files you under “probably doomed,” plays judgmental GIFs, and mails* you a sarcastic replacement career. *There is no mail. There is only vibes.</p>
         </div>
         <p class="text-[10px] font-black uppercase text-white tracking-widest text-center">Unit #3000-Z | Secure Neural Link Active</p>
     </div>
@@ -126,13 +165,17 @@
     <div id="formSection">
         <form id="careerForm" class="space-y-6">
             <div class="space-y-2 text-center">
-                <label class="block font-black text-xl sm:text-2xl uppercase tracking-tighter italic text-slate-900" style="text-shadow: 0 0 1px rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.15);">Current Human "Career":</label>
+                <div class="w-full px-1 pt-1 pb-0 sm:pt-2">
+                    <div class="inline-block max-w-full bg-[#facc15] brutal-border px-3 py-2 sm:px-4 sm:py-2.5 shadow-[3px_3px_0px_0px_#000] rounded-lg mx-auto">
+                        <span class="start-here-hint font-black uppercase tracking-wide text-[10px] sm:text-xs text-black leading-tight block text-center whitespace-normal">👇 START HERE HUMAN 👇</span>
+                    </div>
+                </div>
+                <label class="block font-black text-xl sm:text-2xl uppercase tracking-tighter italic text-slate-900 mt-1 sm:mt-2" style="text-shadow: 0 0 1px rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.15);">Current Human "Career":</label>
                 <input type="text" id="jobInput" placeholder="Ex: Growth Hacker, Scrum Master..." class="w-full p-4 brutal-border rounded-xl text-lg brutal-shadow focus:outline-none bg-white text-center" required>
             </div>
             <div class="flex flex-wrap gap-2 sm:gap-3 justify-center pb-2 max-w-xl mx-auto">
                 <button type="button" onclick="document.getElementById('jobInput').value='Venture Capitalist'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">VC</button>
                 <button type="button" onclick="document.getElementById('jobInput').value='Scrum Master'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Scrum Master</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Prompt Engineer'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Prompt Engineer</button>
                 <button type="button" onclick="document.getElementById('jobInput').value='Agile Coach'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Agile Coach</button>
                 <button type="button" onclick="document.getElementById('jobInput').value='Influencer'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Influencer</button>
                 <button type="button" onclick="document.getElementById('jobInput').value='Chief Vibe Officer'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">CVO</button>
@@ -144,8 +187,8 @@
                 <button type="button" onclick="document.getElementById('jobInput').value='Paralegal'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Paralegal</button>
             </div>
             <div class="text-center space-y-3">
-                <button type="submit" class="w-full bg-[#facc15] text-black brutal-border p-5 rounded-xl text-xl font-black shadow-[4px_4px_0px_0px_#000] active:translate-y-1 transition-all hover:bg-yellow-300">CONSULT THE OVERLORD</button>
-                <p class="text-xs font-black uppercase text-white tracking-widest italic text-center">Calculating your inevitable replacement... 😭</p>
+                <button type="submit" class="w-full bg-[#facc15] text-black brutal-border p-5 rounded-xl text-lg sm:text-xl font-black shadow-[4px_4px_0px_0px_#000] active:translate-y-1 transition-all hover:bg-yellow-300">Consult A.I (obviously)</button>
+                <p class="text-sm sm:text-base font-black uppercase text-white tracking-wide sm:tracking-widest italic text-center px-1 leading-snug" style="text-shadow: 0 1px 2px rgba(0,0,0,0.45);">Calculating your inevitable replacement... 😭</p>
             </div>
         </form>
     </div>
@@ -194,30 +237,34 @@
 
 <!-- Roast overlay — card visible behind via backdrop-filter -->
 <div id="roastOverlay" class="overlay-layer">
-    <div class="w-full max-w-md text-center">
+    <div class="overlay-inner w-full max-w-lg sm:max-w-xl text-center px-1">
 
-        <!-- GIF frame -->
-        <div class="bg-white brutal-border rounded-xl p-4 brutal-shadow transform rotate-1 mb-6 overflow-hidden">
-            <div id="gifWrapper" class="w-full h-44 sm:h-56 brutal-border overflow-hidden bg-black flex items-center justify-center relative gif-loading">
-                <img id="memeImage" src="" alt="Roasting..." class="w-full h-full object-cover hidden">
+        <!-- GIF frame — letterboxed so any aspect ratio fits -->
+        <div class="bg-white brutal-border rounded-xl p-3 sm:p-4 brutal-shadow transform rotate-1 mb-4 sm:mb-6 overflow-hidden">
+            <div id="gifWrapper" class="w-full aspect-[4/3] max-h-[min(42vh,320px)] sm:max-h-[min(48vh,380px)] min-h-[160px] brutal-border overflow-hidden bg-black flex items-center justify-center relative gif-loading mx-auto">
+                <img id="memeImage" src="" alt="Roasting..." class="max-w-full max-h-full w-auto h-auto object-contain hidden">
                 <div class="scanline"></div>
             </div>
         </div>
 
         <!-- Insult text -->
-        <div class="bg-yellow-300 brutal-border p-4 shadow-[6px_6px_0px_0px_#000] inline-block w-full mb-4">
-            <p id="memeText" class="text-xl font-black uppercase italic tracking-tighter leading-tight min-h-[2.5rem] flex items-center justify-center text-black px-4">
+        <div id="memeTextPanel" class="bg-yellow-300 brutal-border p-3 sm:p-4 shadow-[6px_6px_0px_0px_#000] inline-block w-full mb-4">
+            <p id="memeText" class="text-lg sm:text-xl font-black uppercase italic tracking-tighter leading-tight min-h-[2.75rem] sm:min-h-[3rem] flex items-center justify-center text-black px-2 sm:px-4">
                 Meatbag: Booting...
             </p>
         </div>
 
         <!-- Progress bar -->
-        <div class="bg-black brutal-border p-3 w-full text-left">
+        <div id="roastProgressShell" class="bg-black brutal-border p-3 sm:p-4 w-full text-left ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/90">
+            <p id="stageStep" class="text-yellow-400 font-black uppercase tracking-wider text-[10px] sm:text-xs mb-1">Protocol 1 / 3</p>
             <div class="flex items-center gap-3 mb-2">
-                <div class="w-2 h-2 rounded-full bg-red-500 animate-ping flex-shrink-0"></div>
-                <p id="stageLabel" class="text-white font-black uppercase tracking-widest text-[10px]">Calculating Obsolescence...</p>
+                <div class="relative flex h-3 w-3 flex-shrink-0 items-center justify-center">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-60"></span>
+                    <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500 brutal-border border border-black"></span>
+                </div>
+                <p id="stageLabel" class="text-white font-black uppercase tracking-wide text-[11px] sm:text-sm leading-snug flex-1">Deploying disrespect...</p>
             </div>
-            <div class="w-full bg-gray-800 brutal-border h-3 overflow-hidden">
+            <div class="w-full bg-gray-800 brutal-border h-4 sm:h-5 overflow-hidden">
                 <div id="progressBar" class="h-full bg-[#facc15]" style="width:0%"></div>
             </div>
         </div>
@@ -321,27 +368,32 @@ async function fetchAI(job) {
 
 // ─── Roast sequence — 3 stages, 2s each ──────────────────────────────
 const STAGE_LABELS = [
-    'SCANNING MEDIOCRITY...',
-    'CROSS-REFERENCING FAILURE...',
-    'PRINTING FATE...'
+    'SCANNING YOUR RESUME FOR HUBRIS...',
+    'CROSS-REFERENCING YOU VS A TOASTER...',
+    'ISSUING A MEANINGLESS BUT OFFICIAL-LOOKING VERDICT...'
 ];
 
 async function runRoastSequence(job) {
-    const overlay     = document.getElementById('roastOverlay');
-    const memeImg     = document.getElementById('memeImage');
-    const memeText    = document.getElementById('memeText');
-    const gifWrapper  = document.getElementById('gifWrapper');
-    const progressBar = document.getElementById('progressBar');
-    const stageLabel  = document.getElementById('stageLabel');
-    const chosenFiles = pickRandom(MEME_FILES, 3);
+    const overlay       = document.getElementById('roastOverlay');
+    const memeImg       = document.getElementById('memeImage');
+    const memeText      = document.getElementById('memeText');
+    const memeTextPanel = document.getElementById('memeTextPanel');
+    const gifWrapper    = document.getElementById('gifWrapper');
+    const progressBar   = document.getElementById('progressBar');
+    const stageLabel    = document.getElementById('stageLabel');
+    const stageStep     = document.getElementById('stageStep');
+    const chosenFiles   = pickRandom(MEME_FILES, 3);
 
     overlay.style.display = 'flex';
     setStatusLight('red');
+    progressBar.classList.add('roast-bar-active');
+    if (memeTextPanel) memeTextPanel.classList.add('roast-text-active');
 
     // Fire AI immediately in parallel
     const aiPromise = fetchAI(job);
 
     for (let i = 0; i < 3; i++) {
+        stageStep.textContent = `Protocol ${i + 1} / 3`;
         stageLabel.textContent = STAGE_LABELS[i];
         memeText.classList.add('fading');
 
@@ -358,9 +410,9 @@ async function runRoastSequence(job) {
         };
 
         const data = await aiPromise;
-        memeText.textContent = data.msgs[i] || 'Meatbag: Processing...';
+        memeText.textContent = data.msgs[i] || 'Meatbag: Still thinking. Bad sign for you.';
         memeText.classList.remove('fading');
-        progressBar.style.width = `${(i + 1) * 33}%`;
+        progressBar.style.width = `${Math.round(((i + 1) / 3) * 100)}%`;
 
         await delay(STAGE_MS);
     }
@@ -374,6 +426,8 @@ async function runRoastSequence(job) {
         `A.I. peeked into my future and reassigned me to: "${data.res.t}". Find your fate 👉 https://ai-wasteland.vercel.app/ 🤖`;
 
     // Reset progress bar
+    progressBar.classList.remove('roast-bar-active');
+    if (memeTextPanel) memeTextPanel.classList.remove('roast-text-active');
     progressBar.style.transition = 'none';
     progressBar.style.width = '0%';
     setTimeout(() => { progressBar.style.transition = 'width 1.9s linear'; }, 50);
