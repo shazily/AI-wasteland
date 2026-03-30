@@ -9,6 +9,10 @@ alwaysApply: true
 
 Satirical dystopian single-page experience: users enter a current job title and receive a cynical AI “Overseer” judgment — short savage roasts with rotating meme GIFs, then an “Official Future Mandate” card (new role title + one-line description). Tone is **Human Obsolescence** / mandatory reassignment humor, not serious career advice.
 
+## Agent workflow
+
+After **any** substantive change to this repo (code, assets, or these rules), **`git add`**, **`git commit`** with a clear message, and **`git push origin main`** to [https://github.com/shazily/AI-wasteland](https://github.com/shazily/AI-wasteland). Do not leave fixes only in the working tree unless the user explicitly asks to skip publishing.
+
 ## URLs
 
 - **Repo:** https://github.com/shazily/AI-wasteland
@@ -36,4 +40,4 @@ Satirical dystopian single-page experience: users enter a current job title and 
 
 ## Design intent
 
-High-contrast neo-brutalist “terminal / bureau” aesthetic: heavy black borders, offset shadows, optional scanline overlay on card, status LED, REBOOT control.
+High-contrast neo-brutalist “terminal / bureau” aesthetic: heavy black borders, offset shadows, optional scanline overlay on card, status LED.
