@@ -31,13 +31,22 @@ Return ONLY valid JSON, no markdown, no extra text:
         const data = await response.json();
         if (!data.message) return res.status(200).json({ debug: JSON.stringify(data) });
 
-       const text = data.message.content.trim()
-        .replace(/^```json\s*/i, '')
-        .replace(/^```\s*/i, '')
-        .replace(/```\s*$/i, '')
-        .trim();
-        const result = JSON.parse(text);
-        return res.status(200).json(result);
+    const text = data.message.content.trim()
+    .replace(/^```json\s*/i, '')
+    .replace(/^```\s*/i, '')
+    .replace(/```\s*$/i, '')
+    .trim();
+
+    // Remove control characters that break JSON parsing
+    const clean = text.replace(/[\x00-\x1F\x7F]/g, (c) => {
+        if (c === '\n') return '\\n';
+        if (c === '\r') return '\\r';
+        if (c === '\t') return '\\t';
+        return '';
+});
+
+const result = JSON.parse(clean);
+return res.status(200).json(result);
 
     } catch (err) {
         return res.status(200).json({ debug: err.message });
