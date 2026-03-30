@@ -108,6 +108,17 @@
             animation: shimmer 1.2s infinite;
         }
 
+        @keyframes reboot-glyph-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50%      { opacity: 0.45; transform: scale(1.18); }
+        }
+        .reboot-icon-pulse {
+            animation: reboot-glyph-pulse 1.05s ease-in-out infinite;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .reboot-icon-pulse { animation: none; opacity: 1; }
+        }
+
         #progressBar { transition: width 1.9s linear; }
 
         #cacheTracker {
@@ -276,6 +287,10 @@
     <!-- Result -->
     <div id="resultContainer" class="hidden">
         <div id="captureArea" class="report-compact brutal-border rounded-xl p-3 sm:p-5 md:p-6 brutal-shadow relative report-card overflow-hidden">
+            <button type="button" onclick="location.reload()" title="Start over" class="absolute top-2 left-2 z-30 bg-white text-black px-2 py-1.5 brutal-border shadow-[1px_1px_0px_0px_#000] font-bold text-[9px] sm:text-[10px] uppercase italic inline-flex items-center gap-1 hover:bg-gray-100 transition-colors">
+                <svg class="w-3 h-3 reboot-icon-pulse flex-shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                Reboot
+            </button>
             <div class="scanline"></div>
             <div class="border-b-2 sm:border-b-4 border-black pb-1.5 sm:pb-2 mb-3 sm:mb-4 text-center uppercase font-black text-lg sm:text-2xl italic tracking-tighter">Future Mandate</div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4 relative">
@@ -300,22 +315,25 @@
             <div class="text-[7px] sm:text-[8px] text-center font-bold text-gray-400 uppercase tracking-widest mt-1 italic">© Career-Tron 3000 | Human Obsolescence Bureau</div>
         </div>
 
-        <div class="mt-4 sm:mt-6 no-screenshot">
-            <button id="openShareBtn" type="button" class="w-full bg-[#facc15] text-black font-black p-3 sm:p-4 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] text-xs sm:text-sm active:translate-y-1 hover:bg-yellow-300 transition-colors uppercase flex flex-col sm:flex-row items-center justify-center gap-2">
+        <div class="mt-3 sm:mt-4 no-screenshot">
+            <button id="openShareBtn" type="button" class="w-full bg-[#facc15] text-black font-black px-2 py-2 sm:py-2.5 brutal-border rounded-lg shadow-[2px_2px_0px_0px_#000] text-[9px] sm:text-[10px] active:translate-y-px hover:bg-yellow-300 transition-colors uppercase inline-flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-1.5">
                 <span class="tracking-wide">Share your fate</span>
-                <span class="flex items-center justify-center gap-2" aria-hidden="true">
-                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-                    <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <span class="flex items-center justify-center gap-1" aria-hidden="true">
+                    <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                    <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <svg class="h-3.5 w-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                 </span>
             </button>
         </div>
-        <button onclick="location.reload()" class="w-full mt-4 bg-white text-black font-black p-4 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] text-xs no-screenshot hover:bg-gray-100 transition-colors uppercase italic">RE-EVALUATE FUTURE 🔄</button>
+        <details class="no-screenshot mt-2 text-left max-w-2xl mx-auto w-full px-1">
+            <summary class="text-[9px] sm:text-[10px] font-black uppercase tracking-wide text-gray-600 cursor-pointer select-none">GIF roster — <span id="memeCountRoster">0</span> files (each once per roast)</summary>
+            <ol id="memeFileList" class="mt-1.5 list-decimal pl-5 space-y-0.5 text-[8px] sm:text-[9px] font-mono text-gray-700 break-all max-h-40 overflow-y-auto"></ol>
+        </details>
     </div>
 
-    <footer class="mt-3 sm:mt-6 text-center no-screenshot shrink-0 pb-1">
-        <a href="https://www.linkedin.com/in/shazilymunawar" target="_blank" class="bg-[#0a66c2] text-white px-5 py-3 brutal-border shadow-[3px_3px_0px_0px_#000] font-bold text-xs sm:text-sm italic flex flex-col sm:flex-row items-center justify-center gap-2 mx-auto max-w-lg w-full sm:w-fit text-center normal-case leading-snug hover:translate-x-1 transition-transform">
-            <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+    <footer class="mt-2 sm:mt-4 text-center no-screenshot shrink-0 pb-1">
+        <a href="https://www.linkedin.com/in/shazilymunawar" target="_blank" rel="noopener noreferrer" class="bg-[#0a66c2] text-white px-2 py-1.5 brutal-border shadow-[1px_1px_0px_0px_#000] font-bold text-[9px] sm:text-[10px] italic inline-flex flex-col sm:flex-row items-center justify-center gap-1 mx-auto max-w-md w-full sm:w-fit text-center normal-case leading-tight hover:translate-x-0.5 transition-transform">
+            <svg class="w-3 h-3 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
             <span>Thank your human comrade.</span>
         </a>
     </footer>
@@ -373,7 +391,7 @@
 // ─── Config ───────────────────────────────────────────────────────────
 const STAGE_MS   = 4800;
 const GITHUB_RAW = "https://raw.githubusercontent.com/shazily/AI-wasteland/main/Memes/";
-const MEME_FILES = [
+const MEME_FILES = [...new Set([
     "they-took-our-jobs-darryl-weathers.gif",
     "hes-got-no-job-south-park.gif",
     "benjammins-too-much-time.gif",
@@ -391,7 +409,7 @@ const MEME_FILES = [
     "emotional-damage.gif",
     "awkward-awkward-smile.gif",
     "the-it-crowd-moss-the-it-crowd.gif"
-];
+])];
 
 // ─── Pre-cache GIFs in parallel on page load ─────────────────────────
 const gifCache = {};
@@ -415,16 +433,13 @@ async function warmCache() {
 }
 warmCache();
 
-function getCachedUrl(filename) {
-    return gifCache[filename] || (GITHUB_RAW + filename);
-}
-
 /**
- * GIF cycle: queue of shuffled memes — every file once per lap, lap boundaries never repeat
- * the same GIF twice in a row. Clearing src avoids stuck frames when URL matches.
+ * GIF cycle: one shuffled lap per roast (no refill — no repeated files until a new run).
+ * Single-file list keeps that file looping. Stale onload gated by memeShowGen.
  */
-const MEME_FLIP_MS = 900;
+const MEME_FLIP_MS = 1000;
 let memeChaosTimer = null;
+let memeShowGen = 0;
 function shuffleMemeDeck(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
@@ -438,52 +453,79 @@ function stopMemeChaos() {
         clearInterval(memeChaosTimer);
         memeChaosTimer = null;
     }
+    memeShowGen++;
 }
+
+function memeUrlForDisplay(filename, bust) {
+    const blob = gifCache[filename];
+    if (blob) return blob;
+    const u = GITHUB_RAW + filename;
+    return `${u}${u.includes('?') ? '&' : '?'}__m=${bust}`;
+}
+
 function startMemeChaos(memeImg, gifWrapper) {
     stopMemeChaos();
-    const pending = [];
-    let lastShown = null;
-
-    function refillPending() {
-        let next = shuffleMemeDeck(MEME_FILES);
-        if (lastShown && next.length > 1 && next[0] === lastShown) {
-            const j = next.findIndex((f) => f !== lastShown);
-            if (j > 0) [next[0], next[j]] = [next[j], next[0]];
-        }
-        pending.push(...next);
-    }
+    memeShowGen = 0;
+    const pool = shuffleMemeDeck([...MEME_FILES]);
+    let lastFilename = null;
 
     function popNextFilename() {
         if (MEME_FILES.length === 0) return null;
         if (MEME_FILES.length === 1) return MEME_FILES[0];
-        if (pending.length === 0) refillPending();
-        const f = pending.shift();
-        lastShown = f;
+        if (pool.length === 0) return null;
+        let f = pool.shift();
+        let guard = 0;
+        while (f === lastFilename && pool.length > 0 && guard++ < MEME_FILES.length + 2) {
+            f = pool.shift();
+        }
+        if (f === lastFilename) return null;
+        lastFilename = f;
         return f;
     }
 
     function showOne() {
         const filename = popNextFilename();
-        if (!filename) return;
-        const url = getCachedUrl(filename);
+        if (!filename) {
+            if (memeChaosTimer !== null) {
+                clearInterval(memeChaosTimer);
+                memeChaosTimer = null;
+            }
+            return;
+        }
+        const gen = ++memeShowGen;
+        const url = memeUrlForDisplay(filename, gen);
         gifWrapper.classList.add('gif-loading');
         memeImg.classList.add('hidden');
-        if (memeImg.src && (memeImg.src === url || memeImg.getAttribute('src') === url)) {
-            memeImg.removeAttribute('src');
-        }
-        memeImg.src = url;
-        memeImg.onload = () => {
-            gifWrapper.classList.remove('gif-loading');
-            memeImg.classList.remove('hidden');
-        };
-        memeImg.onerror = () => {
-            gifWrapper.classList.remove('gif-loading');
-            memeImg.classList.remove('hidden');
-        };
+        memeImg.onload = null;
+        memeImg.onerror = null;
+        memeImg.removeAttribute('src');
+        requestAnimationFrame(() => {
+            if (gen !== memeShowGen) return;
+            memeImg.onload = () => {
+                if (gen !== memeShowGen) return;
+                gifWrapper.classList.remove('gif-loading');
+                memeImg.classList.remove('hidden');
+            };
+            memeImg.onerror = () => {
+                if (gen !== memeShowGen) return;
+                gifWrapper.classList.remove('gif-loading');
+                memeImg.classList.remove('hidden');
+            };
+            memeImg.src = url;
+        });
     }
     showOne();
     memeChaosTimer = setInterval(showOne, MEME_FLIP_MS);
 }
+
+(function initMemeFileRoster() {
+    const ul = document.getElementById('memeFileList');
+    const c = document.getElementById('memeCountRoster');
+    if (ul) {
+        ul.innerHTML = MEME_FILES.map((f) => `<li>${f}</li>`).join('');
+    }
+    if (c) c.textContent = String(MEME_FILES.length);
+})();
 
 // ─── Helpers ──────────────────────────────────────────────────────────
 const SITE_URL = 'https://ai-wasteland.vercel.app/';
