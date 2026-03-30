@@ -68,10 +68,9 @@
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(8px) brightness(0.4);
             -webkit-backdrop-filter: blur(8px) brightness(0.4);
-            align-items: flex-start;
+            align-items: center;
             justify-content: center;
-            padding-top: 0.35rem;
-            padding-bottom: 1rem;
+            padding: max(0.75rem, env(safe-area-inset-top, 0px)) 1rem max(1rem, env(safe-area-inset-bottom, 0px));
         }
         #shareModal {
             z-index: 6000;
@@ -159,13 +158,18 @@
         }
 
         #roastOverlay .overlay-inner {
-            max-height: min(94vh, 900px);
+            max-height: min(92vh, 880px);
+            width: 100%;
             overflow-y: auto;
-            padding-bottom: 0.35rem;
+            overflow-x: hidden;
+            padding: 0.25rem 0 0.5rem;
             animation: roast-overlay-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            margin-left: auto;
+            margin-right: auto;
         }
         @keyframes roast-overlay-in {
             from { opacity: 0; transform: translateY(12px) scale(0.96); }
@@ -319,18 +323,18 @@
 
 <!-- Roast overlay — card visible behind via backdrop-filter -->
 <div id="roastOverlay" class="overlay-layer">
-    <div class="overlay-inner w-full max-w-lg sm:max-w-xl text-center px-1">
+    <div class="overlay-inner w-full max-w-lg sm:max-w-xl text-center px-2 sm:px-3">
 
         <!-- GIF frame — letterboxed so any aspect ratio fits -->
-        <div class="gif-frame-anim bg-white brutal-border rounded-xl p-2 sm:p-3 brutal-shadow transform rotate-1 mb-2 sm:mb-3 w-full overflow-hidden">
-            <div id="gifWrapper" class="w-full aspect-[4/3] max-h-[min(36vh,280px)] sm:max-h-[min(42vh,340px)] min-h-[140px] brutal-border overflow-hidden bg-black flex items-center justify-center relative gif-loading mx-auto">
+        <div class="gif-frame-anim bg-white brutal-border rounded-xl p-2 sm:p-3 brutal-shadow transform rotate-1 mb-3 sm:mb-4 w-full max-w-[min(100%,36rem)] mx-auto overflow-hidden shrink-0">
+            <div id="gifWrapper" class="w-full aspect-[4/3] max-h-[min(34vh,300px)] sm:max-h-[min(40vh,360px)] min-h-[132px] brutal-border overflow-hidden bg-black flex items-center justify-center relative gif-loading mx-auto">
                 <img id="memeImage" src="" alt="Roasting..." class="max-w-full max-h-full w-auto h-auto object-contain hidden">
                 <div class="scanline"></div>
             </div>
         </div>
 
         <!-- Rotating banter + entropy bar (GIF above) -->
-        <div id="roastProgressShell" class="bg-black brutal-border p-4 sm:p-5 w-full max-w-xl mx-auto text-center ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/90 transition-shadow duration-300 flex flex-col items-stretch gap-3">
+        <div id="roastProgressShell" class="bg-black brutal-border p-4 sm:p-5 w-full max-w-[min(100%,36rem)] mx-auto text-center ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/90 transition-shadow duration-300 flex flex-col items-stretch gap-3 shrink-0">
             <p id="stageLabel" class="text-white font-bold text-base sm:text-lg leading-relaxed text-center tracking-normal px-1 sm:px-2 text-balance min-h-[3.25rem] sm:min-h-[3.5rem] flex items-center justify-center">Harvesting red flags from your title…</p>
             <p class="text-gray-300 text-[11px] sm:text-xs font-bold text-center tracking-wide">Entropy meter</p>
             <div class="w-full bg-gray-700 brutal-border h-5 sm:h-6 overflow-hidden">
@@ -415,7 +419,10 @@ function getCachedUrl(filename) {
     return gifCache[filename] || (GITHUB_RAW + filename);
 }
 
-/** GIF cycle: shuffle deck, show each meme once per pass, reshuffle between passes (no dupes in one lap). */
+/**
+ * GIF cycle: queue of shuffled memes — every file once per lap, lap boundaries never repeat
+ * the same GIF twice in a row. Clearing src avoids stuck frames when URL matches.
+ */
 const MEME_FLIP_MS = 900;
 let memeChaosTimer = null;
 function shuffleMemeDeck(arr) {
@@ -434,39 +441,44 @@ function stopMemeChaos() {
 }
 function startMemeChaos(memeImg, gifWrapper) {
     stopMemeChaos();
-    let deck = shuffleMemeDeck(MEME_FILES);
-    let di = 0;
-    let lastFile = null;
-    function pickFile() {
+    const pending = [];
+    let lastShown = null;
+
+    function refillPending() {
+        let next = shuffleMemeDeck(MEME_FILES);
+        if (lastShown && next.length > 1 && next[0] === lastShown) {
+            const j = next.findIndex((f) => f !== lastShown);
+            if (j > 0) [next[0], next[j]] = [next[j], next[0]];
+        }
+        pending.push(...next);
+    }
+
+    function popNextFilename() {
         if (MEME_FILES.length === 0) return null;
-        if (MEME_FILES.length === 1) {
-            lastFile = MEME_FILES[0];
-            return MEME_FILES[0];
-        }
-        if (di >= deck.length) {
-            deck = shuffleMemeDeck(MEME_FILES);
-            di = 0;
-            if (deck[0] === lastFile) {
-                const k = deck.findIndex((f) => f !== lastFile);
-                if (k > 0) [deck[0], deck[k]] = [deck[k], deck[0]];
-            }
-        }
-        const f = deck[di++];
-        lastFile = f;
+        if (MEME_FILES.length === 1) return MEME_FILES[0];
+        if (pending.length === 0) refillPending();
+        const f = pending.shift();
+        lastShown = f;
         return f;
     }
+
     function showOne() {
-        const filename = pickFile();
+        const filename = popNextFilename();
         if (!filename) return;
+        const url = getCachedUrl(filename);
         gifWrapper.classList.add('gif-loading');
         memeImg.classList.add('hidden');
-        memeImg.src = getCachedUrl(filename);
+        if (memeImg.src && (memeImg.src === url || memeImg.getAttribute('src') === url)) {
+            memeImg.removeAttribute('src');
+        }
+        memeImg.src = url;
         memeImg.onload = () => {
             gifWrapper.classList.remove('gif-loading');
             memeImg.classList.remove('hidden');
         };
         memeImg.onerror = () => {
             gifWrapper.classList.remove('gif-loading');
+            memeImg.classList.remove('hidden');
         };
     }
     showOne();
