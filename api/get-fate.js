@@ -22,7 +22,7 @@ Return ONLY valid JSON, no markdown, no extra text:
                 "Authorization": `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "llama3.2",
+                model: "gemma3:4b",
                 messages: [{ role: "user", content: prompt }],
                 stream: false
             })
