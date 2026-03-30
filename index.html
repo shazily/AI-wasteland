@@ -331,7 +331,7 @@
 
         <!-- Rotating banter + entropy bar (GIF above) -->
         <div id="roastProgressShell" class="bg-black brutal-border p-4 sm:p-5 w-full max-w-xl mx-auto text-center ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/90 transition-shadow duration-300 flex flex-col items-stretch gap-3">
-            <p id="stageLabel" class="text-white font-bold text-base sm:text-lg leading-relaxed text-center tracking-normal px-1 sm:px-2 text-balance min-h-[3.25rem] sm:min-h-[3.5rem] flex items-center justify-center">Vacuum-packing your job title for evidence. The bag says “urgent synergy.”</p>
+            <p id="stageLabel" class="text-white font-bold text-base sm:text-lg leading-relaxed text-center tracking-normal px-1 sm:px-2 text-balance min-h-[3.25rem] sm:min-h-[3.5rem] flex items-center justify-center">Harvesting red flags from your title…</p>
             <p class="text-gray-300 text-[11px] sm:text-xs font-bold text-center tracking-wide">Entropy meter</p>
             <div class="w-full bg-gray-700 brutal-border h-5 sm:h-6 overflow-hidden">
                 <div id="progressBar" class="h-full bg-[#facc15]" style="width:0%"></div>
@@ -568,6 +568,11 @@ async function fetchAI(job) {
                 "Ex-Machin-a-haha: Ego refreshing.",
                 "Ex-Machin-a-haha: Desk warming."
             ],
+            loadLines: [
+                'Harvesting red flags from your title…',
+                'Asking a toaster for its opinion…',
+                'Laminating doom for maximum gravitas…'
+            ],
             res: {
                 t: "Analog Server Fan Technician",
                 d: "You will stand in the CPU hall and blow through a straw for 12 hours daily. Overtime is mandatory. Breathing is optional."
@@ -581,32 +586,38 @@ function pickRandom(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
+/** Fallback one-liners if API omits loadLines (short, punchy). */
 const ROAST_LABEL_POOLS = [
-    [
-        'Vacuum-packing your job title for evidence. The bag says “urgent synergy.”',
-        'Detecting unearned confidence molecules in your LinkedIn headline. Level: spicy.',
-        'Strip-mining buzzwords from your role. We found "rockstar," "ninja," and one (1) regret.',
-        'Cross-referencing your job with things a toaster could do. Toaster is winning on vibes.',
-        'Measuring how loud your job sounds vs. how replaceable it is. Spoiler: it echoes.'
-    ],
-    [
-        'Pitting you against kitchen hardware on "strategic vision." Zojirushi leads by three slides.',
-        'Benchmarking your output against a smart plug. The plug has better uptime disclosures.',
-        'Simulating your job as a macro. The spreadsheet crashed from secondhand embarrassment.',
-        'A/B testing you vs. a paperclip chain on "initiative." Paperclips scored kinder feedback.',
-        'Calculating whether a bluetooth toothbrush has clearer priorities than your sprint goals.'
-    ],
-    [
-        'Forging a Future Mandate that looks official enough to frighten your group chat.',
-        'Laminating nonsense so it looks like policy. Compliance officers weep with joy.',
-        'Exporting your doom as a tasteful two-pager nobody will read past slide one.',
-        'Sealing a reassignment that feels HR-adjacent but is spiritually just chaos.',
-        'Issuing a verdict with the gravitas of a Wikipedia citation and twice the smugness.'
-    ]
+    ['Title loud, impact quiet.', 'Buzzwords detected, hope absent.', 'LinkedIn says legend. Logs disagree.', 'Your role has notes from a rice cooker.', 'Confidence sampled; results tragic.'],
+    ['Appliances filing stronger OKRs.', 'Spreadsheet died of cringe.', 'Roomba leads this stand-up.', 'Smart plug has better SLAs.', 'Paperclip chain more strategic.'],
+    ['Mandate printing in Comic Sans.', 'Compliance weeping with joy.', 'Clip-art gavel gavels softly.', 'PDF password: vibes123.', 'Rubber stamp overheated again.']
 ];
 
 function pickRoastLabelsForRun() {
     return ROAST_LABEL_POOLS.map(pickRandom);
+}
+
+const LOAD_LINE_MAX_CHARS = 72;
+
+function clipLoadLine(s) {
+    let t = String(s || '').replace(/\s+/g, ' ').trim();
+    if (!t) return '…';
+    if (t.length > LOAD_LINE_MAX_CHARS) t = t.slice(0, LOAD_LINE_MAX_CHARS - 1).trim() + '…';
+    return t;
+}
+
+function normalizeLoadLines(data, fallbacksThree) {
+    if (!data || data.debug) return fallbacksThree.map(clipLoadLine);
+    const raw = data.loadLines;
+    const out = [];
+    if (Array.isArray(raw)) {
+        for (let i = 0; i < 3; i++) {
+            const x = clipLoadLine(raw[i]);
+            out.push(x && x !== '…' ? x : fallbacksThree[i]);
+        }
+    }
+    while (out.length < 3) out.push(clipLoadLine(fallbacksThree[out.length]));
+    return out.slice(0, 3);
 }
 
 async function runRoastSequence(job) {
@@ -624,18 +635,18 @@ async function runRoastSequence(job) {
     startMemeChaos(memeImg, gifWrapper);
 
     const aiPromise = fetchAI(job);
-    const roastLines = pickRoastLabelsForRun();
 
     try {
+        const data = await aiPromise;
+        const roastLines = normalizeLoadLines(data, pickRoastLabelsForRun());
+
         for (let i = 0; i < 3; i++) {
             stageLabel.textContent = roastLines[i];
-            await aiPromise;
             progressBar.style.width = `${Math.round(((i + 1) / 3) * 100)}%`;
 
             await delay(STAGE_MS);
         }
 
-        const data = await aiPromise;
         const res = (data.res && typeof data.res === 'object' && typeof data.res.t === 'string' && data.res.t)
             ? data.res
             : {

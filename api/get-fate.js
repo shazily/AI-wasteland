@@ -21,10 +21,12 @@ res.t: NEW job title — absurd but concrete. HARD MAX 6 words. Punchy, memorabl
 
 res.d: Exactly ONE sentence, HARD MAX 16 words. Weird logistics or consequences of the role — dark-funny, not a paragraph.
 
+loadLines: array of exactly 3 strings. Ultra-short loading quips for a progress UI while we roast this person. Each string HARD MAX 8 words. Punchy, mean-funny, specific to "${job}". No speaker prefix, no quote marks around the line. No slurs or profanity.
+
 Maximize variety: every response should feel different in rhythm and imagery; do NOT recycle near-identical titles or descriptions across runs.
 
 Schema:
-{"msgs":["Ex-Machin-a-haha: ...","...","...","..."],"res":{"t":"...","d":"..."}}`;
+{"msgs":["Ex-Machin-a-haha: ...","...","...","..."],"loadLines":["...","...","..."],"res":{"t":"...","d":"..."}}`;
 
     try {
         const response = await fetch("https://ollama.com/api/chat", {
@@ -42,7 +44,7 @@ Schema:
                 stream: false,
                 options: {
                     temperature: 0.95,
-                    num_predict: 220
+                    num_predict: 280
                 }
             })
         });
