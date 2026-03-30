@@ -397,6 +397,13 @@ const MEME_FILES = [...new Set([
 ])];
 const MEME_QUEUE_KEY = 'aiw_meme_queue_v1';
 const MEME_LAST_KEY = 'aiw_meme_last_v1';
+/** Fresh shuffle on every page load (no manual console reset). Queue still advances across roasts until empty in this tab. */
+try {
+    sessionStorage.removeItem(MEME_QUEUE_KEY);
+    sessionStorage.removeItem(MEME_LAST_KEY);
+} catch (e) {
+    /* ignore (private mode / storage blocked) */
+}
 
 // ─── Pre-cache GIFs in parallel on page load ─────────────────────────
 const gifCache = {};
@@ -421,8 +428,8 @@ async function warmCache() {
 warmCache();
 
 /**
- * GIF cycle: session queue (shuffle + random rotation). No file repeats until the queue
- * drains and refills. Preload next URL so the current GIF stays visible (no black gap).
+ * GIF cycle: queue in sessionStorage (shuffle + random rotation), cleared on each page load.
+ * No file repeats until the queue drains and refills. Preload keeps the current GIF visible.
  */
 const MEME_FLIP_MS = 1000;
 let memeChaosTimer = null;
