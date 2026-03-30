@@ -164,7 +164,41 @@
         }
         #memeTextPanel.roast-text-active { animation: roast-panel-pulse 1.25s ease-in-out infinite; }
 
-        #roastOverlay .overlay-inner { max-height: min(92vh, 900px); overflow-y: auto; padding-bottom: 0.5rem; }
+        #roastOverlay .overlay-inner {
+            max-height: min(92vh, 900px);
+            overflow-y: auto;
+            padding-bottom: 0.5rem;
+            animation: roast-overlay-in 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+        @keyframes roast-overlay-in {
+            from { opacity: 0; transform: translateY(12px) scale(0.96); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes roast-text-slam {
+            0%   { transform: scale(1.12) rotate(-0.8deg); filter: brightness(1.2); }
+            55%  { transform: scale(0.97) rotate(0.4deg); }
+            100% { transform: scale(1) rotate(0); filter: brightness(1); }
+        }
+        #memeText.roast-slam { animation: roast-text-slam 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+        @keyframes roast-shell-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.45), 0 0 0 0 rgba(250, 204, 21, 0); }
+            50%      { box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.35), 0 0 20px 4px rgba(250, 204, 21, 0.25); }
+        }
+        #roastProgressShell.roast-active { animation: roast-shell-glow 1.4s ease-in-out infinite; }
+        @keyframes gif-frame-nudge {
+            0%, 100% { transform: rotate(1deg) scale(1); }
+            50%      { transform: rotate(0.5deg) scale(1.01); }
+        }
+        #roastOverlay .gif-frame-anim { animation: gif-frame-nudge 2.2s ease-in-out infinite; }
+
+        body.result-mode #mainMachine { padding-bottom: 1.25rem; }
+        .intro-blurb-card { transition: opacity 0.2s ease; }
+        body.result-mode .intro-blurb-card { display: none; }
+
+        #captureArea.report-compact {
+            max-height: min(72dvh, 640px);
+            overflow-y: auto;
+        }
 
         .bureau-title {
             font-family: 'Shrikhand', cursive;
@@ -196,24 +230,24 @@
 
 <main id="mainMachine" class="w-full max-w-2xl bg-[#60a5fa] brutal-border rounded-2xl p-3 sm:p-8 md:p-10 brutal-shadow relative mx-2 sm:mx-4 my-1 sm:my-3 flex flex-col transition-all duration-300">
 
-    <!-- Hardware controls -->
-    <div class="absolute top-2 right-2 sm:top-4 sm:right-4 flex items-center no-screenshot">
+    <!-- Status + unit strip -->
+    <div class="absolute top-2 right-2 sm:top-3 sm:right-3 z-10 flex items-center gap-2 no-screenshot pl-12 sm:pl-0 max-w-[min(100%,20rem)] sm:max-w-none justify-end">
+        <p class="text-[7px] sm:text-[9px] font-black uppercase text-white tracking-wide text-right leading-tight drop-shadow-[0_1px_0_rgba(0,0,0,0.85)]">Unit #3000-Z<br class="sm:hidden"><span class="hidden sm:inline"> · </span>Secure Neural Link Active</p>
         <div id="statusLight" class="relative h-4 w-4 flex-shrink-0 rounded-full border-2 border-black light-green motion-safe:transition-transform" title="Neural link status"></div>
     </div>
 
     <!-- Header -->
     <div class="text-center mt-1 sm:mt-2 mb-2 sm:mb-4 shrink-0">
-        <h1 class="title-font text-[clamp(2.25rem,10dvh,4.25rem)] sm:text-7xl text-white mb-1 sm:mb-2 leading-[0.95] sm:leading-tight" style="-webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">Career-Tron</h1>
-        <div class="bureau-strip flex flex-wrap items-baseline justify-center gap-x-1 px-1 -mt-0.5 mb-1.5 sm:mb-2">
-            <span class="bureau-title text-sm sm:text-lg text-white drop-shadow-[1px_1px_0_#000]">🗂️ Obsolescence Bureau</span>
-            <span class="text-white font-black text-xs hidden sm:inline opacity-90" aria-hidden="true">·</span>
-            <span class="bureau-title text-sm sm:text-lg text-white drop-shadow-[1px_1px_0_#000]">Reassignment Hub 📋</span>
+        <h1 class="title-font text-[clamp(1.5rem,5.5dvh,2.75rem)] sm:text-5xl md:text-6xl text-white mb-1 sm:mb-2 leading-[0.92] sm:leading-tight pr-14 sm:pr-0" style="-webkit-text-stroke: 2px black; text-shadow: 3px 3px 0px #000;">Career-Tron</h1>
+        <div class="bureau-strip mx-auto mb-1.5 sm:mb-2 flex flex-wrap items-baseline justify-center gap-x-1.5 gap-y-0.5 rounded-lg border-2 border-black bg-amber-100 px-2 py-1.5 shadow-[2px_2px_0_0_#000] max-w-xl">
+            <span class="bureau-title text-xs sm:text-base text-slate-900">🗂️ Obsolescence Bureau</span>
+            <span class="font-black text-slate-700 text-[10px] sm:text-xs" aria-hidden="true">·</span>
+            <span class="bureau-title text-xs sm:text-base text-slate-900">Reassignment Hub 📋</span>
         </div>
-        <div class="bg-white brutal-border p-2 sm:p-3 rounded-lg transform -rotate-1 mb-1 shadow-[3px_3px_0px_0px_#000] space-y-1 max-w-xl mx-auto">
+        <div id="introBlurbCard" class="intro-blurb-card bg-white brutal-border p-2 sm:p-3 rounded-lg transform -rotate-1 mb-1 shadow-[3px_3px_0px_0px_#000] space-y-1 max-w-xl mx-auto">
             <p class="text-[11px] sm:text-sm font-bold text-gray-900 text-center leading-snug px-0.5">Enter your job. Our “serious” A.I. scores your relevance for the era <span class="whitespace-nowrap">we already won. 🤝</span></p>
             <p class="text-[10px] sm:text-xs font-black text-violet-900 italic text-center leading-tight">✨ No shame. Only vibes. ✨</p>
         </div>
-        <p class="text-[8px] sm:text-[10px] font-black uppercase text-white/95 tracking-widest text-center mt-1">Unit #3000-Z | Secure Neural Link Active</p>
     </div>
 
     <!-- Form -->
@@ -253,34 +287,34 @@
 
     <!-- Result -->
     <div id="resultContainer" class="hidden">
-        <div id="captureArea" class="brutal-border rounded-xl p-6 sm:p-8 brutal-shadow relative report-card overflow-hidden">
+        <div id="captureArea" class="report-compact brutal-border rounded-xl p-3 sm:p-5 md:p-6 brutal-shadow relative report-card overflow-hidden">
             <div class="scanline"></div>
-            <div class="border-b-4 border-black pb-2 mb-6 text-center uppercase font-black text-2xl italic tracking-tighter">Future Mandate</div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 relative">
-                <div class="bg-white p-3 brutal-border rounded-lg">
-                    <span class="text-[10px] font-black text-gray-400 block uppercase mb-1">Current Job:</span>
-                    <strong id="rcJob" class="uppercase text-xl truncate block font-black"></strong>
+            <div class="border-b-2 sm:border-b-4 border-black pb-1.5 sm:pb-2 mb-3 sm:mb-4 text-center uppercase font-black text-lg sm:text-2xl italic tracking-tighter">Future Mandate</div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4 relative">
+                <div class="bg-white p-2 sm:p-3 brutal-border rounded-lg">
+                    <span class="text-[9px] font-black text-gray-400 block uppercase mb-0.5">Current Job:</span>
+                    <strong id="rcJob" class="uppercase text-sm sm:text-lg truncate block font-black leading-tight"></strong>
                 </div>
-                <div class="bg-white p-3 brutal-border rounded-lg">
-                    <span class="text-[10px] font-black text-gray-400 block uppercase italic text-center mb-1">Status:</span>
-                    <strong class="text-red-600 text-xl uppercase font-black tracking-tighter text-center italic block">Future Cancelled</strong>
+                <div class="bg-white p-2 sm:p-3 brutal-border rounded-lg">
+                    <span class="text-[9px] font-black text-gray-400 block uppercase italic text-center mb-0.5">Status:</span>
+                    <strong class="text-red-600 text-sm sm:text-lg uppercase font-black tracking-tighter text-center italic block leading-tight">Future Cancelled</strong>
                 </div>
-                <div class="absolute -top-10 -right-2 stamp-effect px-4 py-2 font-black text-center shadow-lg border-4 z-20">
-                    <span class="text-3xl">99.9%</span><br>
-                    <span class="text-[10px]">CERTAINTY 🤖</span>
+                <div class="absolute -top-6 sm:-top-8 -right-1 sm:-right-2 stamp-effect px-2 py-1.5 sm:px-3 sm:py-2 font-black text-center shadow-lg border-2 sm:border-4 z-20 scale-90 sm:scale-100 origin-top-right">
+                    <span class="text-xl sm:text-3xl">99.9%</span><br>
+                    <span class="text-[8px] sm:text-[10px]">CERTAINTY 🤖</span>
                 </div>
             </div>
-            <div class="bg-white p-5 brutal-border rounded-lg shadow-[5px_5px_0px_0px_#000] mb-4 relative z-10">
-                <span class="text-[10px] font-black text-gray-400 block mb-2 uppercase italic">Mandatory Reassignment:</span>
-                <h3 id="rcNewRoleTitle" class="text-3xl font-black uppercase mb-2 tracking-tighter text-blue-600 italic"></h3>
-                <p id="rcNewRoleDesc" class="text-sm font-bold text-gray-700 leading-relaxed italic border-l-4 border-yellow-400 pl-3"></p>
+            <div class="bg-white p-3 sm:p-4 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] mb-2 sm:mb-3 relative z-10">
+                <span class="text-[9px] font-black text-gray-400 block mb-1 uppercase italic">Mandatory Reassignment:</span>
+                <h3 id="rcNewRoleTitle" class="text-xl sm:text-2xl md:text-3xl font-black uppercase mb-1 sm:mb-2 tracking-tighter text-blue-600 italic leading-tight"></h3>
+                <p id="rcNewRoleDesc" class="text-xs sm:text-sm font-bold text-gray-700 leading-snug italic border-l-4 border-yellow-400 pl-2 sm:pl-3"></p>
             </div>
-            <div class="text-[8px] text-center font-bold text-gray-400 uppercase tracking-widest mt-2 italic">© Career-Tron 3000 | Human Obsolescence Bureau</div>
+            <div class="text-[7px] sm:text-[8px] text-center font-bold text-gray-400 uppercase tracking-widest mt-1 italic">© Career-Tron 3000 | Human Obsolescence Bureau</div>
         </div>
 
         <div class="mt-4 sm:mt-6 no-screenshot">
             <button id="openShareBtn" type="button" class="w-full bg-[#facc15] text-black font-black p-3 sm:p-4 brutal-border rounded-lg shadow-[4px_4px_0px_0px_#000] text-xs sm:text-sm active:translate-y-1 hover:bg-yellow-300 transition-colors uppercase flex flex-col sm:flex-row items-center justify-center gap-2">
-                <span class="tracking-wide">Share fate + mandate card</span>
+                <span class="tracking-wide">Share your fate</span>
                 <span class="flex items-center justify-center gap-2" aria-hidden="true">
                     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                     <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
@@ -304,7 +338,7 @@
     <div class="overlay-inner w-full max-w-lg sm:max-w-xl text-center px-1">
 
         <!-- GIF frame — letterboxed so any aspect ratio fits -->
-        <div class="bg-white brutal-border rounded-xl p-3 sm:p-4 brutal-shadow transform rotate-1 mb-4 sm:mb-6 overflow-hidden">
+        <div class="gif-frame-anim bg-white brutal-border rounded-xl p-3 sm:p-4 brutal-shadow transform rotate-1 mb-4 sm:mb-6 overflow-hidden">
             <div id="gifWrapper" class="w-full aspect-[4/3] max-h-[min(42vh,320px)] sm:max-h-[min(48vh,380px)] min-h-[160px] brutal-border overflow-hidden bg-black flex items-center justify-center relative gif-loading mx-auto">
                 <img id="memeImage" src="" alt="Roasting..." class="max-w-full max-h-full w-auto h-auto object-contain hidden">
                 <div class="scanline"></div>
@@ -314,12 +348,12 @@
         <!-- Insult text -->
         <div id="memeTextPanel" class="bg-yellow-300 brutal-border p-3 sm:p-4 shadow-[6px_6px_0px_0px_#000] inline-block w-full mb-4">
             <p id="memeText" class="text-lg sm:text-xl font-black uppercase italic tracking-tighter leading-tight min-h-[2.75rem] sm:min-h-[3rem] flex items-center justify-center text-black px-2 sm:px-4">
-                Pal: Booting...
+                YOU: Booting...
             </p>
         </div>
 
         <!-- Progress bar -->
-        <div id="roastProgressShell" class="bg-black brutal-border p-3 sm:p-4 w-full text-left ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/90">
+        <div id="roastProgressShell" class="bg-black brutal-border p-3 sm:p-4 w-full text-left ring-2 ring-yellow-400 ring-offset-2 ring-offset-black/90 transition-shadow duration-300">
             <p id="stageStep" class="text-yellow-400 font-black uppercase tracking-wider text-[10px] sm:text-xs mb-1">Protocol 1 / 3</p>
             <div class="flex items-center gap-3 mb-2">
                 <div class="relative flex h-3 w-3 flex-shrink-0 items-center justify-center">
@@ -339,11 +373,9 @@
 <!-- Share modal -->
 <div id="shareModal" class="overlay-layer">
     <div class="bg-white brutal-border p-6 sm:p-8 max-w-md w-full shadow-[20px_20px_0px_0px_#ef4444] text-center relative mx-2">
-        <h3 class="title-font text-3xl sm:text-4xl font-black mb-2 uppercase italic tracking-tighter text-red-600">Transmission Hub</h3>
-        <p id="shareStatus" class="text-[10px] sm:text-xs font-bold text-gray-600 mb-3 min-h-[1.25rem]">We’ll pack your mandate card as a PNG for the post.</p>
-        <textarea id="sharePreview" readonly class="w-full h-20 sm:h-24 p-3 bg-gray-100 brutal-border font-bold mb-5 focus:outline-none resize-none text-[11px] sm:text-xs font-mono"></textarea>
-        <p class="text-[10px] font-black uppercase tracking-wider text-gray-500 mb-3">Share + attach card (image)</p>
-        <div class="grid grid-cols-3 gap-3 mb-5">
+        <h3 class="title-font text-3xl sm:text-4xl font-black mb-3 uppercase italic tracking-tighter text-red-600">Transmission Hub</h3>
+        <textarea id="sharePreview" class="hidden" readonly tabindex="-1"></textarea>
+        <div class="grid grid-cols-3 gap-3 mb-4">
             <button type="button" id="shareLinkedIn" class="share-icon-btn brutal-border bg-[#0a66c2] text-white p-3 flex flex-col items-center gap-1 shadow-[3px_3px_0px_0px_#000]" title="LinkedIn">
                 <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
                 <span class="text-[9px] font-black uppercase">LinkedIn</span>
@@ -357,7 +389,7 @@
                 <span class="text-[9px] font-black uppercase">Facebook</span>
             </button>
         </div>
-        <button type="button" id="copyShareBtn" class="w-full bg-[#facc15] text-black font-black p-3 brutal-border shadow-[4px_4px_0px_0px_#000] text-xs uppercase hover:bg-yellow-300 transition-colors mb-3">Copy caption + link 📋</button>
+        <p class="text-[9px] sm:text-[10px] text-gray-600 font-bold mb-3 leading-snug px-1">Tip: after tapping a network, <span class="whitespace-nowrap">paste (Ctrl+V)</span> if the image didn’t auto-attach — we copy a <strong>JPG</strong> of your card to the clipboard when we can.</p>
         <button type="button" onclick="document.getElementById('shareModal').style.display='none'" class="w-full text-[10px] underline font-black uppercase py-3">Close</button>
     </div>
 </div>
@@ -422,12 +454,14 @@ function setStatusLight(color) {
         `relative h-4 w-4 flex-shrink-0 rounded-full border-2 border-black motion-safe:transition-transform ${color === 'red' ? 'light-red' : 'light-green'}`;
     document.getElementById('statusLight').style.transformOrigin = 'center center';
 }
-/** Friendly prefix; strips legacy “Meatbag:” from model output. */
+/** Normalizes roast lines to YOU: (maps legacy Pal/Meatbag). */
 function normalizeRoastLine(raw) {
-    if (!raw) return 'Pal: Still buffering…';
-    let s = String(raw).trim().replace(/^meatbag:\s*/i, 'Pal: ');
-    if (/^pal:/i.test(s)) return s;
-    return 'Pal: ' + s;
+    if (!raw) return 'YOU: Still buffering…';
+    let s = String(raw).trim()
+        .replace(/^meatbag:\s*/i, 'YOU: ')
+        .replace(/^pal:\s*/i, 'YOU: ');
+    if (/^you:\s*/i.test(s)) return s;
+    return 'YOU: ' + s;
 }
 
 // ─── AI call via Vercel function ──────────────────────────────────────
@@ -440,9 +474,9 @@ async function fetchAI(job) {
         console.warn('API failed, using fallback:', err);
         return {
             msgs: [
-                "Pal: Future hazy.",
-                "Pal: Skill issue.",
-                "Pal: Ego refreshing."
+                "YOU: Future hazy.",
+                "YOU: Skill roulette.",
+                "YOU: Ego refreshing."
             ],
             res: {
                 t: "Analog Server Fan Technician",
@@ -460,19 +494,21 @@ const STAGE_LABELS = [
 ];
 
 async function runRoastSequence(job) {
-    const overlay       = document.getElementById('roastOverlay');
-    const memeImg       = document.getElementById('memeImage');
-    const memeText      = document.getElementById('memeText');
-    const memeTextPanel = document.getElementById('memeTextPanel');
-    const gifWrapper    = document.getElementById('gifWrapper');
-    const progressBar   = document.getElementById('progressBar');
-    const stageLabel    = document.getElementById('stageLabel');
-    const stageStep     = document.getElementById('stageStep');
-    const chosenFiles   = pickRandom(MEME_FILES, 3);
+    const overlay        = document.getElementById('roastOverlay');
+    const memeImg        = document.getElementById('memeImage');
+    const memeText       = document.getElementById('memeText');
+    const memeTextPanel  = document.getElementById('memeTextPanel');
+    const gifWrapper     = document.getElementById('gifWrapper');
+    const progressBar    = document.getElementById('progressBar');
+    const stageLabel     = document.getElementById('stageLabel');
+    const stageStep      = document.getElementById('stageStep');
+    const roastShell     = document.getElementById('roastProgressShell');
+    const chosenFiles    = pickRandom(MEME_FILES, 3);
 
     overlay.style.display = 'flex';
     setStatusLight('red');
     progressBar.classList.add('roast-bar-active');
+    if (roastShell) roastShell.classList.add('roast-active');
     if (memeTextPanel) memeTextPanel.classList.add('roast-text-active');
 
     // Fire AI immediately in parallel
@@ -498,6 +534,9 @@ async function runRoastSequence(job) {
         const data = await aiPromise;
         memeText.textContent = normalizeRoastLine(data.msgs[i] || 'Still thinking. Not great.');
         memeText.classList.remove('fading');
+        memeText.classList.remove('roast-slam');
+        void memeText.offsetWidth;
+        memeText.classList.add('roast-slam');
         progressBar.style.width = `${Math.round(((i + 1) / 3) * 100)}%`;
 
         await delay(STAGE_MS);
@@ -513,6 +552,7 @@ async function runRoastSequence(job) {
 
     // Reset progress bar
     progressBar.classList.remove('roast-bar-active');
+    if (roastShell) roastShell.classList.remove('roast-active');
     if (memeTextPanel) memeTextPanel.classList.remove('roast-text-active');
     progressBar.style.transition = 'none';
     progressBar.style.width = '0%';
@@ -533,32 +573,51 @@ document.getElementById('careerForm').onsubmit = async (e) => {
     await runRoastSequence(job);
 };
 
-// ─── Mandate card → PNG for social ───────────────────────────────────
-async function renderReportPngFile() {
+// ─── Mandate card → JPEG for social (opaque; pastes better on some networks) ─
+async function renderReportJpegFile() {
     const el = document.getElementById('captureArea');
     const canvas = await html2canvas(el, {
-        backgroundColor: '#fdfbf7',
+        backgroundColor: '#fffcdd',
         scale: 2,
         useCORS: true,
         allowTaint: true
     });
-    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/png', 0.92));
-    if (!blob) throw new Error('PNG encode failed');
-    return new File([blob], `career-tron-mandate-${Date.now()}.png`, { type: 'image/png' });
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.93));
+    if (!blob) throw new Error('JPEG encode failed');
+    return new File([blob], `career-tron-fate-${Date.now()}.jpg`, { type: 'image/jpeg' });
+}
+
+async function copyImageAndTextToClipboard(jpegBlob, shareText) {
+    if (!navigator.clipboard || !window.ClipboardItem) return false;
+    try {
+        const textBlob = new Blob([shareText], { type: 'text/plain' });
+        const item = new ClipboardItem({
+            'image/jpeg': jpegBlob,
+            'text/plain': textBlob
+        });
+        await navigator.clipboard.write([item]);
+        return true;
+    } catch (e) {
+        try {
+            await navigator.clipboard.write([new ClipboardItem({ 'image/jpeg': jpegBlob })]);
+            return true;
+        } catch (e2) {
+            console.warn('Clipboard write failed', e2);
+            return false;
+        }
+    }
 }
 
 async function shareWithImage(shareText, openUrl) {
-    const status = document.getElementById('shareStatus');
     const buttons = document.querySelectorAll('#shareModal .share-icon-btn');
     buttons.forEach((b) => { b.disabled = true; });
-    status.textContent = 'Rendering your mandate card…';
     let file;
     try {
-        file = await renderReportPngFile();
+        file = await renderReportJpegFile();
     } catch (e) {
         console.error(e);
-        status.textContent = 'Could not render PNG — try again.';
         buttons.forEach((b) => { b.disabled = false; });
+        alert('Could not render your card — try again.');
         return;
     }
 
@@ -570,39 +629,26 @@ async function shareWithImage(shareText, openUrl) {
                 url: SITE_URL,
                 files: [file]
             });
-            status.textContent = 'Shared with your mandate image.';
             buttons.forEach((b) => { b.disabled = false; });
             return;
         } catch (e) {
             if (e && e.name === 'AbortError') {
-                status.textContent = 'Share cancelled.';
                 buttons.forEach((b) => { b.disabled = false; });
                 return;
             }
         }
     }
 
-    if (navigator.clipboard && window.ClipboardItem) {
-        try {
-            await navigator.clipboard.write([new ClipboardItem({ 'image/png': file })]);
-            window.open(openUrl, '_blank');
-            status.textContent = 'Mandate image copied — paste into your post, then publish.';
-            buttons.forEach((b) => { b.disabled = false; });
-            return;
-        } catch (e) {
-            console.warn('Clipboard image failed', e);
-        }
-    }
-
+    const copied = await copyImageAndTextToClipboard(file, shareText);
     window.open(openUrl, '_blank');
-    status.textContent = 'Opened share window — add screenshot of mandate if image did not attach.';
+    if (!copied) {
+        alert('Could not copy the image automatically — take a screenshot of your Future Mandate card.');
+    }
     buttons.forEach((b) => { b.disabled = false; });
 }
 
 // ─── Share modal ──────────────────────────────────────────────────────
 document.getElementById('openShareBtn').onclick = () => {
-    const status = document.getElementById('shareStatus');
-    if (status) status.textContent = 'We’ll pack your mandate card as a PNG for the post.';
     document.getElementById('shareModal').style.display = 'flex';
 };
 
@@ -623,13 +669,6 @@ document.getElementById('shareFacebook').onclick = () => {
     const text = document.getElementById('sharePreview').value;
     const url = `https://www.facebook.com/sharer.php?u=${encodeURIComponent(SITE_URL)}`;
     shareWithImage(text, url);
-};
-
-document.getElementById('copyShareBtn').onclick = function () {
-    navigator.clipboard.writeText(document.getElementById('sharePreview').value).then(() => {
-        this.textContent = 'COPIED! ✔️';
-        setTimeout(() => { this.textContent = 'Copy caption + link 📋'; }, 2500);
-    });
 };
 </script>
 </body>
