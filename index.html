@@ -382,7 +382,7 @@
                 <span class="text-[9px] font-black uppercase">Facebook</span>
             </button>
         </div>
-        <p id="shareFlowTip" class="text-[9px] sm:text-[10px] text-gray-600 font-bold mb-3 leading-snug px-1">We copy your <strong>caption + JPG</strong> to the clipboard when the browser allows it. If LinkedIn only pastes one, paste again or use <span class="whitespace-nowrap">Win+V / ⌘V</span> clipboard history.</p>
+        <p id="shareFlowTip" class="text-[9px] sm:text-[10px] text-gray-600 font-bold mb-3 leading-snug px-1">Share your professional A.I roast - I dare you!</p>
         <button type="button" onclick="document.getElementById('shareModal').style.display='none'" class="w-full text-[10px] underline font-black uppercase py-3">Close</button>
     </div>
 </div>
@@ -609,8 +609,12 @@ async function renderReportJpegFile() {
     return new File([blob], `career-tron-fate-${Date.now()}.jpg`, { type: 'image/jpeg' });
 }
 
-/** Try image+text on clipboard (best for desktop paste); fall back to image-only, then text-only. */
-async function writeRichClipboard(jpegFile, plainText) {
+/**
+ * Try image+text on clipboard (desktop paste). Optional skipImageOnly: LinkedIn mobile/desktop often
+ * loses caption if we overwrite clipboard with image-only after a failed multi-type write.
+ */
+async function writeRichClipboard(jpegFile, plainText, opts = {}) {
+    const skipImageOnly = opts.skipImageOnly === true;
     const textBlob = new Blob([plainText], { type: 'text/plain' });
     let jpegBlob;
     try {
@@ -637,11 +641,13 @@ async function writeRichClipboard(jpegFile, plainText) {
     } catch (e) {
         console.warn('Clipboard multi-type', e);
     }
-    try {
-        await navigator.clipboard.write([new ClipboardItem({ 'image/jpeg': jpegBlob })]);
-        return 'image';
-    } catch (e2) {
-        console.warn('Clipboard image', e2);
+    if (!skipImageOnly) {
+        try {
+            await navigator.clipboard.write([new ClipboardItem({ 'image/jpeg': jpegBlob })]);
+            return 'image';
+        } catch (e2) {
+            console.warn('Clipboard image', e2);
+        }
     }
     try {
         await navigator.clipboard.writeText(plainText);
@@ -662,11 +668,37 @@ function openShareUrl(url) {
     });
 }
 
+const SHARE_TIP_DARE = 'Share your professional A.I roast - I dare you!';
+
+/** LinkedIn app often drops Share API text; keep caption on clipboard for paste in the post field. */
+async function copyCaptionForLinkedIn(shareText) {
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(shareText);
+            return true;
+        }
+    } catch (e) {
+        console.warn('LinkedIn caption clipboard', e);
+    }
+    return false;
+}
+
+function scheduleLinkedInCaptionRefresh(shareText) {
+    [400, 1200, 2500].forEach((ms) => {
+        setTimeout(() => { copyCaptionForLinkedIn(shareText).catch(() => {}); }, ms);
+    });
+}
+
 async function shareWithImage(shareText, openUrl, meta = {}) {
     const buttons = document.querySelectorAll('#shareModal .share-icon-btn');
     const tip = document.getElementById('shareFlowTip');
+    const isLinkedIn = meta.platform === 'linkedin';
     buttons.forEach((b) => { b.disabled = true; });
-    if (tip) tip.textContent = 'Rendering card + clipboard…';
+    if (tip) tip.textContent = 'Rendering card…';
+
+    if (isLinkedIn) {
+        await copyCaptionForLinkedIn(shareText);
+    }
 
     let file;
     try {
@@ -680,41 +712,36 @@ async function shareWithImage(shareText, openUrl, meta = {}) {
     }
 
     const site = SITE_URL.replace(/\/$/, '');
+    /** Some Android targets read `title` when they ignore `text`. */
+    const shareTitle = shareText.length > 280 ? shareText.slice(0, 277).trim() + '…' : shareText;
+
     if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
         try {
+            if (isLinkedIn) await copyCaptionForLinkedIn(shareText);
             await navigator.share({
-                title: 'Career-Tron 3000',
+                title: isLinkedIn ? shareTitle : 'Career-Tron 3000',
                 text: shareText,
                 url: site,
                 files: [file]
             });
-            if (tip) tip.textContent = 'Shared from your device.';
+            if (isLinkedIn) scheduleLinkedInCaptionRefresh(shareText);
+            if (tip) tip.textContent = SHARE_TIP_DARE;
             buttons.forEach((b) => { b.disabled = false; });
             return;
         } catch (e) {
             if (e && e.name === 'AbortError') {
-                if (tip) tip.textContent = 'Share cancelled.';
+                if (tip) tip.textContent = SHARE_TIP_DARE;
                 buttons.forEach((b) => { b.disabled = false; });
                 return;
             }
         }
     }
 
-    const mode = await writeRichClipboard(file, shareText);
+    const mode = await writeRichClipboard(file, shareText, { skipImageOnly: isLinkedIn });
     await openShareUrl(openUrl);
 
-    if (tip) {
-        if (mode === 'both') {
-            tip.textContent = 'Caption + JPG copied. In the new tab: Ctrl+V in the post box. If only text appears, paste again for the image (or Win+V / clipboard history for both).';
-        } else if (mode === 'image') {
-            tip.textContent = 'JPG copied — paste into the post for the image. Your caption may still load from the URL on LinkedIn; if not, type the first line manually.';
-        } else if (mode === 'text') {
-            tip.textContent = 'Caption copied. Screenshot your Future Mandate card above to add the image, or allow clipboard and try again.';
-        } else {
-            tip.textContent = 'Clipboard blocked (check site permissions). LinkedIn opened with caption in the URL when possible — add a screenshot of your mandate card.';
-        }
-    }
-    if (mode === 'none' && meta.platform === 'linkedin') {
+    if (tip) tip.textContent = SHARE_TIP_DARE;
+    if (mode === 'none' && isLinkedIn) {
         alert('Clipboard access was blocked. LinkedIn should still open with draft text; add a screenshot of your mandate for the image.');
     }
     buttons.forEach((b) => { b.disabled = false; });
@@ -723,9 +750,7 @@ async function shareWithImage(shareText, openUrl, meta = {}) {
 // ─── Share modal ──────────────────────────────────────────────────────
 document.getElementById('openShareBtn').onclick = () => {
     const tip = document.getElementById('shareFlowTip');
-    if (tip) {
-        tip.textContent = 'We copy your caption + JPG when the browser allows it. If a network only pastes one, paste again or use Win+V / ⌘V clipboard history.';
-    }
+    if (tip) tip.textContent = SHARE_TIP_DARE;
     document.getElementById('shareModal').style.display = 'flex';
 };
 
