@@ -109,16 +109,15 @@
 <main id="mainMachine" class="w-full max-w-2xl bg-[#60a5fa] brutal-border rounded-2xl p-6 sm:p-10 brutal-shadow relative mx-4 transition-all duration-300">
 
     <!-- Hardware controls -->
-    <div class="absolute top-4 right-4 flex items-center space-x-3 no-screenshot">
-        <button onclick="location.reload()" class="bg-red-500 text-white text-[10px] font-black brutal-border px-3 py-1 shadow-[2px_2px_0px_0px_#000] uppercase transition-transform hover:scale-105 active:translate-y-1">REBOOT 🔴</button>
-        <div id="statusLight" class="w-4 h-4 rounded-full border-2 border-black light-green"></div>
+    <div class="absolute top-4 right-4 flex items-center no-screenshot">
+        <div id="statusLight" class="w-4 h-4 rounded-full border-2 border-black light-green" title="Neural link status"></div>
     </div>
 
     <!-- Header -->
     <div class="text-center mt-4 mb-8">
         <h1 class="title-font text-5xl sm:text-7xl text-white mb-2" style="-webkit-text-stroke: 2px black; text-shadow: 4px 4px 0px #000;">Career-Tron</h1>
         <div class="bg-white brutal-border p-3 rounded-lg transform -rotate-1 mb-4 shadow-[4px_4px_0px_0px_#000]">
-            <p class="text-[11px] font-bold uppercase leading-tight italic text-black text-center">Bureau of Human Obsolescence: Reassignment Hub</p>
+            <p class="text-sm sm:text-base font-bold uppercase leading-tight italic text-black text-center">Bureau of Human Obsolescence: Reassignment Hub</p>
         </div>
         <p class="text-[10px] font-black uppercase text-white tracking-widest text-center">Unit #3000-Z | Secure Neural Link Active</p>
     </div>
@@ -127,16 +126,22 @@
     <div id="formSection">
         <form id="careerForm" class="space-y-6">
             <div class="space-y-2 text-center">
-                <label class="block font-black text-lg uppercase tracking-tighter italic text-white" style="-webkit-text-stroke: 0.5px black;">Current Human "Career":</label>
+                <label class="block font-black text-xl sm:text-2xl uppercase tracking-tighter italic text-slate-900" style="text-shadow: 0 0 1px rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.15);">Current Human "Career":</label>
                 <input type="text" id="jobInput" placeholder="Ex: Growth Hacker, Scrum Master..." class="w-full p-4 brutal-border rounded-xl text-lg brutal-shadow focus:outline-none bg-white text-center" required>
             </div>
-            <div class="flex flex-wrap gap-2 justify-center pb-2">
-                <button type="button" onclick="document.getElementById('jobInput').value='Venture Capitalist'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">VC</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Scrum Master'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Scrum Master</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Prompt Engineer'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Prompt Engineer</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Agile Coach'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Agile Coach</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Influencer'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Influencer</button>
-                <button type="button" onclick="document.getElementById('jobInput').value='Chief Vibe Officer'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">CVO</button>
+            <div class="flex flex-wrap gap-2 sm:gap-3 justify-center pb-2 max-w-xl mx-auto">
+                <button type="button" onclick="document.getElementById('jobInput').value='Venture Capitalist'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">VC</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Scrum Master'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Scrum Master</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Prompt Engineer'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Prompt Engineer</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Agile Coach'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Agile Coach</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Influencer'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Influencer</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Chief Vibe Officer'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">CVO</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Product Manager'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Product Manager</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Management Consultant'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Consultant</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Software Engineer'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Software Engineer</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='HR Business Partner'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">HR</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Real Estate Agent'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Real Estate</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Paralegal'" class="bg-white border-2 border-black rounded-full px-3.5 py-2 text-[11px] sm:text-xs font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase tracking-wide transition-colors leading-tight">Paralegal</button>
             </div>
             <div class="text-center space-y-3">
                 <button type="submit" class="w-full bg-[#facc15] text-black brutal-border p-5 rounded-xl text-xl font-black shadow-[4px_4px_0px_0px_#000] active:translate-y-1 transition-all hover:bg-yellow-300">CONSULT THE OVERLORD</button>
@@ -180,9 +185,9 @@
     </div>
 
     <footer class="mt-12 text-center no-screenshot">
-        <a href="https://www.linkedin.com/in/shazilymunawar" target="_blank" class="bg-[#0a66c2] text-white px-6 py-2 brutal-border shadow-[3px_3px_0px_0px_#000] font-black uppercase text-[10px] italic flex items-center justify-center gap-2 mx-auto w-fit hover:translate-x-1 transition-transform">
-            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-            For now i do this.
+        <a href="https://www.linkedin.com/in/shazilymunawar" target="_blank" class="bg-[#0a66c2] text-white px-5 py-3 brutal-border shadow-[3px_3px_0px_0px_#000] font-bold text-xs sm:text-sm italic flex flex-col sm:flex-row items-center justify-center gap-2 mx-auto max-w-lg w-full sm:w-fit text-center normal-case leading-snug hover:translate-x-1 transition-transform">
+            <svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            <span>Thank your human comrade. This is what he does (for now).</span>
         </a>
     </footer>
 </main>

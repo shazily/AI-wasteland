@@ -1,0 +1,39 @@
+---
+description: Career-Tron 3000 / AI-wasteland — product context, architecture, and links
+alwaysApply: true
+---
+
+# AI-wasteland (Career-Tron 3000)
+
+## What it is
+
+Satirical dystopian single-page experience: users enter a current job title and receive a cynical AI “Overseer” judgment — short savage roasts with rotating meme GIFs, then an “Official Future Mandate” card (new role title + one-line description). Tone is **Human Obsolescence** / mandatory reassignment humor, not serious career advice.
+
+## URLs
+
+- **Repo:** https://github.com/shazily/AI-wasteland
+- **Live site:** https://ai-wasteland.vercel.app/
+- **Vercel project** (hosting / gateway dashboard may live under this project): https://vercel.com/shazilys-projects/ai-wasteland/
+
+## Stack (this repo)
+
+| Layer | Location | Notes |
+|-------|----------|--------|
+| Frontend | `index.html` | Tailwind via CDN, custom CSS (brutalist borders, shadows, scanlines). Fonts: Space Mono + Shrikhand (title). Main shell blue `#60a5fa`, mandate card cream/yellow `#fffcdd`, accent yellow `#facc15`. |
+| Backend | `api/get-fate.js` | Vercel serverless handler: proxies **Ollama Cloud** `POST https://ollama.com/api/chat`, model `gemma3:4b`, auth `Bearer` from `process.env.OLLAMA_API_KEY`. Parses JSON from model text (brace extraction + control-char strip). Success shape: `{ msgs: string[], res: { t, d } }`. On errors returns `200` with `debug` payload for troubleshooting. |
+| Assets | `Memes/` (in repo on GitHub) | GIFs listed in `MEME_FILES` in `index.html`; loaded from `raw.githubusercontent.com/shazily/AI-wasteland/main/Memes/`. Page **warms cache** on load (`Neural Cache` footer text). |
+
+## UX / behavior
+
+- **Quick picks:** VC, Scrum Master, Prompt Engineer, Agile Coach, Influencer, CVO — fill the job field.
+- **Flow:** Submit → full-screen roast overlay → **3 stages** × **~2s** with random GIFs + progress bar labels; `fetch('/api/get-fate?job=...')` runs **in parallel** with the sequence.
+- **Result:** “Future Mandate” report card (Future Cancelled, 99.9% certainty); **Save PNG** via html2canvas on `#captureArea`; **Share Fate** modal with LinkedIn share URL + copy text linking `https://ai-wasteland.vercel.app/`.
+- **Fallback:** If the function fetch fails, client uses canned `msgs` + `res` so the UI still completes.
+
+## Env / ops
+
+- **Required in Vercel:** `OLLAMA_API_KEY` for production AI responses.
+
+## Design intent
+
+High-contrast neo-brutalist “terminal / bureau” aesthetic: heavy black borders, offset shadows, optional scanline overlay on card, status LED, REBOOT control.
