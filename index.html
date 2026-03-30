@@ -58,8 +58,8 @@
             0%,100% { box-shadow: 0 0 8px rgba(239,68,68,0.6); }
             50%      { box-shadow: 0 0 22px rgba(239,68,68,1); }
         }
-        .light-green { background:#22c55e; animation: pulse-green 1.4s infinite; }
-        .light-red   { background:#ef4444; animation: pulse-red 0.55s infinite; }
+        .light-green { background: #22c55e; animation: pulse-green 1.4s infinite; }
+        .light-red   { background: #ef4444; animation: pulse-red 0.55s infinite; }
 
         @keyframes shimmer {
             0%   { background-position: -400px 0; }
@@ -115,6 +115,8 @@
                 <button type="button" onclick="document.getElementById('jobInput').value='Scrum Master'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Scrum Master</button>
                 <button type="button" onclick="document.getElementById('jobInput').value='Prompt Engineer'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Prompt Engineer</button>
                 <button type="button" onclick="document.getElementById('jobInput').value='Agile Coach'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Agile Coach</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Influencer'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">Influencer</button>
+                <button type="button" onclick="document.getElementById('jobInput').value='Chief Vibe Officer'" class="bg-white border-2 border-black rounded-full px-3 py-1 text-[9px] font-black shadow-[2px_2px_0px_0px_#000] hover:bg-yellow-200 uppercase transition-colors">CVO</button>
             </div>
             <div class="text-center space-y-3">
                 <button type="submit" class="w-full bg-[#facc15] text-black brutal-border p-5 rounded-xl text-xl font-black shadow-[4px_4px_0px_0px_#000] active:translate-y-1 transition-all hover:bg-yellow-300">CONSULT THE OVERLORD</button>
@@ -203,7 +205,7 @@
 </div>
 
 <script>
-// ─── GIF config — capital M matches your actual GitHub folder name ─────
+// ─── GIF config ───────────────────────────────────────────────────────
 const GITHUB_RAW = "https://raw.githubusercontent.com/shazily/AI-wasteland/main/Memes/";
 const MEME_FILES = [
     "they-took-our-jobs-darryl-weathers.gif",
@@ -261,14 +263,14 @@ function setStatusLight(color) {
         `w-4 h-4 rounded-full border-2 border-black ${color === 'red' ? 'light-red' : 'light-green'}`;
 }
 
-// ─── AI call — goes through your Netlify function, key stays secret ───
+// ─── AI call — Vercel serverless function, key never exposed ──────────
 async function fetchAI(job) {
     try {
-        const res = await fetch(`/.netlify/functions/get-fate?job=${encodeURIComponent(job)}`);
+        const res = await fetch(`/api/get-fate?job=${encodeURIComponent(job)}`);
         if (!res.ok) throw new Error(`Function error ${res.status}`);
         return await res.json();
     } catch (err) {
-        console.warn('Netlify function failed, using fallback:', err);
+        console.warn('API failed, using fallback:', err);
         return {
             msgs: [
                 "Meatbag: Future cancelled.",
