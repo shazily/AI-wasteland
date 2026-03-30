@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer">
-    <title>Career-Roast ☕ | A.I powered Re-assignment</title>
+    <title>Career-Roast 🫘 | A.I powered Re-assignment</title>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QX4K1WEL73"></script>
@@ -232,7 +232,7 @@
 
     <!-- Header -->
     <div class="text-center mt-1 sm:mt-2 mb-2 sm:mb-4 shrink-0">
-        <h1 class="title-font text-[clamp(1.5rem,5.5dvh,2.75rem)] sm:text-5xl md:text-6xl text-white mb-1 sm:mb-2 leading-[0.92] sm:leading-tight pr-10 sm:pr-0" style="-webkit-text-stroke: 2px black; text-shadow: 3px 3px 0px #000;">Career-Roast ☕</h1>
+        <h1 class="title-font text-[clamp(1.5rem,5.5dvh,2.75rem)] sm:text-5xl md:text-6xl text-white mb-1 sm:mb-2 leading-[0.92] sm:leading-tight pr-10 sm:pr-0" style="-webkit-text-stroke: 2px black; text-shadow: 3px 3px 0px #000;">Career-Roast 🫘</h1>
         <div class="bureau-strip mx-auto mb-1.5 sm:mb-2 flex flex-nowrap items-center justify-center rounded-lg border-2 border-black bg-amber-100 px-2.5 py-1.5 shadow-[2px_2px_0_0_#000] max-w-xl text-center">
             <span class="text-[10px] sm:text-sm md:text-base text-slate-900 tracking-tight">🗂️ Obsolescence Bureau · Reassignment Hub 📋</span>
         </div>
@@ -573,7 +573,7 @@ function buildSharePost(ctx) {
         : `• (${ROAST_VOICE} bluescreened tactfully.)`;
 
     const linkedInBody =
-        `Career-Roast ☕ dragged my career. 99.9% “certainty” — hilarious, legally meaningless.
+        `Career-Roast 🫘 dragged my career. 99.9% “certainty” — hilarious, legally meaningless.
 
 Was: ${job} | STATUS: FUTURE CANCELLED 🔴
 MANDATE: ${title}
@@ -587,11 +587,11 @@ Try your luck before HR does: ${site}`;
     const q1 = lines[0] || 'Peak obsolescence.';
     const q2 = lines[1] || '';
     let xBody = q2
-        ? `Career-Roast ☕ → "${title}" 💀\n“${q1}” · “${q2}”\n\nTry your luck → ${site}`
+        ? `Career-Roast 🫘 → "${title}" 💀\n“${q1}” · “${q2}”\n\nTry your luck → ${site}`
         : `Reassigned to “${title}” 💀 ${q1}\n\nTry yours → ${site}`;
     const X_MAX = 260;
     if (xBody.length > X_MAX) {
-        xBody = `Career-Roast ☕ → “${title}” 💀\n${q1}\n\nTry your luck → ${site}`;
+        xBody = `Career-Roast 🫘 → “${title}” 💀\n${q1}\n\nTry your luck → ${site}`;
     }
     if (xBody.length > X_MAX) {
         xBody = `AI mandate: “${title}” 💀\nTry yours → ${site}`;
@@ -817,7 +817,7 @@ async function shareTextPost(shareText, openUrl, meta = {}) {
         try {
             if (isLinkedIn) await copyCaptionForLinkedIn(shareText);
             const payload = {
-                title: isLinkedIn ? shareTitle : 'Career-Roast ☕',
+                title: isLinkedIn ? shareTitle : 'Career-Roast 🫘',
                 text: shareText
             };
             if (!shareText.includes('ai-wasteland.vercel.app')) payload.url = site;
