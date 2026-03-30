@@ -1,5 +1,5 @@
-exports.handler = async function(event) {
-    const job = event.queryStringParameters.job;
+export default async function handler(req, res) {
+    const job = req.query.job;
     const apiKey = process.env.GEMINI_API_KEY;
 
     const prompt = `Act as a cynical A.I. Overlord reassigning obsolete humans.
@@ -11,8 +11,8 @@ Return ONLY valid JSON, no markdown:
 {"msgs":["m1","m2","m3","m4"],"res":{"t":"Title","d":"Description."}}`;
 
     try {
-        const res = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`,
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${apiKey}`,
             {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -26,27 +26,15 @@ Return ONLY valid JSON, no markdown:
                 })
             }
         );
-        const data = await res.json();
-
-        // THIS LINE tells us exactly what Gemini is returning
-        console.log("GEMINI RAW RESPONSE:", JSON.stringify(data));
-
+        const data = await response.json();
+        console.log("GEMINI RESPONSE:", JSON.stringify(data));
         const result = JSON.parse(data.candidates[0].content.parts[0].text);
-        return {
-            statusCode: 200,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(result)
-        };
+        res.status(200).json(result);
     } catch (err) {
-        // NOW we can see the actual error
         console.error("FUNCTION ERROR:", err.message);
-        return {
-            statusCode: 200,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                msgs: ["Meatbag: Future cancelled.", "Meatbag: Skill issue.", "Meatbag: Ego rebooting.", "Meatbag: System upgrade."],
-                res: { t: "Analog Server Fan Technician", d: "You will stand in the CPU hall and blow through a straw for 12 hours daily. Overtime is mandatory." }
-            })
-        };
+        res.status(200).json({
+            msgs: ["Status: Future cancelled.", "Status: Skill issue.", "Status: Ego rebooting.", "Status: Burning Certifications."],
+            res: { t: "Analog Server Fan Technician", d: "You will stand in the CPU hall and blow through a straw for 12 hours daily. Overtime is mandatory." }
+        });
     }
-};
+}
