@@ -109,8 +109,6 @@
             animation: shimmer 1.2s infinite;
         }
 
-        #memeText { transition: opacity 0.2s ease; }
-        #memeText.fading { opacity: 0; }
         #progressBar { transition: width 1.9s linear; }
 
         #cacheTracker {
@@ -160,12 +158,6 @@
             animation: progress-stripe 0.55s linear infinite, progress-glow 1s ease-in-out infinite;
         }
 
-        @keyframes roast-panel-pulse {
-            0%, 100% { box-shadow: 6px 6px 0 0 #000, 0 0 0 0 rgba(250, 204, 21, 0.35); }
-            50%      { box-shadow: 6px 6px 0 0 #000, 0 0 22px 2px rgba(250, 204, 21, 0.55); }
-        }
-        #roastQuotePanel.roast-text-active { animation: roast-panel-pulse 1.25s ease-in-out infinite; }
-
         #roastOverlay .overlay-inner {
             max-height: min(94vh, 900px);
             overflow-y: auto;
@@ -179,12 +171,6 @@
             from { opacity: 0; transform: translateY(12px) scale(0.96); }
             to   { opacity: 1; transform: translateY(0) scale(1); }
         }
-        @keyframes roast-text-slam {
-            0%   { transform: scale(1.12) rotate(-0.8deg); filter: brightness(1.2); }
-            55%  { transform: scale(0.97) rotate(0.4deg); }
-            100% { transform: scale(1) rotate(0); filter: brightness(1); }
-        }
-        #memeText.roast-slam { animation: roast-text-slam 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
         @keyframes roast-shell-glow {
             0%, 100% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.45), 0 0 0 0 rgba(250, 204, 21, 0); }
             50%      { box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.35), 0 0 20px 4px rgba(250, 204, 21, 0.25); }
@@ -353,11 +339,6 @@
                     <span class="relative inline-flex h-2 w-2 rounded-full bg-red-500 brutal-border border border-black"></span>
                 </div>
                 <p id="stageLabel" class="text-white font-black uppercase tracking-wide text-sm sm:text-base leading-snug text-center flex-1 min-w-0">Weaponizing your LinkedIn headline…</p>
-            </div>
-            <div id="roastQuotePanel" class="bg-yellow-300 brutal-border p-3 sm:p-4 shadow-[6px_6px_0px_0px_#000] w-full max-w-xl mb-3">
-                <p id="memeText" class="text-sm sm:text-base font-black italic tracking-tight leading-snug min-h-[3.25rem] sm:min-h-[3.5rem] flex items-center justify-center text-black text-center px-1 sm:px-2">
-                    Ex-Machin-a-haha: Booting…
-                </p>
             </div>
             <p class="text-[10px] sm:text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1 w-full text-center">Entropy meter</p>
             <div class="w-full max-w-xl mx-auto bg-gray-800 brutal-border h-4 sm:h-5 overflow-hidden">
@@ -625,8 +606,6 @@ const ROAST_STAGES = [
 async function runRoastSequence(job) {
     const overlay        = document.getElementById('roastOverlay');
     const memeImg        = document.getElementById('memeImage');
-    const memeText       = document.getElementById('memeText');
-    const roastQuotePanel = document.getElementById('roastQuotePanel');
     const stageHint      = document.getElementById('stageHint');
     const gifWrapper     = document.getElementById('gifWrapper');
     const progressBar    = document.getElementById('progressBar');
@@ -638,7 +617,6 @@ async function runRoastSequence(job) {
     setStatusLight('red');
     progressBar.classList.add('roast-bar-active');
     if (roastShell) roastShell.classList.add('roast-active');
-    if (roastQuotePanel) roastQuotePanel.classList.add('roast-text-active');
     startMemeChaos(memeImg, gifWrapper);
 
     const aiPromise = fetchAI(job);
@@ -648,14 +626,7 @@ async function runRoastSequence(job) {
             if (stageHint) stageHint.textContent = ROAST_STAGES[i].hint;
             stageStep.textContent = ROAST_STAGES[i].step;
             stageLabel.textContent = ROAST_STAGES[i].label;
-            memeText.classList.add('fading');
-
-            const data = await aiPromise;
-            memeText.textContent = normalizeRoastLine(data.msgs[i] || 'Still thinking. Not great.');
-            memeText.classList.remove('fading');
-            memeText.classList.remove('roast-slam');
-            void memeText.offsetWidth;
-            memeText.classList.add('roast-slam');
+            await aiPromise;
             progressBar.style.width = `${Math.round(((i + 1) / 3) * 100)}%`;
 
             await delay(STAGE_MS);
@@ -679,7 +650,6 @@ async function runRoastSequence(job) {
 
     progressBar.classList.remove('roast-bar-active');
     if (roastShell) roastShell.classList.remove('roast-active');
-    if (roastQuotePanel) roastQuotePanel.classList.remove('roast-text-active');
     progressBar.style.transition = 'none';
     progressBar.style.width = '0%';
     setTimeout(() => { progressBar.style.transition = 'width 1.9s linear'; }, 50);
