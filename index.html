@@ -39,8 +39,21 @@
             align-items: center; justify-content: center; padding: 1rem;
             box-sizing: border-box;
         }
-        #roastOverlay { z-index: 5000; background: rgba(0, 0, 0, 0.98); backdrop-filter: blur(20px); }
-        #shareModal   { z-index: 6000; background: rgba(0, 0, 0, 0.98); backdrop-filter: blur(25px); }
+
+        /* KEY FIX: semi-transparent so card is visible behind, with heavy blur */
+        #roastOverlay {
+            z-index: 5000;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px) brightness(0.4);
+            -webkit-backdrop-filter: blur(8px) brightness(0.4);
+        }
+        #shareModal {
+            z-index: 6000;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
         .scanline {
             width: 100%; height: 100%; position: absolute; top: 0; left: 0;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.1) 50%),
@@ -71,15 +84,22 @@
             animation: shimmer 1.2s infinite;
         }
 
-        #memeText { transition: opacity 0.25s ease; }
+        #memeText { transition: opacity 0.2s ease; }
         #memeText.fading { opacity: 0; }
-        #progressBar { transition: width 3.4s linear; }
+        #progressBar { transition: width 1.9s linear; }
 
         #cacheTracker {
             position: fixed; bottom: 10px; left: 10px;
             font-size: 8px; font-weight: bold; color: #94a3b8; z-index: 5;
             font-family: 'Space Mono', monospace;
         }
+
+        /* Slide-in animation for result */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px) rotate(1deg); }
+            to   { opacity: 1; transform: translateY(0)    rotate(1deg); }
+        }
+        #captureArea { animation: slideUp 0.4s ease forwards; }
     </style>
 </head>
 <body>
@@ -167,19 +187,27 @@
     </footer>
 </main>
 
-<!-- Roast overlay -->
+<!-- Roast overlay — card visible behind via backdrop-filter -->
 <div id="roastOverlay" class="overlay-layer">
     <div class="w-full max-w-md text-center">
-        <div class="bg-white brutal-border rounded-xl p-4 brutal-shadow transform rotate-1 mb-8 overflow-hidden">
-            <div id="gifWrapper" class="w-full h-48 sm:h-64 brutal-border overflow-hidden bg-black flex items-center justify-center relative gif-loading">
-                <img id="memeImage" src="" alt="Roasting..." class="w-full h-full object-contain hidden">
+
+        <!-- GIF frame -->
+        <div class="bg-white brutal-border rounded-xl p-4 brutal-shadow transform rotate-1 mb-6 overflow-hidden">
+            <div id="gifWrapper" class="w-full h-44 sm:h-56 brutal-border overflow-hidden bg-black flex items-center justify-center relative gif-loading">
+                <img id="memeImage" src="" alt="Roasting..." class="w-full h-full object-cover hidden">
                 <div class="scanline"></div>
             </div>
         </div>
-        <div class="bg-yellow-300 brutal-border p-5 shadow-[6px_6px_0px_0px_#000] inline-block w-full">
-            <p id="memeText" class="text-xl font-black uppercase italic tracking-tighter leading-tight min-h-[3.5rem] flex items-center justify-center text-black px-4">Meatbag: Booting...</p>
+
+        <!-- Insult text -->
+        <div class="bg-yellow-300 brutal-border p-4 shadow-[6px_6px_0px_0px_#000] inline-block w-full mb-4">
+            <p id="memeText" class="text-xl font-black uppercase italic tracking-tighter leading-tight min-h-[2.5rem] flex items-center justify-center text-black px-4">
+                Meatbag: Booting...
+            </p>
         </div>
-        <div class="mt-6 bg-black brutal-border p-3 w-full text-left">
+
+        <!-- Progress bar -->
+        <div class="bg-black brutal-border p-3 w-full text-left">
             <div class="flex items-center gap-3 mb-2">
                 <div class="w-2 h-2 rounded-full bg-red-500 animate-ping flex-shrink-0"></div>
                 <p id="stageLabel" class="text-white font-black uppercase tracking-widest text-[10px]">Calculating Obsolescence...</p>
@@ -188,6 +216,7 @@
                 <div id="progressBar" class="h-full bg-[#facc15]" style="width:0%"></div>
             </div>
         </div>
+
     </div>
 </div>
 
@@ -205,7 +234,9 @@
 </div>
 
 <script>
-// ─── GIF config ───────────────────────────────────────────────────────
+// ─── Config ───────────────────────────────────────────────────────────
+// 3 stages × 2s = ~6 seconds total (down from 4 × 3.5s = 14s)
+const STAGE_MS   = 2000;
 const GITHUB_RAW = "https://raw.githubusercontent.com/shazily/AI-wasteland/main/Memes/";
 const MEME_FILES = [
     "they-took-our-jobs-darryl-weathers.gif",
@@ -227,9 +258,7 @@ const MEME_FILES = [
     "the-it-crowd-moss-the-it-crowd.gif"
 ];
 
-const STAGE_MS = 3500;
-
-// ─── Pre-cache GIFs ───────────────────────────────────────────────────
+// ─── Pre-cache GIFs in parallel on page load ─────────────────────────
 const gifCache = {};
 
 async function cacheOneGif(filename) {
@@ -263,7 +292,7 @@ function setStatusLight(color) {
         `w-4 h-4 rounded-full border-2 border-black ${color === 'red' ? 'light-red' : 'light-green'}`;
 }
 
-// ─── AI call — Vercel serverless function, key never exposed ──────────
+// ─── AI call via Vercel function ──────────────────────────────────────
 async function fetchAI(job) {
     try {
         const res = await fetch(`/api/get-fate?job=${encodeURIComponent(job)}`);
@@ -275,8 +304,7 @@ async function fetchAI(job) {
             msgs: [
                 "Meatbag: Future cancelled.",
                 "Meatbag: Skill issue.",
-                "Meatbag: Ego rebooting.",
-                "Meatbag: System upgrade."
+                "Meatbag: Ego rebooting."
             ],
             res: {
                 t: "Analog Server Fan Technician",
@@ -286,11 +314,10 @@ async function fetchAI(job) {
     }
 }
 
-// ─── Roast sequence ───────────────────────────────────────────────────
+// ─── Roast sequence — 3 stages, 2s each ──────────────────────────────
 const STAGE_LABELS = [
     'SCANNING MEDIOCRITY...',
     'CROSS-REFERENCING FAILURE...',
-    'CONSULTING DARK ORACLE...',
     'PRINTING FATE...'
 ];
 
@@ -301,17 +328,19 @@ async function runRoastSequence(job) {
     const gifWrapper  = document.getElementById('gifWrapper');
     const progressBar = document.getElementById('progressBar');
     const stageLabel  = document.getElementById('stageLabel');
-    const chosenFiles = pickRandom(MEME_FILES, 4);
+    const chosenFiles = pickRandom(MEME_FILES, 3);
 
     overlay.style.display = 'flex';
     setStatusLight('red');
 
+    // Fire AI immediately in parallel
     const aiPromise = fetchAI(job);
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 3; i++) {
         stageLabel.textContent = STAGE_LABELS[i];
         memeText.classList.add('fading');
 
+        // Swap GIF
         gifWrapper.classList.add('gif-loading');
         memeImg.classList.add('hidden');
         memeImg.src = getCachedUrl(chosenFiles[i]);
@@ -321,27 +350,28 @@ async function runRoastSequence(job) {
         };
         memeImg.onerror = () => {
             gifWrapper.classList.remove('gif-loading');
-            gifWrapper.style.background = '#111';
         };
 
         const data = await aiPromise;
         memeText.textContent = data.msgs[i] || 'Meatbag: Processing...';
         memeText.classList.remove('fading');
-        progressBar.style.width = `${(i + 1) * 25}%`;
+        progressBar.style.width = `${(i + 1) * 33}%`;
 
         await delay(STAGE_MS);
     }
 
+    // Populate result
     const data = await aiPromise;
     document.getElementById('rcJob').textContent          = job;
     document.getElementById('rcNewRoleTitle').textContent = data.res.t;
     document.getElementById('rcNewRoleDesc').textContent  = data.res.d;
     document.getElementById('sharePreview').value =
-        `A.I. peeked into my future and reassigned me to: "${data.res.t}". Find your fate 👉 https://ai-tookmyjob.netlify.app/ 🤖`;
+        `A.I. peeked into my future and reassigned me to: "${data.res.t}". Find your fate 👉 https://ai-wasteland.vercel.app/ 🤖`;
 
+    // Reset progress bar
     progressBar.style.transition = 'none';
     progressBar.style.width = '0%';
-    setTimeout(() => { progressBar.style.transition = 'width 3.4s linear'; }, 50);
+    setTimeout(() => { progressBar.style.transition = 'width 1.9s linear'; }, 50);
 
     overlay.style.display = 'none';
     document.getElementById('resultContainer').classList.remove('hidden');
