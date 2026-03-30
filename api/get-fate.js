@@ -1,4 +1,4 @@
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     const job = req.query.job;
     const apiKey = process.env.GEMINI_API_KEY;
 
@@ -38,10 +38,3 @@ Return ONLY valid JSON, no markdown:
         return res.status(200).json({ debug: err.message });
     }
 }
-```
-
-5. Tap **Commit changes**
-
-Vercel will auto-deploy within 30 seconds. Then test:
-```
-https://your-vercel-url.vercel.app/api/get-fate?job=test
